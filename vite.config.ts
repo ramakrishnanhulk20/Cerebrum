@@ -10,4 +10,8 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: false,
   },
+  // Add custom title
+  server: {
+    open: true,
+  },
 });
