@@ -1,4 +1,3 @@
-```markdown
 # 🏥 Cerebrum - Fully Homomorphic Encrypted Health Records System
 
 <div align="center">
