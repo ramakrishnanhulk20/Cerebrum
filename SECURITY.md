@@ -171,28 +171,6 @@ We welcome security audits from the community. If you're interested in auditing 
 3. Follow responsible disclosure guidelines
 4. Submit your findings privately
 
-## Bug Bounty Program
-
-### Scope
-
-We offer rewards for security vulnerabilities in:
-
-- Smart contracts
-- Frontend application
-- Backend services
-- Infrastructure
-
-### Rewards
-
-Severity is assessed using CVSS v3.1:
-
-| Severity | CVSS Score | Reward |
-|----------|------------|--------|
-| Critical | 9.0-10.0 | $5,000 - $10,000 |
-| High | 7.0-8.9 | $2,000 - $5,000 |
-| Medium | 4.0-6.9 | $500 - $2,000 |
-| Low | 0.1-3.9 | $100 - $500 |
-
 ### Out of Scope
 
 - Issues in third-party dependencies (unless we can fix)
@@ -207,7 +185,6 @@ For security-related questions or concerns:
 
 - **Email**: security@cerebrum.health
 - **PGP Key**: [Link to PGP key]
-- **Bug Bounty**: [HackerOne/Immunefi page]
 
 ---
 
