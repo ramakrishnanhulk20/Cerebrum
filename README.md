@@ -1,7 +1,3 @@
-# Complete GitHub README for Your Project
-
-Here's a comprehensive, professional README.md file for your FHE Health Records project. Copy the entire content below and save it as `README.md`:
-
 ```markdown
 # 🏥 Cerebrum - Fully Homomorphic Encrypted Health Records System
 
