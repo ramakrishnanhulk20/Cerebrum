@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="brainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Brain Icon -->
+  <circle cx="50" cy="50" r="48" fill="url(#brainGrad)"/>
+  
+  <!-- Brain shape -->
+  <g fill="white">
+    <path d="M35 30 Q25 35 25 45 Q25 55 30 60 Q35 65 40 62 Q45 60 50 60 Q55 60 60 62 Q65 65 70 60 Q75 55 75 45 Q75 35 65 30 Q60 27 55 30 Q50 33 50 35 Q50 33 45 30 Q40 27 35 30 Z" opacity="0.9"/>
+    <circle cx="40" cy="45" r="3" fill="url(#brainGrad)"/>
+    <circle cx="60" cy="45" r="3" fill="url(#brainGrad)"/>
+  </g>
+</svg>
