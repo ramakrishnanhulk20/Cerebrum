@@ -696,37 +696,55 @@ The test suite includes:
 - Complex operation chains
 - Error handling for invalid inputs
 
-### Example Test Output
+### Test Output
 
 ```bash
-  CerebrumFHEVM_v2
-    Patient Functions
-      ✓ registers patient with correct initial state (125ms)
-      ✓ shares encrypted health data and updates score (178ms)
-      ✓ prevents duplicate registration (45ms)
-      ✓ tracks activity logs correctly (89ms)
-      ✓ allows earnings claims (156ms)
-    
-    Researcher Functions
-      ✓ purchases access with correct fee split (134ms)
-      ✓ prevents access without payment (52ms)
-      ✓ requests health record decryption (167ms)
-      ✓ stores decrypted results after callback (201ms)
-    
-    Lender Functions
-      ✓ checks qualification on encrypted score (143ms)
-      ✓ calculates risk levels correctly (121ms)
-      ✓ requires patient approval (67ms)
-    
-    FHE Operations
-      ✓ FHE.asEuint64() converts plaintext to encrypted (78ms)
-      ✓ FHE.add() performs encrypted addition (92ms)
-      ✓ FHE.select() performs conditional selection (105ms)
-      ✓ FHE.ge() performs encrypted comparison (88ms)
-      ✓ FHE.requestDecryption() creates valid request (147ms)
-      ✓ FHE.checkSignatures() verifies decryption proof (112ms)
 
-  18 passing (2.1s)
+   CerebrumFHEVM - Full Test Suite
+    Deployment
+      ✔ Should deploy with platform wallet
+      ✔ Should initialize constants
+      ✔ Should revert with zero address
+    Patient Registration
+      ✔ Should register patient
+      ✔ Should emit PatientRegistered event
+      ✔ Should prevent duplicate registration
+      ✔ Should track multiple registrations
+    Data Sharing
+      ✔ Should toggle sharing enabled
+      ✔ Should toggle sharing disabled
+      ✔ Should emit DataSharingToggled
+      ✔ Should prevent toggle if unregistered
+    Lender Approval
+      ✔ Should approve lender
+      ✔ Should emit LenderApprovalGranted
+      ✔ Should prevent zero address approval
+      ✔ Should allow multiple approvals
+    Researcher Access
+      ✔ Should purchase access
+      ✔ Should split payment 80/20
+      ✔ Should emit ResearcherAccessPurchased
+      ✔ Should prevent insufficient payment
+      ✔ Should prevent unregistered patient access
+      ✔ Should allow multiple researchers
+    Earnings
+      ✔ Should claim earnings
+      ✔ Should reset earnings after claim
+      ✔ Should emit EarningsDistributed
+      ✔ Should prevent double claim
+    View Functions
+      ✔ Should return registration status
+      ✔ Should return patient count
+      ✔ Should return patient info
+      ✔ Should return empty records
+      ✔ Should return patient list
+    Workflows
+      ✔ Full workflow: register → buy → claim
+      ✔ Multi-researcher scenario
+      ✔ Multi-patient scenario
+
+  33 passing (724ms)
+
 ```
 
 ---
