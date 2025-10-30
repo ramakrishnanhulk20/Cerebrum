@@ -16,7 +16,7 @@ A decentralized healthcare data platform that uses Fully Homomorphic Encryption 
 
 - [Overview](#overview)
 - [The Problem](#the-problem)
-- [Our Solution](#our-solution)
+- [Solution](#solution)
 - [Key Features](#key-features)
 - [Architecture](#architecture)
 - [Technology Stack](#technology-stack)
@@ -47,7 +47,7 @@ Healthcare systems worldwide face critical challenges:
 - Lenders and insurance companies need health verification but current systems expose sensitive medical details
 - Centralized databases create single points of failure and honeypots for attackers
 
-### Our Solution
+### Solution
 
 Cerebrum implements end-to-end encryption using Fully Homomorphic Encryption, enabling:
 
@@ -991,6 +991,6 @@ Need help or have questions?
 
 ---
 
-**Built with love using Zama FHE**
+**Built with ❤️ using Zama FHE**
 
 [Live Demo](https://cerebrum-site.vercel.app/) · [GitHub](https://github.com/ramakrishnanhulk20/Cerebrum) · [Contract](https://sepolia.etherscan.io/address/0x5B9dCB5CaB452ffe2000F95ee29558c81682aE2a)
