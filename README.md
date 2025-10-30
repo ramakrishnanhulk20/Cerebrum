@@ -1,4 +1,4 @@
-# Cerebrum - Health Data Privacy Platform
+# Cerebrum - Health Data Value
 
 **Health Data Value**
 
@@ -102,14 +102,14 @@ Cerebrum implements end-to-end encryption using Fully Homomorphic Encryption, en
 ┌─────────────────────────────────────────────────────────────────┐
 │                   Frontend (React + TypeScript + Vite)          │
 │                                                                 │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐           │
-│  │  Patient    │  │ Researcher  │  │   Lender    │           │
-│  │  Portal     │  │   Portal    │  │   Portal    │           │
-│  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘           │
-│         │                │                │                    │
-│         └────────────────┴────────────────┘                    │
-│                         │                                      │
-│                  Wagmi + Viem                                  │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐              │
+│  │  Patient    │  │ Researcher  │  │   Lender    │              │
+│  │  Portal     │  │   Portal    │  │   Portal    │              │
+│  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘              │
+│         │                │                │                     │
+│         └────────────────┴────────────────┘                     │
+│                         │                                       │
+│                  Wagmi + Viem                                   │
 └──────────────────────────┬──────────────────────────────────────┘
                            │
                   ┌────────▼─────────┐
@@ -120,20 +120,20 @@ Cerebrum implements end-to-end encryption using Fully Homomorphic Encryption, en
          ┌─────────────────┴────────────────────┐
          │                                      │
 ┌────────▼──────────┐               ┌──────────▼────────────┐
-│ CerebrumFHEVM_v2  │◄──────────────┤   Zama Gateway       │
-│ Smart Contract    │               │   Decryption Oracle  │
-│                   │               │                      │
-│ ┌───────────────┐ │               │ • FHE Decryption    │
-│ │ Patient State │ │               │ • Proof Generation  │
-│ │ Health Records│ │               │ • Callback Trigger  │
-│ │ Access Control│ │               └──────────────────────┘
+│ CerebrumFHEVM_v2  │◄──────────────┤   Zama Gateway        │
+│ Smart Contract    │               │   Decryption Oracle   │
+│                   │               │                       │
+│ ┌───────────────┐ │               │ • FHE Decryption      │
+│ │ Patient State │ │               │ • Proof Generation    │
+│ │ Health Records│ │               │ • Callback Trigger    │
+│ │ Access Control│ │               └──────────────────────
 │ │ Earnings Pool │ │
 │ └───────────────┘ │
 └───────────────────┘
          │
     ┌────┴─────┐
     │          │
-┌───▼────┐ ┌──▼─────────┐
+┌───▼────┐  ┌──▼─────────┐
 │Encrypted│ │ Decrypted  │
 │ Health  │ │  Results   │
 │ Records │ │  Storage   │
