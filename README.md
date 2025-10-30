@@ -5,6 +5,7 @@
 [![License: BSD-3-Clause](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Powered by Zama fhEVM](https://img.shields.io/badge/Powered%20by-Zama%20fhEVM-brightgreen)](https://www.zama.ai/)
 [![Ethereum Sepolia](https://img.shields.io/badge/Ethereum-Sepolia-purple)](https://sepolia.etherscan.io/)
+[![YouTube](https://img.shields.io/badge/YouTube-Watch%20Demo-red?logo=youtube&logoColor=white)](https://youtu.be/A7h1CDHMxP4?si=0GCaqexvfX5dTgQY)
 
 A decentralized healthcare data platform that uses Fully Homomorphic Encryption to give patients complete control over their health records while enabling secure data monetization. Patients earn when researchers access their encrypted data, and lenders can verify health creditworthiness without ever seeing raw medical information.
 
@@ -30,6 +31,7 @@ A decentralized healthcare data platform that uses Fully Homomorphic Encryption 
 - [Contributing](#contributing)
 - [License](#license)
 - [Support](#support)
+- [Demo Video](#demo-video)
 
 ---
 
@@ -939,6 +941,12 @@ npm test
 - Report vulnerabilities responsibly
 - Improve access control mechanisms
 - Enhance encryption implementations
+
+---
+
+## Demo Video
+
+[Watch on YouTube](https://youtu.be/A7h1CDHMxP4?si=d-_nD3qaaJ-AhRkz)
 
 ---
 
