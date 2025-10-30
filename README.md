@@ -1,6 +1,6 @@
 # Cerebrum - Health Data Value
 
-**Health Data Value**
+**Privacy isn’t optional. It’s yours**
 
 [![License: BSD-3-Clause](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Powered by Zama fhEVM](https://img.shields.io/badge/Powered%20by-Zama%20fhEVM-brightgreen)](https://www.zama.ai/)
@@ -120,7 +120,7 @@ Cerebrum implements end-to-end encryption using Fully Homomorphic Encryption, en
          ┌─────────────────┴────────────────────┐
          │                                      │
 ┌────────▼──────────┐               ┌──────────▼────────────┐
-│ CerebrumFHEVM_v2  │◄──────────────┤   Zama Gateway        │
+│ CerebrumFHEVM     │◄──────────────┤   Zama Gateway        │
 │ Smart Contract    │               │   Decryption Oracle   │
 │                   │               │                       │
 │ ┌───────────────┐ │               │ • FHE Decryption      │
