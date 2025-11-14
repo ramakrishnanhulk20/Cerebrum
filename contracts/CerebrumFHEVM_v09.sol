@@ -11,9 +11,9 @@ interface ICerebrumRiskScoring {
     function calculateComprehensiveRisk(euint64 bloodSugar, euint64 cholesterol, euint64 bmi, euint64 bloodPressureSystolic, euint64 heartRate, uint8 age) external returns (euint64, euint64, euint64);
 }
 
-/// @title Cerebrum v0.9 - FHEVM v0.9 with FHE.allowThis + FHE.allowTransient + User Decryption
+/// @title Cerebrum v0.9 - FHEVM v0.9
 /// @notice Privacy-first health data marketplace with automatic access control
-/// @dev No Gateway callbacks - uses User Decryption (EIP-712) and FHE.allowTransient for seamless access
+/// @dev No Gateway callbacks - uses User Decryption (EIP-712) and FHE.allow for seamless access
 contract CerebrumFHEVM_v09 is EthereumConfig {
     // ============ Constants ============
     uint64 public constant INITIAL_SCORE = 500;
@@ -209,10 +209,10 @@ contract CerebrumFHEVM_v09 is EthereumConfig {
         patient.sharingEnabled = true; // Enable sharing by default for smoother UX
         patient.registrationTime = block.timestamp;
 
-        // v0.9 Pattern: Grant contract permission to manage health score
+        // Grant contract permission to manage health score
         FHE.allowThis(patient.healthScore);
         
-        // v0.9 Pattern: Grant patient permission to decrypt their own score (User Decryption)
+        // Grant patient permission to decrypt their own score (User Decryption)
         FHE.allow(patient.healthScore, msg.sender);
 
         allPatients.push(msg.sender);
@@ -225,7 +225,7 @@ contract CerebrumFHEVM_v09 is EthereumConfig {
         emit PatientRegistered(msg.sender, block.timestamp);
     }
 
-    /// @notice Share health data using encrypted inputs (v0.9 pattern)
+    /// @notice Share health data using encrypted inputs
     /// @dev Uses createEncryptedInput() from frontend to create externalEuint64 values
     /// @param encBloodSugar Encrypted blood sugar from createEncryptedInput()
     /// @param encCholesterol Encrypted cholesterol from createEncryptedInput()
@@ -253,7 +253,7 @@ contract CerebrumFHEVM_v09 is EthereumConfig {
         Patient storage patient = patients[msg.sender];
         if (!patient.isRegistered) revert NotRegistered();
 
-        // v0.9 Pattern: Convert externalEuint64 to euint64 using asEuint64 with proof
+        // Convert externalEuint64 to euint64 using asEuint64 with proof
         euint64 bloodSugar = FHE.fromExternal(encBloodSugar, inputProof);
         euint64 cholesterol = FHE.fromExternal(encCholesterol, inputProof);
         euint64 bmi = FHE.fromExternal(encBmi, inputProof);
@@ -270,7 +270,7 @@ contract CerebrumFHEVM_v09 is EthereumConfig {
             sleepHours
         );
 
-        // v0.9 Pattern: Grant contract permission to manage all encrypted data BEFORE storing
+        // Grant contract permission to manage all encrypted data BEFORE storing
         FHE.allowThis(bloodSugar);
         FHE.allowThis(cholesterol);
         FHE.allowThis(bmi);
@@ -359,7 +359,7 @@ contract CerebrumFHEVM_v09 is EthereumConfig {
         emit EarningsDistributed(msg.sender, amount, block.timestamp);
     }
 
-    // ============ User Decryption Functions (v0.9 Pattern) ============
+    // ============ User Decryption Functions ============
 
     /// @notice Get encrypted health score handle for User Decryption
     /// @dev Returns the ciphertext that can be decrypted client-side with EIP-712 signature
@@ -431,7 +431,7 @@ contract CerebrumFHEVM_v09 is EthereumConfig {
         // DEBUG: Emit handles for inspection
         emit DebugHandles(storedHandle, minHandle, resultHandle);
 
-        // v0.9 Pattern: Grant permissions for the ebool IMMEDIATELY after creation
+        // Grant permissions for the ebool IMMEDIATELY after creation
         FHE.allowThis(meetsReq); // Contract needs permission to unwrap/store it
         FHE.allow(meetsReq, msg.sender); // Lender can decrypt it
 
@@ -484,7 +484,7 @@ contract CerebrumFHEVM_v09 is EthereumConfig {
         // DEBUG: Log handles before comparison
         bytes32 storedHandle = euint64.unwrap(pat.healthScore);
         
-        // v0.9 Pattern: Convert encrypted input with proof
+        // Convert encrypted input with proof
         euint64 minScore = FHE.fromExternal(encryptedMinScore, inputProof);
         bytes32 minHandle = euint64.unwrap(minScore);
         
@@ -495,7 +495,7 @@ contract CerebrumFHEVM_v09 is EthereumConfig {
         // DEBUG: Emit handles for inspection
         emit DebugHandles(storedHandle, minHandle, resultHandle);
 
-        // v0.9 Pattern: Grant permissions for the ebool
+        // Grant permissions for the ebool
         FHE.allowThis(meetsReq); // Contract needs permission to store it
         FHE.allow(meetsReq, msg.sender); // Lender can decrypt it
 
@@ -535,7 +535,7 @@ contract CerebrumFHEVM_v09 is EthereumConfig {
     function getEncryptedEligibilityResult(address patient) external returns (ebool) {
         ebool result = encryptedEligibilityResults[patient][msg.sender];
         
-        // v0.9 Pattern: Re-grant PERMANENT permission for off-chain User Decryption
+        // Re-grant PERMANENT permission for off-chain User Decryption
         // Changed from FHE.allowTransient() to FHE.allow() to enable userDecrypt()
         FHE.allow(result, msg.sender);
         
@@ -552,9 +552,9 @@ contract CerebrumFHEVM_v09 is EthereumConfig {
 
     // ============ Researcher Functions ============
 
-    /// @notice Purchase researcher access (v0.9 with FHE.allowTransient)
-    /// @dev Contract automatically grants FHE.allowTransient to researcher - NO PATIENT SIGNING NEEDED!
-    /// @dev This is the magic of v0.9: automatic access control without user interaction
+    /// @notice Purchase researcher access 
+    /// @dev Contract automatically to researcher - NO PATIENT SIGNING NEEDED!
+    /// @dev automatic access control without user interaction
     function purchaseResearcherAccess(address patient, uint256 recordIndex) external payable {
         Patient storage pat = patients[patient];
         if (!pat.isRegistered) revert NotRegistered();
@@ -569,7 +569,7 @@ contract CerebrumFHEVM_v09 is EthereumConfig {
 
         HealthData storage record = pat.healthRecords[recordIndex];
         
-        // v0.9 Pattern: FHE.allowTransient for automatic, temporary access
+        // FHE.allowTransient for automatic, temporary access
         // Researcher gets ONE-TIME access without patient signing again!
         FHE.allowTransient(record.bloodSugar, msg.sender);
         FHE.allowTransient(record.cholesterol, msg.sender);
@@ -623,7 +623,7 @@ contract CerebrumFHEVM_v09 is EthereumConfig {
         
         HealthData storage record = pat.healthRecords[recordIndex];
         
-        // v0.9 Pattern: Grant PERMANENT permission for off-chain User Decryption
+        // Grant PERMANENT permission for off-chain User Decryption
         // Changed from FHE.allowTransient() to FHE.allow() to enable userDecrypt()
         FHE.allow(record.bloodSugar, msg.sender);
         FHE.allow(record.cholesterol, msg.sender);
@@ -704,7 +704,7 @@ contract CerebrumFHEVM_v09 is EthereumConfig {
         
         HealthData storage record = pat.healthRecords[recordIndex];
         
-        // v0.9 Pattern: Grant RiskScoring library permission to access encrypted health data
+        // Grant RiskScoring library permission to access encrypted health data
         address libraryAddress = address(riskScoringLibrary);
         FHE.allow(record.bloodSugar, libraryAddress);
         FHE.allow(record.cholesterol, libraryAddress);
@@ -722,7 +722,7 @@ contract CerebrumFHEVM_v09 is EthereumConfig {
             record.age
         );
         
-        // v0.9 Pattern: Grant contract permission to store the encrypted risk scores
+        // Grant contract permission to store the encrypted risk scores
         FHE.allowThis(diabetesRisk);
         FHE.allowThis(heartRisk);
         FHE.allowThis(strokeRisk);
@@ -735,7 +735,7 @@ contract CerebrumFHEVM_v09 is EthereumConfig {
             timestamp: block.timestamp
         });
         
-        // v0.9 Pattern: Grant researcher PERMANENT permission to decrypt risk scores (for User Decryption)
+        // Grant researcher PERMANENT permission to decrypt risk scores (for User Decryption)
         // This allows off-chain userDecrypt() to work after transaction is mined
         FHE.allow(diabetesRisk, msg.sender);
         FHE.allow(heartRisk, msg.sender);
@@ -767,7 +767,7 @@ contract CerebrumFHEVM_v09 is EthereumConfig {
     {
         RiskScores storage risks = researcherRiskScores[patient][msg.sender][recordIndex];
         
-        // v0.9 Pattern: Grant researcher PERMANENT permission (not transient) to decrypt the stored encrypted risk scores
+        // Grant researcher PERMANENT permission (not transient) to decrypt the stored encrypted risk scores
         FHE.allow(risks.diabetesRisk, msg.sender);
         FHE.allow(risks.heartDiseaseRisk, msg.sender);
         FHE.allow(risks.strokeRisk, msg.sender);
