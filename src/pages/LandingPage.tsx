@@ -177,7 +177,7 @@ const LandingPage = () => {
             className="inline-block mb-8"
           >
             <img 
-              src="/favicon/cerebrum_logo.png" 
+              src="/cerebrum_logo.png" 
               alt="Cerebrum Logo" 
               className="w-40 h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 object-contain mx-auto"
             />
