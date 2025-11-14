@@ -1745,7 +1745,7 @@ const AnalyticsSection = ({
       <button
         onClick={handleCalculate}
         disabled={isCalculating}
-        className="w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-lg shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2 mb-3"
+        className="w-full px-6 py-3 bg-gradient-to-r from-emerald-600 to-green-600 text-white font-semibold rounded-lg shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2 mb-3"
       >
         {isCalculating ? (
           <>
@@ -1762,8 +1762,8 @@ const AnalyticsSection = ({
 
       {/* Show status after calculation */}
       {isCalculateSuccess && !localDecryptedRisks && isDecryptingLocal && (
-        <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-4 mb-3">
-          <p className="text-sm text-purple-400 mb-3 flex items-center gap-2">
+        <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4 mb-3">
+          <p className="text-sm text-emerald-400 mb-3 flex items-center gap-2">
             <Loader className="w-4 h-4 animate-spin" />
             Decrypting risk scores automatically...
           </p>
