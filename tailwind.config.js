@@ -73,6 +73,7 @@ export default {
         'float': 'float 3s ease-in-out infinite',
         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'glow': 'glow 2s ease-in-out infinite alternate',
+        'shimmer': 'shimmer 2s infinite',
       },
       keyframes: {
         'gradient-y': {
@@ -106,6 +107,10 @@ export default {
           'to': {
             'text-shadow': '0 0 20px #fff, 0 0 30px #00ffc6, 0 0 40px #00ffc6, 0 0 50px #00ffc6'
           }
+        },
+        'shimmer': {
+          '0%': { 'background-position': '-200% 0' },
+          '100%': { 'background-position': '200% 0' }
         }
       },
       backdropBlur: {

@@ -1,26 +1,37 @@
-import { createContext, useContext, useState, type ReactNode } from 'react';
-import { theme } from '../config/theme';
+// Theme tokens and types used across the app.
+// This file intentionally exports simple theme objects and a Theme type.
+// The actual ThemeProvider and runtime logic live in `src/contexts/ThemeContext.tsx`.
 
-interface ThemeContextType {
-  currentTheme: typeof theme;
-}
-
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
-
-export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const [currentTheme] = useState(theme);
-
-  return (
-    <ThemeContext.Provider value={{ currentTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  );
+export type Theme = {
+  colors: {
+    background: string;
+    foreground: string;
+    primary: string;
+    secondary: string;
+  };
+  spacing?: Record<string, string>;
+  [key: string]: any;
 };
 
-export const useTheme = () => {
-  const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error('useTheme must be used within ThemeProvider');
-  }
-  return context;
+export const theme: Theme = {
+  colors: {
+    background: '#0f172a',
+    foreground: '#e6eef8',
+    primary: '#06b6d4',
+    secondary: '#7c3aed',
+  },
+  spacing: {
+    sm: '8px',
+    md: '16px',
+    lg: '24px',
+  },
+};
+
+export const darkTheme: Theme = {
+  ...theme,
+  colors: {
+    ...theme.colors,
+    background: '#020617',
+    foreground: '#e6eef8',
+  },
 };

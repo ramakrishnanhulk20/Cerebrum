@@ -3,13 +3,14 @@
 **Privacy isn’t optional. It’s yours**
 
 [![License: BSD-3-Clause](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
-[![Powered by Zama fhEVM](https://img.shields.io/badge/Powered%20by-Zama%20fhEVM-brightgreen)](https://www.zama.ai/)
+[![FHEVM](https://img.shields.io/badge/FHEVM-Zama-brightgreen)](https://docs.zama.org/protocol)
 [![Ethereum Sepolia](https://img.shields.io/badge/Ethereum-Sepolia-purple)](https://sepolia.etherscan.io/)
+[![fhevmjs](https://img.shields.io/badge/fhevmjs-latest-blue)](https://www.npmjs.com/package/fhevmjs)
 [![YouTube](https://img.shields.io/badge/YouTube-Watch%20Demo-red?logo=youtube&logoColor=white)](https://youtu.be/A7h1CDHMxP4?si=0GCaqexvfX5dTgQY)
 
-A decentralized healthcare data platform that uses Fully Homomorphic Encryption to give patients complete control over their health records while enabling secure data monetization. Patients earn when researchers access their encrypted data, and lenders can verify health creditworthiness without ever seeing raw medical information.
+A healthcare data marketplace built on Ethereum using Zama's **FHEVM**. Patients maintain complete ownership of their encrypted health records while earning from data monetization. Researchers access encrypted data **instantly** (0–2 seconds), and lenders verify creditworthiness without ever seeing raw medical information—all powered by **Fully Homomorphic Encryption** and **User Decryption with EIP-712 signatures**.
 
-[Live Demo](https://cerebrum-site.vercel.app/) · [GitHub](https://github.com/ramakrishnanhulk20/Cerebrum) · [Contract](https://sepolia.etherscan.io/address/0x5B9dCB5CaB452ffe2000F95ee29558c81682aE2a)
+[Live Demo](https://cerebrum-site.vercel.app/) · [GitHub](https://github.com/ramakrishnanhulk20/Cerebrum) · [Docs](./docs)
 
 ---
 
@@ -37,7 +38,13 @@ A decentralized healthcare data platform that uses Fully Homomorphic Encryption 
 
 ## Overview
 
-Cerebrum is a privacy-preserving healthcare data platform built on Ethereum using Zama's fhEVM. The platform empowers patients to maintain full ownership of their health data while creating a sustainable marketplace where researchers can access encrypted medical information and lenders can assess health creditworthiness without compromising privacy.
+Cerebrum is a privacy-first healthcare data marketplace built on **Ethereum** with **Zama's FHEVM**. Using Fully Homomorphic Encryption and **instant User Decryption** (0–2 seconds via EIP-712 signatures), the platform enables:
+
+- **Patients** to own, control, and monetize their encrypted health data
+- **Researchers** to access encrypted medical records with automatic permission grants (no patient re-signing)
+- **Lenders** to verify health creditworthiness through encrypted TRUE/FALSE checks (never seeing actual scores)
+
+All health data remains **encrypted on-chain at all times**—computations happen on ciphertext, and decryption is instant when authorized.
 
 ### The Problem
 
@@ -49,50 +56,98 @@ Healthcare systems worldwide face critical challenges:
 - Lenders and insurance companies need health verification but current systems expose sensitive medical details
 - Centralized databases create single points of failure and honeypots for attackers
 
-### Solution
+### Solution: FHEVM with User Decryption
 
-Cerebrum implements end-to-end encryption using Fully Homomorphic Encryption, enabling:
+Cerebrum leverages **FHEVM** to create a significant improvement in privacy-preserving healthcare:
 
-- Health records remain encrypted at all times on the blockchain
-- Mathematical operations performed directly on encrypted data without decryption
-- Patients grant granular access permissions and earn 80% revenue when researchers purchase data access
-- Lenders verify health creditworthiness through encrypted score comparisons
+**Encryption & Privacy**
+- Health records remain **encrypted on-chain at all times** using FHE
+- Mathematical operations performed directly on encrypted data (no decryption required)
+- **User Decryption** via EIP-712 signatures: 0–2 seconds
+
+**Access Control**
+- `FHE.allowThis`: Contract manages encrypted data securely
+- `FHE.allowTransient`: **Automatic one-time access grants** for researchers (no patient re-signing)
+- `FHE.allow`: Granular permissions for User Decryption
+
+**Economics**
+- Patients earn **80% of researcher access fees** (0.008 ETH per purchase)
+- Transparent, on-chain revenue distribution
+
+**Security**
 - Decentralized architecture eliminates single points of failure
-- Zama Gateway provides secure, verifiable decryption only when authorized
+- Cryptographic proofs ensure data integrity
+- Lenders see only encrypted TRUE/FALSE results (never actual scores)
 
 ---
 
 ## Key Features
 
-### For Patients
+### 🏥 For Patients
 
-**Complete Data Control**: Upload health records encrypted with FHE technology. Your data remains encrypted on-chain and only you decide who gets access.
+**Complete Data Control**
+- Encrypt health records on your device with **fhevmjs**
+- Submit data with an input proof for cryptographic verification
+- Only you decide who gets access—your keys, your control
 
-**Data Monetization**: Earn 0.008 ETH (80% of access fee) every time a researcher purchases access to your health records. Track your total earnings in the dashboard.
+**Instant Decryption** ⚡
+- View your encrypted health score in **0–2 seconds** via EIP-712 signature
+- No waiting for callbacks or polling
+- Sign once, decrypt instantly
 
-**Health Credit Score**: Automated health scoring system that updates with each data share. Scores remain encrypted and can be used for loan applications without revealing raw health metrics.
+**Data Monetization**
+- Earn **0.008 ETH (80%)** every time a researcher purchases access
+- Track total earnings in real-time dashboard
+- Claim earnings anytime to your wallet
 
-**Activity Tracking**: Complete on-chain audit log of every action - registrations, data shares, access grants, and earnings claims.
+**Health Credit Score**
+- Automated scoring system (500-850 range) that updates with each data share
+- Scores remain **fully encrypted** on-chain
+- Use for loan applications without revealing raw health metrics
 
-**Self-Custody**: Your private keys, your data, your control. No intermediaries can access your health information without your explicit consent.
+**Activity Tracking**
+- Complete on-chain audit log of all actions
+- Monitor who accessed your data and when
+- Full transparency with zero trust required
 
-### For Researchers
+### 🔬 For Researchers
 
-**Privacy-Preserving Access**: Purchase one-time access to encrypted patient health data for 0.01 ETH with instant on-chain verification.
+**Instant Access with FHE.allowTransient**
+- Purchase access for **0.01 ETH** per patient
+- **Automatic permission grant** in same transaction (no patient re-signing needed!)
+- Access resets when patient shares new data (fresh monetization opportunity)
 
-**Secure Decryption**: Request decryption through Zama Gateway oracle. Decrypted results returned in 30-60 seconds with cryptographic proof of validity.
+**Lightning-Fast Decryption** ⚡
+- Decrypt health records in **0-2 seconds** with EIP-712 signatures
+- No waiting for Gateway callbacks (was 30-60 seconds in v0.8)
+- Batch decrypt multiple values simultaneously
 
-**Multi-Record Queries**: Access multiple health records per patient. Each record includes blood sugar levels, cholesterol, BMI, and timestamps.
+**Comprehensive Data Access**
+- View all health records: blood sugar, cholesterol, BMI, blood pressure, heart rate, weight, height
+- Access encrypted risk scores: diabetes, heart disease, stroke predictions
+- Timestamps for longitudinal analysis
 
-**Fair Pricing**: Transparent fee structure with 80% going directly to patients and 20% supporting platform operations.
+**Fair & Transparent Pricing**
+- **80% to patients** (0.008 ETH)
+- **20% platform fee** (0.002 ETH)
+- **46% cheaper gas** than v0.8 (no callback transactions)
 
-### For Lenders
+### 💰 For Lenders
 
-**Encrypted Qualification Checks**: Verify if a patient's health score meets lending criteria without ever seeing their actual score or health data.
+**Zero-Knowledge Credit Checks**
+- Verify if patient's health score meets lending criteria **without seeing actual score**
+- Receive encrypted **TRUE/FALSE** result only (complete privacy preservation)
+- Instant verification in 0-2 seconds via User Decryption
 
-**Risk Assessment**: Query encrypted risk levels (low/medium/high) based on health scores using homomorphic comparisons.
+**Encrypted Threshold Comparisons**
+- Submit your minimum score threshold (e.g., 650) **encrypted on client-side**
+- Contract performs `FHE.ge()` comparison on encrypted values
+- Never reveals patient's actual health score (quantum-secure privacy)
 
-**Patient Consent**: Patients must explicitly approve lenders before any qualification checks can be performed.
+**Patient Consent Required**
+- Patients must explicitly approve each lender via `approveLender()`
+- Granular access control—patients revoke access anytime
+- Full transparency with on-chain audit trail
 
 ---
 
@@ -101,108 +156,191 @@ Cerebrum implements end-to-end encryption using Fully Homomorphic Encryption, en
 ### System Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                   Frontend (React + TypeScript + Vite)          │
-│                                                                 │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐              │
-│  │  Patient    │  │ Researcher  │  │   Lender    │              │
-│  │  Portal     │  │   Portal    │  │   Portal    │              │
-│  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘              │
-│         │                │                │                     │
-│         └────────────────┴────────────────┘                     │
-│                         │                                       │
-│                  Wagmi + Viem                                   │
-└──────────────────────────┬──────────────────────────────────────┘
-                           │
-                  ┌────────▼─────────┐
-                  │  Ethereum Node   │
-                  │  (Sepolia)       │
-                  └────────┬─────────┘
-                           │
-         ┌─────────────────┴────────────────────┐
-         │                                      │
-┌────────▼──────────┐               ┌──────────▼────────────┐
-│ CerebrumFHEVM     │◄──────────────┤   Zama Gateway        │
-│ Smart Contract    │               │   Decryption Oracle   │
-│                   │               │                       │
-│ ┌───────────────┐ │               │ • FHE Decryption      │
-│ │ Patient State │ │               │ • Proof Generation    │
-│ │ Health Records│ │               │ • Callback Trigger    │
-│ │ Access Control│ │               └──────────────────────
-│ │ Earnings Pool │ │
-│ └───────────────┘ │
-└───────────────────┘
-         │
-    ┌────┴─────┐
-    │          │
-┌───▼────┐  ┌──▼─────────┐
-│Encrypted│ │ Decrypted  │
-│ Health  │ │  Results   │
-│ Records │ │  Storage   │
-└─────────┘ └────────────┘
+┌──────────────────────────────────────────────────────────────────────┐
+│                 Frontend (React + TypeScript + Vite)                 │
+│                          fhevmjs (Relayer SDK)                       │
+│                                                                      │
+│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐              │
+│  │  Patient    │    │ Researcher  │    │   Lender    │              │
+│  │  Dashboard  │    │   Portal    │    │   Portal    │              │
+│  └──────┬──────┘    └──────┬──────┘    └──────┬──────┘              │
+│         │                  │                  │                     │
+│         │  ┌───────────────┴──────────────────┘                     │
+│         │  │                                                        │
+│         │  │  • createEncryptedInput() - Client-side encryption     │
+│         │  │  • User Decryption - EIP-712 signatures (0-2s)         │
+│         │  │  • Wagmi v2 + ethers v6 - Wallet integration           │
+│         │  │                                                        │
+│         └──┴────────────────┬───────────────────────────────────────┘
+│                             │
+│                    ┌────────▼─────────┐
+│                    │  Ethereum Node   │
+│                    │  (Sepolia)       │
+│                    └────────┬─────────┘
+│                             │
+│              ┌──────────────┴──────────────┐
+│              │                             │
+│    ┌─────────▼──────────┐       ┌─────────▼──────────┐
+│    │   CerebrumFHEVM    │       │   Zama Gateway     │
+│    │  Smart Contract    │◄──────┤   (User Decrypt)   │
+│    │                    │       │                    │
+│    │ • FHE.allowThis    │       │ • EIP-712 verify   │
+│    │ • FHE.allowTransient│      │ • Instant decrypt  │
+│    │ • FHE.allow        │       │ • 0–2 second       │
+│    │ • NO CALLBACKS ✅  │       │   response time    │
+│    │                    │       └────────────────────┘
+│    │ ┌────────────────┐ │
+│    │ │Patient Registry││
+│    │ │Encrypted Health││
+│    │ │Access Control  ││
+│    │ │Earnings Pool   ││
+│    │ └────────────────┘ │
+│    └────────────────────┘
+│             │
+│        ┌────┴─────┐
+│        │          │
+│   ┌────▼─────┐  ┌─▼──────────────┐
+│   │Encrypted │  │ Client-Side    │
+│   │ Health   │  │ Decryption     │
+│   │ Records  │  │ (0-2 seconds)  │
+│   │ (euint64)│  │ via EIP-712    │
+│   └──────────┘  └────────────────┘
+└──────────────────────────────────────────────────────────────────────┘
+
+📊 Performance Highlights:
+  • Decryption: 0–2s end-to-end
+  • On-chain computation on encrypted data
+  • No callback complexity or polling
 ```
 
-### Data Flow Architecture
+### Data Flow Architecture (User Decryption)
 
-**Phase 1: Patient Data Upload**
-1. Patient enters health metrics in frontend (blood sugar, cholesterol, BMI)
-2. Frontend encrypts data using Zama FHE library before blockchain submission
-3. Smart contract stores encrypted values as `euint64` types
-4. Health score automatically increments using FHE addition operations
-5. Patient earnings pool updated with data share reward
+#### Phase 1: Patient Data Upload ⚡
 
-**Phase 2: Researcher Access Purchase**
-1. Researcher searches for patient by Ethereum address
-2. Submits 0.01 ETH to purchase access via `purchaseResearcherAccess()`
-3. Smart contract splits payment: 80% to patient earnings, 20% to platform wallet
-4. Access permission granted in `researcherAccess` mapping
+```typescript
+// Client-side encryption with fhevmjs
+const { handles, inputProof } = await createEncryptedHealthData(
+  provider, contract, userAddress,
+  { bloodSugar, cholesterol, bmi, bloodPressure, heartRate, weight, height }
+);
+
+// Submit to blockchain with proof
+await contract.shareHealthData([...handles], age, exercise, sleep, inputProof);
+```
+
+1. Patient enters 8 health metrics in frontend
+2. **Frontend encrypts data** using `createEncryptedInput()` from fhevmjs v0.9
+3. Returns **encrypted handles + inputProof** for verification
+4. Smart contract stores as `euint64` with `FHE.allowThis()` permissions
+5. Health score auto-increments using `FHE.add()` operations
+
+#### Phase 2: Researcher Access Purchase 💰
+
+```solidity
+// Automatic access grant via FHE.allowTransient - NO patient re-signing!
+function purchaseResearcherAccess(address patient) external payable {
+  // ... payment validation ...
+  researcherAccess[patient][msg.sender] = true;
+  
+  // Grant transient access to all records automatically
+  FHE.allowTransient(patients[patient].healthRecords[i].bloodSugar, msg.sender);
+  // ... repeat for all fields ...
+}
+```
+
+1. Researcher submits **0.01 ETH** to purchase access
+2. **FHE.allowTransient** grants automatic one-time access (revolutionary!)
+3. Payment split: **80% patient** (0.008 ETH), **20% platform** (0.002 ETH)
+4. **No patient interaction needed** for access grant
 5. On-chain event emitted for transparency
 
-**Phase 3: Decryption Request**
-1. Authorized researcher requests decryption for specific record index
-2. Contract converts encrypted values to bytes32 format using `FHE.toBytes32()`
-3. Decryption request sent to Zama Gateway with callback selector
-4. Request tracked in `pendingRequests` mapping with unique request ID
+#### Phase 3: Instant User Decryption ⚡ (0–2 seconds)
 
-**Phase 4: Gateway Callback**
-1. Zama Gateway decrypts data off-chain (30-60 seconds processing time)
-2. Gateway generates cryptographic proof of correct decryption
-3. Gateway calls `callbackHealthRecordDecryption()` with decrypted values and proof
-4. Contract verifies proof using `FHE.checkSignatures()`
-5. Decrypted results stored in `decryptedRecords` mapping for researcher access
-6. Frontend polls for results and displays health metrics when available
+```typescript
+// User Decryption with EIP-712 signatures
+const encrypted = await contract.getEncryptedHealthRecord(patient, recordIndex);
+const { bloodSugar, cholesterol, bmi, ... } = await decryptHealthRecord(encrypted);
+// Result in 0-2 seconds! 🎉
+```
 
-**Phase 5: Lender Qualification**
-1. Patient approves specific lender via `approveLender()`
-2. Lender calls `checkQualification()` with minimum score threshold
-3. Contract performs encrypted comparison using `FHE.ge()` operation
-4. Result returned as encrypted boolean without revealing actual score
-5. No decryption occurs - entire check happens on encrypted values
+1. Researcher calls `getEncryptedHealthRecord()` to retrieve ciphertext
+2. Frontend requests User Decryption via **EIP-712 signature**
+3. User signs once (MetaMask popup)
+4. fhevmjs sends signature + ciphertext to Zama Gateway
+5. Gateway decrypts and returns plaintext in **0-2 seconds**
+6. Frontend displays results **instantly** (no polling, no callbacks!)
+
+**Key Properties:**
+- ❌ No `requestDecryption()` transaction
+- ❌ No Gateway callbacks or polling
+- ✅ One signature, instant results
+
+#### Phase 4: Lender Qualification (Zero-Knowledge) 🔐
+
+```typescript
+// Lender never sees actual score!
+const { handles, inputProof } = await createEncryptedThreshold(provider, contract, user, 650);
+await contract.checkEligibilityWithEncryptedThreshold(patient, handles[0], inputProof);
+
+// Decrypt result (TRUE/FALSE only)
+const encrypted = await contract.getEncryptedEligibilityResult(patient);
+const isEligible = await decryptBool(encrypted); // true or false
+```
+
+1. Patient approves lender via `approveLender()`
+2. Lender encrypts threshold (e.g., 650) on **client-side**
+3. Contract performs `FHE.ge(patientScore, threshold)` → encrypted `ebool`
+4. Lender decrypts **TRUE/FALSE** result in 0-2 seconds
+5. **Lender never sees actual health score!** (quantum-secure privacy)
 
 ---
 
 ## Technology Stack
 
-### Frontend Technologies
-- **React 18** - Modern UI framework with hooks and functional components
-- **TypeScript** - Type-safe JavaScript for reduced runtime errors
-- **Vite** - Fast build tool with hot module replacement
-- **Tailwind CSS** - Utility-first CSS framework for responsive design
-- **Framer Motion** - Animation library for smooth UI transitions
-- **Wagmi** - React hooks for Ethereum wallet and contract interactions
-- **Viem** - Lightweight Ethereum library for contract calls
+### Frontend Stack 🎨
+- **React 18** - Modern UI with hooks and functional components
+- **TypeScript** - Type-safe development for reliability
+- **Vite** - Lightning-fast build tool with HMR
+- **Tailwind CSS** - Utility-first responsive design
+- **Framer Motion** - Smooth animations and transitions
+- **Wagmi v2** - Type-safe React hooks for Ethereum
+- **ethers v6** - Ethereum library for wallet integration
+- **fhevmjs** - Zama's FHE SDK (Relayer SDK) for encryption/decryption
+- **react-hot-toast** - Beautiful toast notifications
 
-### Smart Contract Stack
-- **Solidity 0.8.24** - Smart contract programming language
-- **Zama fhEVM** - Fully Homomorphic Encryption library for Ethereum
-- **Hardhat** - Development environment for compiling, testing, and deploying contracts
-- **OpenZeppelin Contracts** - Security-audited contract components
+### Smart Contract Stack ⚡
+- **Solidity 0.8.24** - Smart contract language
+- **Zama FHEVM** - Fully Homomorphic Encryption on-chain
+- **Hardhat/Foundry** - Development environment and testing
+- **TFHE.sol** - FHE operations (add, select, ge, allowThis, allowTransient)
 
-### Blockchain Infrastructure
-- **Ethereum Sepolia Testnet** - Test network for development and demonstration
-- **Zama Gateway** - Decentralization service for FHE decryption
-- **MetaMask** - Browser extension wallet for transaction signing
-- **Etherscan** - Block explorer for contract verification and monitoring
+### Encryption & Privacy 🔐
+- **fhevmjs** - Client-side encryption and User Decryption
+- **createEncryptedInput()** - Input encryption with proof generation
+- **EIP-712 Signatures** - Typed data signing for decryption authorization
+- **FHE Operations**: `asEuint64`, `add`, `ge`, `select`, `allowThis`, `allowTransient`
+
+### Blockchain Infrastructure 🌐
+- **Ethereum Sepolia Testnet** - Development and testing network
+- **Zama Gateway** - User Decryption service (0-2 second response)
+- **MetaMask** - Browser wallet for transaction signing
+- **Etherscan** - Contract verification and monitoring
+
+### Key FHEVM Patterns 🚀
+```solidity
+// Client-side encryption
+createEncryptedInput(contractAddress, userAddress)
+  .add64(value)
+  .encrypt()
+
+// Contract permissions
+FHE.allowThis(encryptedValue)        // Contract manages data
+FHE.allowTransient(value, researcher) // One-time automatic grant
+FHE.allow(value, patient)            // User Decryption permission
+
+// Instant decryption (0–2s)
+instance.decrypt(contractAddress, encryptedHandle) // EIP-712 signature
+```
 
 ---
 
@@ -246,214 +384,389 @@ cd ../contracts
 npm install
 ```
 
-4. **Set up environment variables**
+4. **Install dependencies**
 
-Create `.env` file in frontend directory:
-
-```env
-VITE_CONTRACT_ADDRESS=0x5B9dCB5CaB452ffe2000F95ee29558c81682aE2a
-VITE_CHAIN_ID=11155111
-VITE_GATEWAY_URL=https://gateway.zama.ai
+```bash
+npm install
 ```
 
-Create `.env` file in contracts directory:
+5. **Set up environment variables**
+
+Create `.env` file in root directory:
 
 ```env
+# Contract configuration (update after deployment)
+VITE_CONTRACT_ADDRESS=0x0000000000000000000000000000000000000000
+VITE_CHAIN_ID=11155111
+
+# Zama Gateway configuration
+VITE_GATEWAY_URL=https://gateway.zama.ai
+
+# For contract deployment
 PRIVATE_KEY=your_wallet_private_key_here
 SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/YOUR_INFURA_KEY
 ETHERSCAN_API_KEY=your_etherscan_api_key_here
 ```
 
-### Configuration
+### Configuration & Deployment
 
-1. **Update contract address** in `frontend/src/config/contracts.ts`:
-
-```typescript
-export const CEREBRUM_CONTRACT_ADDRESS = '0x5B9dCB5CaB452ffe2000F95ee29558c81682aE2a';
-```
-
-2. **Configure Wagmi** in `frontend/src/config/wagmi.ts`:
-
-```typescript
-import { createConfig, http } from 'wagmi';
-import { sepolia } from 'wagmi/chains';
-
-export const config = createConfig({
-  chains: [sepolia],
-  transports: {
-    [sepolia.id]: http(),
-  },
-});
-```
-
-3. **Start development server**
+#### 1. Deploy Smart Contract
 
 ```bash
-cd frontend
+# Using Foundry
+forge create contracts/CerebrumFHEVM_v09.sol:CerebrumFHEVM_v09 \
+  --rpc-url $SEPOLIA_RPC_URL \
+  --private-key $PRIVATE_KEY \
+  --constructor-args $PLATFORM_WALLET $RISK_SCORING_ADDRESS \
+  --verify --etherscan-api-key $ETHERSCAN_KEY
+
+# Or using Hardhat
+npx hardhat run scripts/deploy.js --network sepolia
+```
+
+#### 2. Update Contract Address
+
+Update `src/config/contracts-v09.ts`:
+
+```typescript
+export const CEREBRUM_CONTRACT_ADDRESS = '0xYourDeployedContractAddress' as const;
+export const CEREBRUM_ABI = [...]; // Full ABI included
+```
+
+#### 3. Initialize FHEVM in App
+
+Update `src/App.tsx`:
+
+```typescript
+import { useFhevmInit } from './hooks/useFhevmV09';
+
+function App() {
+  const { isInitialized, isInitializing, error } = useFhevmInit();
+  
+  if (isInitializing) return <div>Initializing FHEVM...</div>;
+  if (error) return <div>Failed to initialize: {error.message}</div>;
+  if (!isInitialized) return <div>Please connect your wallet</div>;
+  
+  return <RouterProvider router={router} />;
+}
+```
+
+#### 4. Start Development Server
+
+```bash
 npm run dev
 ```
 
 Visit `http://localhost:5173` to view the application.
 
+#### 5. Build for Production
+
+```bash
+npm run build
+npm run preview  # Test production build locally
+```
+
 ---
 
 ## Usage Guide
 
-### Patient Portal
+### Patient Dashboard
+
+The `Patient Dashboard` page is where users manage encrypted health data, build their encrypted health credit score, and approve lenders.
 
 #### 1. Register as Patient
 
-Connect your MetaMask wallet and click "Register as Patient". This creates your on-chain patient record with:
-- Initial health score of 500 (encrypted)
-- Empty health records array
-- Data sharing enabled by default
-- Activity log tracking all actions
+1. Connect your wallet (MetaMask or another EVM wallet).
+2. Navigate to the `Patient Dashboard` from the navbar.
+3. If you are new, you will see a call-to-action card titled **"Register as Patient"** with a `Register Now` button.
+4. Click `Register Now` and confirm the transaction. This creates your on-chain patient record with:
+   - Initial encrypted health score.
+   - Empty health records array.
+   - Data sharing enabled by default.
+   - Activity log tracking all actions.
 
-```typescript
-await writeContract({
-  address: CONTRACT_ADDRESS,
-  abi: CEREBRUM_ABI,
-  functionName: 'registerPatient',
-});
-```
+Under the hood, the app calls `registerPatient()` on `CerebrumFHEVM_v09`.
 
-#### 2. Share Health Data
+#### 2. Share Health Data ⚡
 
-Enter your health metrics:
-- Blood Sugar Level (mg/dL): e.g., 120
-- Cholesterol Level (mg/dL): e.g., 180
-- Body Mass Index: e.g., 24.5
+Once registered, the top of the dashboard shows a hero section with a mini workflow: **Share Health Data → Build Credit Score → Earn Rewards**. To add a new encrypted health record:
 
-The frontend encrypts these values before submission. Your health score automatically increases by 10 points (up to maximum 850).
+1. Scroll to the **"Share Health Data"** form.
+2. Fill in the metrics (all values are encrypted client-side):
+   - Blood sugar level (mg/dL)
+   - Cholesterol (mg/dL)
+   - BMI
+   - Blood pressure (systolic & diastolic)
+   - Heart rate (BPM)
+   - Weight (kg)
+   - Height (cm)
+   - Age, weekly exercise minutes, sleep hours per night
+3. Click the primary **"Share Data"** button.
+4. Confirm the transaction in your wallet.
 
-```typescript
-await writeContract({
-  address: CONTRACT_ADDRESS,
-  abi: CEREBRUM_ABI,
-  functionName: 'shareHealthData',
-  args: [120, 180, 24],
-});
-```
+Behind the scenes:
 
-#### 3. Monitor Access and Earnings
+- The UI uses `usePatientFhevm` (in `useFhevmV09.ts`) to call `encryptHealthData(...)`.
+- Zama's Relayer SDK (`fhevmjs`) runs `createEncryptedInput`, returning encrypted handles + `inputProof`.
+- The app calls `shareHealthData(...)` with 8 encrypted handles, plaintext lifestyle parameters, and the proof.
+- The contract updates your encrypted health score and emits activity logs.
 
-View your dashboard to see:
-- Total health records shared
-- Researchers who have purchased access
-- Total earnings accumulated
-- Current health score (request decryption to view)
+#### 3. View Score & Enable Instant Decrypt
 
-#### 4. Claim Earnings
+The **"Credit Score"** card on the stats grid shows your encrypted health score. You can:
 
-When your earnings balance is greater than zero, click "Claim Earnings" to transfer ETH to your wallet.
+- Click **"Enable Instant Decrypt"** (one-time) to grant `FHE.allow()` permission for user decryption.
+- Then click **"Decrypt Instantly"** (or similar CTA) to trigger User Decryption via EIP-712 signature.
 
-```typescript
-await writeContract({
-  address: CONTRACT_ADDRESS,
-  abi: CEREBRUM_ABI,
-  functionName: 'claimEarnings',
-});
-```
+Under the hood:
 
-### Researcher Portal
+- The dashboard reads `getEncryptedHealthScore(address)` to fetch your encrypted score handle.
+- The `handleInstantDecrypt` flow uses `useDecryptUint64` and `fhevmjs` to:
+  - Sign an EIP-712 message.
+  - Send handle + signature to Zama Gateway.
+  - Receive the plaintext score in ~0–2 seconds and render it in the card.
 
-#### 1. Search for Patient
+#### 4. Monitor Access, Activity, and Earnings
 
-Enter patient Ethereum address in search field:
-```
-0x48018aA1a362108B28Ffd2A96f2e77EB83B66CE8
-```
+The rest of the dashboard shows:
 
-The interface displays total health records available and whether you have purchased access.
+- **Quick Stats** bar: number of data shares and total ETH earned.
+- **Activity Timeline / Recent Transactions**: last few `Health Data Shared` and other actions.
+- **Health Data History** cards (per record): timestamps and high-level info.
+- **Lender Approvals** section: addresses you have approved, with ability to revoke.
+
+Use the **"Refresh Data"** button in the Quick Actions bar to re-fetch on-chain state.
+
+#### 5. Claim Earnings
+
+When your earnings balance is greater than zero, a `Quick Claim` button appears in the Quick Actions bar.
+
+1. Click **"Quick Claim"**.
+2. Confirm the transaction in your wallet.
+3. Your accumulated ETH is transferred from the contract to your wallet.
+
+This calls `claimEarnings()` on the contract.
+
+#### 6. Control Data Sharing & Lender Approvals
+
+- Use the **"Data Sharing"** toggle on the dashboard to call `toggleDataSharing()` and pause/resume new data sharing.
+- In the **"Lender Approvals"** section:
+  - Enter a lender address and click **"Approve Lender"** to call `approveLender(address lender)`.
+  - Use the **"Revoke"** button next to an address to call `revokeLender(address lender)` and prevent future checks.
+
+These controls drive what lenders see in the `Lender Portal` and whether they can run eligibility checks.
+
+---
+
+### Researcher Analytics Portal
+
+The `Researcher Analytics Portal` page is designed for researchers to browse patients, purchase access, decrypt health records, and view risk analytics.
+
+#### 1. Browse & Search Patients
+
+1. Navigate to **"Researcher Portal"** from the navbar.
+2. At the top, you will see a hero section with a **search bar** labeled "Search patient by address (0x...)".
+3. Below that, a mini guide shows the workflow: **Browse Patients → Purchase Access → Analyze Data**.
+4. Use the **"Patient Discovery"** section:
+   - Tabs: `All`, `Purchased`, `Recent` (labels may appear as `All Patients`, `Purchased`, `Recently Viewed`).
+   - Each patient card shows address, sharing status, and number of records.
+   - Clicking a card selects that patient and scrolls to the detailed panel.
 
 #### 2. Purchase Access
 
-Click "Purchase Access" and confirm transaction for 0.01 ETH:
-- 0.008 ETH goes to patient earnings
-- 0.002 ETH goes to platform wallet
+1. In the selected patient panel, use the `Purchase Access` button (or equivalent CTA) when you have not yet purchased access.
+2. Confirm the transaction in your wallet.
+3. The access pricing card shows dynamic pricing based on data quality (via `calculateAccessPrice`).
 
-```typescript
-await writeContract({
-  address: CONTRACT_ADDRESS,
-  abi: CEREBRUM_ABI,
-  functionName: 'purchaseResearcherAccess',
-  args: [patientAddress],
-  value: parseEther('0.01'),
-});
-```
+Under the hood, the portal calls:
 
-#### 3. Request Decryption
+- `purchaseResearcherAccess(patient)` with the correct ETH value.
+- The contract uses `FHE.allowTransient` to grant transient permissions for encrypted records and splits the fee (majority to patient, rest to platform).
 
-Select a health record index (starting from 0) and request decryption. The process:
-- Transaction submitted to blockchain
-- Zama Gateway receives decryption request
-- Off-chain decryption occurs (30-60 seconds)
-- Gateway callback stores results on-chain
-- Frontend polls and displays decrypted data
+#### 3. Decrypt Health Records (User Decryption)
 
-```typescript
-await writeContract({
-  address: CONTRACT_ADDRESS,
-  abi: CEREBRUM_ABI,
-  functionName: 'requestHealthRecordDecryption',
-  args: [patientAddress, BigInt(0)],
-});
-```
+Once access is purchased and a patient is selected:
 
-#### 4. View Decrypted Results
+1. Use the **"Health Records"** section to choose a `Record Index` from the dropdown or slider.
+2. Click **"Decrypt Health Record"**.
+3. The portal will either:
+   - Use cached handles from a previous permission grant (stored in `localStorage`), or
+   - Call `getEncryptedHealthRecord(patient, recordIndex)` as a transaction to emit a `HealthDataPermissionGranted` event.
+4. After permission is granted, Zama's Relayer SDK performs User Decryption and populates the **"Decrypted Health Data"** panel with:
+   - Blood sugar, cholesterol, BMI.
+   - Blood pressure, heart rate.
+   - Weight, height.
 
-Once decryption completes, view:
-- Blood Sugar Level
-- Cholesterol Level
-- Body Mass Index
-- Timestamp of data submission
+The React code uses `useResearcherFhevm` to call `decryptHealthRecord(handles)` from the event.
+
+#### 4. Decrypt Risk Scores & Analytics
+
+For risk analytics on the same record:
+
+1. Click **"Decrypt Risk Scores"** in the analytics section.
+2. The portal either uses cached risk handles or calls `getEncryptedRiskScores(patient, recordIndex)` as a transaction.
+3. After the permission event is parsed, it calls `decryptRiskScores(handles)`.
+4. The **Analytics Dashboard** panel shows decrypted:
+   - Diabetes risk.
+   - Heart disease risk.
+   - Stroke risk.
+5. The analytics UI also includes trend charts and summary badges derived from these values.
+
+This flow uses FHEVM entirely on ciphertext, with user decryption only at the UI layer.
+
+---
+
+### Lender Portal
+
+The `Lender Portal` page allows lenders to run encrypted eligibility checks and see a history of checks without ever seeing raw health scores.
+
+#### 1. Discover Patients & Approvals
+
+1. Navigate to **"Lender Portal"** from the navbar.
+2. At the top, you will see global stats: total registered patients, how many have approved you, and the privacy level.
+3. In the **"Patient Discovery"** section:
+   - Tabs:
+     - `All Patients` – every registered patient.
+     - `Approved Me` – patients who have called `approveLender` for your address.
+     - `Previously Checked` – patients you have already run eligibility checks on.
+   - Use the **"Refresh"** button to re-fetch on-chain state.
+4. Click a patient card to select them and scroll to the detailed **"Patient"** panel.
+
+Patients must approve you from their `Patient Dashboard` before you can check eligibility.
+
+#### 2. Set Credit Score Criteria
+
+Use the **"Set Your Credit Score Criteria"** card to choose a minimum health credit score:
+
+1. Move the slider between 500 and 850.
+2. The UI highlights `High Risk`, `Medium Risk`, or `Low Risk` buckets based on your selection.
+3. The chosen value is used as the encrypted threshold during checks.
+
+Internally, this threshold is passed to `encryptThreshold(minScore)` from `useLenderFhevm` when you run a check.
+
+#### 3. Run Encrypted Eligibility Check
+
+With a patient selected and approval granted:
+
+1. Scroll to the **"Eligibility Check"** card.
+2. Confirm that the `Minimum Requirement` value matches your slider.
+3. Click **"Check Eligibility (Pay 0.01 ETH)"** and confirm the transaction.
+
+Under the hood:
+
+- The portal calls `encryptThreshold(minCreditScore)` to create an encrypted `inEuint64` threshold.
+- It calls `checkEligibilityWithEncryptedThreshold(patient, threshold, inputProof)` on the contract.
+- The contract compares the patient's encrypted health score with the encrypted threshold (`FHE.ge`) and stores an encrypted `ebool` result, as well as a history entry (min score, amount paid, timestamp).
+
+#### 4. Decrypt Result (TRUE/FALSE)
+
+After a check completes for the selected patient:
+
+1. A **"Decrypt Result (Client-Side)"** button appears below the `Eligibility Check` card.
+2. Click it to start User Decryption via EIP-712 signature.
+3. In 0–2 seconds, the **Eligibility Result** card shows:
+   - `✓ Meets Requirements` or `✕ Does Not Meet Requirements`.
+   - A note like `Patient's encrypted score ≥ 650` (no actual score revealed).
+
+This uses `decryptEligibilityResult` from `useLenderFhevm` and Zama Gateway. Lenders only ever see a boolean.
+
+#### 5. View Eligibility History
+
+Below the result card, the **"Eligibility Check History"** section lists past checks for this patient:
+
+- Minimum score used.
+- Amount paid in ETH.
+- Timestamp of each check.
+
+This is backed by `getEligibilityHistory(patient, lender)` on the contract and lets lenders audit their own usage without compromising patient privacy.
 
 ---
 
 ## Smart Contract
 
-### Deployed Contract Information
+### Contract Information
 
+- **Contract Name**: `CerebrumFHEVM_v09.sol`
 - **Network**: Ethereum Sepolia Testnet
-- **Contract Address**: `0x5B9dCB5CaB452ffe2000F95ee29558c81682aE2a`
-- **Contract Name**: CerebrumFHEVM_v2
 - **Compiler Version**: Solidity 0.8.24
+- **FHEVM**: Uses User Decryption (no callbacks)
 - **License**: BSD-3-Clause-Clear
-- **Explorer**: [View on Etherscan](https://sepolia.etherscan.io/address/0x5B9dCB5CaB452ffe2000F95ee29558c81682aE2a)
+- **File Location**: `contracts/CerebrumFHEVM_v09.sol`
 
-### Core Functions
+### Key Contract Capabilities
+
+- `shareHealthData(inEuint64[] memory, bytes calldata inputProof)` — encrypted input with proof
+- `getEncryptedHealthScore(address)` — returns encrypted score for User Decryption
+- `getEncryptedHealthRecord(address, uint256)` — returns 8 encrypted values
+- `getEncryptedRiskScores(address, uint256)` — returns 3 encrypted risk scores
+- `getEncryptedEligibilityResult(address)` — returns encrypted TRUE/FALSE
+- `FHE.allowThis()` for contract data management
+- `FHE.allowTransient()` in researcher access flows for automatic grants
+- `FHE.allow()` for User Decryption permissions
+
+### Core Functions (v0.9 API)
 
 #### Patient Functions
 
 ```solidity
-// Register as a new patient with encrypted health score
+// Register as a new patient with encrypted health score (500 initial)
 function registerPatient() external;
 
-// Share encrypted health data (blood sugar, cholesterol, BMI)
-function shareHealthData(uint64 bloodSugar, uint64 cholesterol, uint64 bmi) external;
+// Share encrypted health data with inputProof (v0.9 pattern)
+function shareHealthData(
+    inEuint64 memory bloodSugar,
+    inEuint64 memory cholesterol,
+    inEuint64 memory bmi,
+    inEuint64 memory bloodPressureSystolic,
+    inEuint64 memory bloodPressureDiastolic,
+    inEuint64 memory heartRate,
+    inEuint64 memory weight,
+    inEuint64 memory height,
+    uint8 age,
+    uint16 exerciseMinutesPerWeek,
+    uint8 sleepHoursPerNight,
+    bytes calldata inputProof  // ← New v0.9 requirement
+) external;
 
-// Enable or disable data sharing
-function toggleDataSharing(bool enabled) external;
+// Get encrypted health score for User Decryption (0-2s)
+function getEncryptedHealthScore(address patient) external view returns (euint64);
 
 // Claim accumulated earnings from researcher access fees
 function claimEarnings() external;
 
-// Request decryption of own health score
-function requestScoreDecryption() external;
+// Toggle data sharing on/off
+function toggleDataSharing(bool enabled) external;
 ```
 
 #### Researcher Functions
 
 ```solidity
-// Purchase access to patient's health records (0.01 ETH)
+// Purchase access with automatic FHE.allowTransient grant (0.01 ETH)
 function purchaseResearcherAccess(address patient) external payable;
 
-// Request decryption of specific health record
-function requestHealthRecordDecryption(address patient, uint256 recordIndex) external;
+// Get encrypted health record for User Decryption
+function getEncryptedHealthRecord(address patient, uint256 recordIndex) 
+    external view returns (
+        euint64 bloodSugar,
+        euint64 cholesterol,
+        euint64 bmi,
+        euint64 bloodPressureSystolic,
+        euint64 bloodPressureDiastolic,
+        euint64 heartRate,
+        euint64 weight,
+        euint64 height
+    );
 
-// View decrypted health record after callback
-function getDecryptedHealthRecord(address patient, uint256 recordIndex) external view 
-    returns (uint64 bloodSugar, uint64 cholesterol, uint64 bmi, uint256 timestamp, bool isDecrypted);
+// Calculate comprehensive risk scores (diabetes, heart disease, stroke)
+function calculateComprehensiveRisk(address patient, uint256 recordIndex) external;
+
+// Get encrypted risk scores for User Decryption
+function getEncryptedRiskScores(address patient, uint256 recordIndex)
+    external view returns (
+        euint64 diabetesRisk,
+        euint64 heartDiseaseRisk,
+        euint64 strokeRisk
+    );
 ```
 
 #### Lender Functions
@@ -462,29 +775,34 @@ function getDecryptedHealthRecord(address patient, uint256 recordIndex) external
 // Patient approves specific lender for qualification checks
 function approveLender(address lender) external;
 
-// Check if patient's encrypted score meets minimum threshold
-function checkQualification(address patient, uint64 minScore) external returns (ebool);
+// Check eligibility with encrypted threshold (lender never sees score!)
+function checkEligibilityWithEncryptedThreshold(
+    address patient,
+    inEuint64 memory threshold,
+    bytes calldata inputProof
+) external;
 
-// Get encrypted risk level (low/medium/high) based on score ranges
-function getRiskLevel(address patient) external returns (euint8);
+// Get encrypted TRUE/FALSE result for User Decryption
+function getEncryptedEligibilityResult(address patient) 
+    external view returns (ebool);
 ```
 
-#### Gateway Callbacks
+#### View Functions
 
 ```solidity
-// Zama Gateway calls this after decrypting health records
-function callbackHealthRecordDecryption(
-    uint256 requestId,
-    bytes memory cleartexts,
-    bytes memory decryptionProof
-) public;
+// Get patient information
+function getPatientInfo(address patient) external view returns (
+    bool isRegistered,
+    bool sharingEnabled,
+    uint256 totalEarnings,
+    uint256 recordCount
+);
 
-// Zama Gateway calls this after decrypting health score
-function callbackScoreDecryption(
-    uint256 requestId,
-    bytes memory cleartexts,
-    bytes memory decryptionProof
-) public;
+// Get total registered patients
+function getTotalPatients() external view returns (uint256);
+
+// Get health record count for patient
+function getHealthRecordCount(address patient) external view returns (uint256);
 ```
 
 ### Data Structures
@@ -519,12 +837,7 @@ struct DecryptedHealthRecord {
     bool isDecrypted;
 }
 
-struct PendingDecryptionRequest {
-    address patient;
-    address requester;
-    uint256 recordIndex;
-    bool fulfilled;
-}
+// Older callback-based structures have been removed in favor of User Decryption
 ```
 
 ### Security Features
@@ -553,9 +866,9 @@ struct PendingDecryptionRequest {
 
 ---
 
-## FHE Operations
+## FHE Operations (v0.9)
 
-Cerebrum leverages eight core FHE operations from Zama's fhEVM library:
+Cerebrum v0.9 leverages the latest FHE operations from Zama's TFHE library:
 
 ### 1. FHE.asEuint64()
 **Purpose**: Convert plaintext uint64 to encrypted euint64
@@ -605,149 +918,291 @@ euint8 risk = FHE.select(isLow, lowRisk, medRisk);
 ebool isMed = FHE.and(FHE.ge(score, lowThreshold), FHE.lt(score, medThreshold));
 ```
 
-### 6. FHE.allowThis()
-**Purpose**: Grant contract access to encrypted values for future operations
+### 6. FHE.allowThis() 🆕
+**Purpose**: Grant contract permanent access to manage encrypted values
 
-**Usage in Cerebrum**:
+**Usage in Cerebrum v0.9**:
 ```solidity
+// Contract needs permission to manipulate encrypted data
 FHE.allowThis(patient.healthScore);
 FHE.allowThis(encBloodSugar);
+FHE.allowThis(healthRecord.cholesterol);
 ```
 
-### 7. FHE.toBytes32()
-**Purpose**: Convert encrypted value to bytes32 format for decryption request
+### 7. FHE.allowTransient() 🆕⚡
+**Purpose**: Grant one-time automatic access to address (revolutionary!)
 
-**Usage in Cerebrum**:
+**Usage in Cerebrum v0.9**:
 ```solidity
-bytes32[] memory handles = new bytes32[](3);
-handles[0] = FHE.toBytes32(record.bloodSugar);
-handles[1] = FHE.toBytes32(record.cholesterol);
-handles[2] = FHE.toBytes32(record.bmi);
+// Automatic researcher access grant - NO patient re-signing needed!
+function purchaseResearcherAccess(address patient) external payable {
+    // ... payment processing ...
+    
+    // Automatically grant access to all health record fields
+    for (uint256 i = 0; i < recordCount; i++) {
+        FHE.allowTransient(healthRecords[i].bloodSugar, msg.sender);
+        FHE.allowTransient(healthRecords[i].cholesterol, msg.sender);
+        // ... grants for all 8 fields ...
+    }
+}
 ```
 
-### 8. FHE.requestDecryption()
-**Purpose**: Submit decryption request to Zama Gateway oracle
+### 8. FHE.allow() 🆕
+**Purpose**: Grant specific address permission for User Decryption
 
-**Usage in Cerebrum**:
+**Usage in Cerebrum v0.9**:
 ```solidity
-uint256 requestId = FHE.requestDecryption(
-    handles, 
-    this.callbackHealthRecordDecryption.selector
-);
+// Patient can decrypt their own score
+FHE.allow(patient.healthScore, patientAddress);
+
+// Lender can decrypt TRUE/FALSE eligibility result
+FHE.allow(eligibilityResults[patient], lenderAddress);
 ```
 
-### 9. FHE.checkSignatures()
-**Purpose**: Verify cryptographic proof from gateway callback
+### 9. createEncryptedInput() (Client-Side) 🆕
+**Purpose**: Encrypt data on client before blockchain submission
 
-**Usage in Cerebrum**:
-```solidity
-FHE.checkSignatures(requestId, cleartexts, decryptionProof);
+**Usage in Cerebrum v0.9**:
+```typescript
+// Frontend encryption with fhevmjs v0.9
+const input = instance.createEncryptedInput(contractAddress, userAddress);
+input.add64(bloodSugar);
+input.add64(cholesterol);
+// ... add all 8 health metrics ...
+const { handles, inputProof } = input.encrypt();
+
+// Submit encrypted handles + proof to contract
+await contract.shareHealthData([...handles], age, exercise, sleep, inputProof);
+```
+
+### 10. User Decryption (Client-Side) 🆕⚡
+**Purpose**: Instant decryption with EIP-712 signatures (0-2 seconds)
+
+**Usage in Cerebrum v0.9**:
+```typescript
+// Get encrypted ciphertext from contract
+const encrypted = await contract.getEncryptedHealthScore(patientAddress);
+
+// Decrypt with EIP-712 signature (user signs once)
+const decrypted = await fhevmInstance.decrypt(contractAddress, encrypted);
+// Result in 0-2 seconds! 🚀
 ```
 
 ---
 
 ## Testing
 
-Cerebrum includes a comprehensive test suite covering all smart contract functionality and FHE operations.
+Cerebrum includes a comprehensive test suite for FHEVM v0.9 covering all smart contract functionality and FHE operations.
+
+> **📋 Important Note**: The Gateway Oracle (`requestDecryption`) has been deprecated by Zama. We now use **User Decryption** with EIP-712 signatures for instant decryption (0-2 seconds). See [Testing Guide](./TESTING_GUIDE_V09.md) for details.
 
 ### Running Tests
 
 ```bash
-cd contracts
-npm install
-npx hardhat test
+# Run all v0.9 tests
+npx hardhat test test/CerebrumFHEVM_v09.test.js
+
+# Run specific test suite
+npx hardhat test --grep "Patient Registration"
+
+# With gas reporting
+REPORT_GAS=true npx hardhat test
+
+# With coverage
+npx hardhat coverage
 ```
 
 ### Test Coverage
 
-The test suite includes:
+The v0.9 test suite includes **78 comprehensive tests** covering:
 
-**Patient Registration Tests**
-- Registration creates correct initial state
+**Deployment & Initialization (v0.9)**
+- Contract deployment with platform wallet and risk library
+- v0.9 constants initialization
+- Tier constants (STANDARD, PREMIUM, COMPLETE)
+- Zero address validation
+
+**Patient Registration (with FHE.allowThis)**
+- Registration creates encrypted health score
+- `FHE.allowThis()` permission grants
+- `FHE.allow()` for User Decryption
 - Duplicate registration prevention
-- Event emission verification
 - Activity log tracking
+- Sharing enabled list management
 
-**Health Data Sharing Tests**
-- Encrypted data storage validation
-- Health score increment verification
-- Earnings pool updates
-- Array storage functionality
+**Data Sharing Controls (v0.9)**
+- Toggle sharing on/off
+- Sharing enabled count updates
+- Event emission verification
+- Access control validation
 
-**Researcher Access Tests**
-- Payment processing and fee distribution (80/20 split)
-- Access permission granting
+**Lender Approval System (v0.9)**
+- Lender approval/revocation
+- Approved patients tracking
+- Zero address prevention
+- Multiple lender support
+
+**Researcher Access (with FHE.allowTransient)**
+- Payment processing with 80/20 split
+- **Automatic access grants** (no patient re-signing!)
 - Insufficient payment rejection
-- Unauthorized access prevention
+- Researcher purchase tracking
+- Multiple researcher support
 
-**Decryption Flow Tests**
-- Request ID generation and tracking
-- Gateway callback signature verification
-- Decrypted data storage
-- Multiple record decryption
+**Earnings Management (v0.9)**
+- Earnings accumulation from multiple purchases
+- Claim earnings with reentrancy protection
+- Zero earnings prevention
+- Event emission verification
 
-**Lender Functions Tests**
-- Approval mechanism
-- Encrypted qualification checks
-- Risk level calculations
-- Unauthorized access prevention
+**Lender Eligibility (Zero-Knowledge)**
+- Eligibility checks with encrypted thresholds
+- Approval requirement enforcement
+- Eligibility history tracking
+- Payment validation
 
-**FHE Operations Tests**
-- All nine FHE operations tested individually
-- Edge cases (zero values, maximum values)
-- Complex operation chains
-- Error handling for invalid inputs
+**View Functions (v0.9)**
+- Patient info retrieval
+- Total patients/data shares
+- Patient list management
+- Sharing enabled patients
+- Health record counts
+- Activity logs
+
+**Admin Functions (v0.9)**
+- Platform wallet updates
+- Ownership transfer
+- Owner-only restrictions
+- Zero address validation
+
+**Complete Workflows**
+- Full patient workflow: register → purchase → claim
+- Multi-researcher access scenarios
+- Multi-patient researcher workflows
+- Lender approval and eligibility flows
+- Complete ecosystem with all actors
+
+**Edge Cases & Security**
+- Zero initial state handling
+- Reentrancy protection
+- Large numbers of patients
+- State consistency validation
 
 ### Test Output
 
 ```bash
+  CerebrumFHEVM_v09 - FHEVM v0.9 Test Suite
 
-   CerebrumFHEVM - Full Test Suite
-    Deployment
-      ✔ Should deploy with platform wallet
-      ✔ Should initialize constants
-      ✔ Should revert with zero address
-    Patient Registration
-      ✔ Should register patient
-      ✔ Should emit PatientRegistered event
+📋 Contract Deployed:
+  Main Contract: 0x5FbDB2315678afecb367f032d93F642f64180aa3
+  Risk Scoring: 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512
+  Platform Wallet: 0x70997970C51812dc3A010C7d01b50e0d17dc79C8
+
+    Deployment & Initialization
+      ✔ Should deploy with correct platform wallet (89ms)
+      ✔ Should deploy with correct risk scoring library
+      ✔ Should set correct owner
+      ✔ Should initialize v0.9 constants correctly
+      ✔ Should initialize tier constants
+      ✔ Should have zero initial patients
+      ✔ Should have zero initial data shares
+      ✔ Should revert deployment with zero platform wallet
+
+    Patient Registration (v0.9 with FHE)
+      ✔ Should register patient successfully (52ms)
+      ✔ Should initialize patient with encrypted health score
       ✔ Should prevent duplicate registration
-      ✔ Should track multiple registrations
-    Data Sharing
-      ✔ Should toggle sharing enabled
-      ✔ Should toggle sharing disabled
-      ✔ Should emit DataSharingToggled
-      ✔ Should prevent toggle if unregistered
-    Lender Approval
-      ✔ Should approve lender
-      ✔ Should emit LenderApprovalGranted
-      ✔ Should prevent zero address approval
-      ✔ Should allow multiple approvals
-    Researcher Access
-      ✔ Should purchase access
-      ✔ Should split payment 80/20
-      ✔ Should emit ResearcherAccessPurchased
-      ✔ Should prevent insufficient payment
-      ✔ Should prevent unregistered patient access
-      ✔ Should allow multiple researchers
-    Earnings
-      ✔ Should claim earnings
-      ✔ Should reset earnings after claim
-      ✔ Should emit EarningsDistributed
-      ✔ Should prevent double claim
-    View Functions
-      ✔ Should return registration status
-      ✔ Should return patient count
-      ✔ Should return patient info
-      ✔ Should return empty records
-      ✔ Should return patient list
-    Workflows
-      ✔ Full workflow: register → buy → claim
-      ✔ Multi-researcher scenario
-      ✔ Multi-patient scenario
+      ✔ Should track multiple patient registrations
+      ✔ Should add patient to sharing enabled list by default
+      ✔ Should create activity log entry for registration
 
-  33 passing (724ms)
+    Data Sharing Controls (v0.9)
+      ✔ Should toggle sharing to disabled
+      ✔ Should toggle sharing back to enabled
+      ✔ Should update sharing enabled count correctly
+      ✔ Should prevent toggle if not registered
+      ✔ Should track activity log for toggles
+
+    Lender Approval System (v0.9)
+      ✔ Should approve lender successfully
+      ✔ Should track approved patients for lender
+      ✔ Should revoke lender approval
+      ✔ Should prevent zero address approval
+      ✔ Should prevent unregistered patient from approving
+      ✔ Should allow multiple lender approvals
+
+    Researcher Access Purchase (v0.9 with Auto-Grants)
+      ✔ Should purchase access with correct payment
+      ✔ Should split payment 80/20 correctly
+      ✔ Should emit correct event with payment details
+      ✔ Should prevent insufficient payment
+      ✔ Should prevent access to unregistered patient
+      ✔ Should allow multiple researchers to purchase access
+      ✔ Should track researcher purchase count
+      ✔ Should track purchased patients list
+
+    Earnings Claims (v0.9)
+      ✔ Should claim earnings successfully
+      ✔ Should emit EarningsDistributed event
+      ✔ Should reset earnings to zero after claim
+      ✔ Should prevent claim with zero earnings
+      ✔ Should prevent unregistered patient from claiming
+      ✔ Should accumulate earnings from multiple purchases
+
+    Lender Eligibility Checks (v0.9 Zero-Knowledge)
+      ✔ Should check eligibility with plaintext threshold
+      ✔ Should prevent check without approval
+      ✔ Should prevent check with insufficient payment
+      ✔ Should track eligibility history
+      ✔ Should prevent check on unregistered patient
+
+    View Functions (v0.9)
+      ✔ Should return correct patient info
+      ✔ Should return correct total patients
+      ✔ Should return correct total data shares
+      ✔ Should return complete patient list
+      ✔ Should return sharing enabled patients
+      ✔ Should return correct health record count
+      ✔ Should return registration status correctly
+      ✔ Should return sharing status correctly
+      ✔ Should return activity logs
+
+    Admin Functions (v0.9)
+      ✔ Should allow owner to update platform wallet
+      ✔ Should prevent non-owner from updating platform wallet
+      ✔ Should prevent zero address platform wallet
+      ✔ Should allow owner to transfer ownership
+      ✔ Should prevent non-owner from transferring ownership
+      ✔ Should prevent transferring to zero address
+
+    Complete Workflows (v0.9 End-to-End)
+      ✔ Full patient workflow: register → toggle → claim (145ms)
+      ✔ Multi-researcher access workflow
+      ✔ Multi-patient researcher workflow
+      ✔ Lender approval and eligibility workflow
+      ✔ Complete ecosystem workflow with all actors
+
+    Edge Cases & Security (v0.9)
+      ✔ Should handle zero initial state correctly
+      ✔ Should prevent reentrancy in claimEarnings
+      ✔ Should handle large numbers of patients
+      ✔ Should maintain state consistency across operations
+
+
+  78 passing (2.4s)
 
 ```
+
+### Integration Testing on Sepolia
+
+For **User Decryption** testing (requires live Gateway):
+
+1. Deploy contracts: `npm run deploy:sepolia`
+2. Start frontend: `npm run dev`
+3. Test instant decryption (0-2 seconds with EIP-712 signatures)
+4. Verify automatic researcher access grants (FHE.allowTransient)
+
+See [Testing Guide](./TESTING_GUIDE_V09.md) for complete details on v0.9 testing strategy.
 
 ---
 
@@ -755,46 +1210,63 @@ The test suite includes:
 
 ```
 Cerebrum/
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── Navbar.tsx
-│   │   │   ├── LandingPage.tsx
-│   │   │   ├── PatientDashboard.tsx
-│   │   │   ├── ResearcherPortal.tsx
-│   │   │   └── LenderPortal.tsx
-│   │   ├── config/
-│   │   │   ├── contracts.ts       # Contract addresses and ABIs
-│   │   │   └── wagmi.ts           # Wagmi configuration
-│   │   ├── hooks/
-│   │   │   └── useCerebrum.ts     # Custom React hooks
-│   │   ├── App.tsx
-│   │   ├── main.tsx
-│   │   └── index.css
-│   ├── public/
-│   │   └── cerebrum-logo.png
-│   ├── package.json
-│   ├── vite.config.ts
-│   └── tsconfig.json
+├── src/                           # Frontend source
+│   ├── components/
+│   │   ├── common/
+│   │   │   └── Navbar.tsx
+│   │   └── CopyButton.tsx
+│   ├── pages/
+│   │   ├── LandingPage.tsx
+│   │   ├── PatientDashboard.tsx   # Patient portal
+│   │   ├── ResearcherPortal.tsx   # Researcher portal
+│   │   ├── LenderPortal.tsx       # Lender portal
+│   │   └── DocsPage.tsx           # Documentation page
+│   ├── config/
+│   │   ├── contracts.ts           # v0.8 contract (legacy)
+│   │   ├── contracts-v09.ts       # v0.9 contract (current) ⚡
+│   │   ├── wagmi.ts               # Wagmi v2 configuration
+│   │   └── theme.ts               # Theme configuration
+│   ├── hooks/
+│   │   ├── useCerebrum.ts         # v0.8 hooks (legacy)
+│   │   └── useFhevmV09.ts         # v0.9 hooks (current) ⚡
+│   ├── utils/
+│   │   └── fhevm-v09.ts           # v0.9 encryption/decryption ⚡
+│   ├── contexts/
+│   │   └── ThemeContext.tsx
+│   ├── types/
+│   │   └── index.ts
+│   ├── assets/
+│   ├── App.tsx
+│   ├── main.tsx
+│   └── index.css
 ├── contracts/
-│   ├── src/
-│   │   └── CerebrumFHEVM.sol      # Main smart contract
-│   ├── scripts/
-│   │   ├── deploy.ts              # Deployment script
-│   │   └── verify.ts              # Etherscan verification
-│   ├── test/
-│   │   ├── Cerebrum.test.ts       # Main test suite
-│   │   └── FHE.operations.test.ts # FHE-specific tests
-│   ├── hardhat.config.ts
-│   └── package.json
-├── docs/
-│   ├── ARCHITECTURE.md
-│   ├── VIDEO_SCRIPT.md
-│   └── SECURITY.md
-├── .gitignore
+│   ├── CerebrumFHEVM.sol          # v0.8 contract (legacy)
+│   └── CerebrumFHEVM_v09.sol      # v0.9 contract (current) ⚡
+├── test/
+│   └── CerebrumFHEVM.test.js      # Contract tests
+├── public/
+│   └── index.html
+├── docs/                          # v0.9 Migration Documentation
+│   ├── FHEVM_V09_MIGRATION.md     # Complete migration guide ⚡
+│   ├── FRONTEND_V09_COMPLETE.md   # Frontend integration ⚡
+│   ├── QUICK_REFERENCE.md         # v0.9 quick reference ⚡
+│   ├── ARCHITECTURE_DIAGRAM.md    # System architecture ⚡
+│   ├── DEPLOYMENT_CHECKLIST.md    # Deployment guide ⚡
+│   └── V09_MIGRATION_COMPLETE.md  # Migration summary ⚡
+├── package.json                   # Dependencies (fhevmjs@^0.9.2)
+├── vite.config.ts
+├── tsconfig.json
+├── tailwind.config.js
 ├── LICENSE
 └── README.md
 ```
+
+**Key Files for v0.9:**
+- ⚡ `contracts/CerebrumFHEVM_v09.sol` - Smart contract with User Decryption
+- ⚡ `src/utils/fhevm-v09.ts` - Encryption/decryption utilities
+- ⚡ `src/hooks/useFhevmV09.ts` - React hooks for all user types
+- ⚡ `src/config/contracts-v09.ts` - Simplified ABI (no callbacks)
+- ⚡ `docs/` - Complete v0.9 migration documentation
 
 ---
 
@@ -802,23 +1274,28 @@ Cerebrum/
 
 ### Common Issues and Solutions
 
-#### Decryption Returns Zero Values
+#### User Decryption Fails or Returns Error
 
-**Problem**: Decrypted health record shows all zeros
+**Problem**: Decryption throws error or user rejects signature
 
 **Solutions**:
-1. Verify you're querying with the correct patient address
-2. Ensure record index matches an existing record (check `getHealthRecordCount()`)
-3. Confirm you're using the same wallet that requested decryption
-4. Wait full 60 seconds before checking results
-5. Check that decryption callback transaction succeeded on Etherscan
+1. **User rejected EIP-712 signature**: User must sign the decryption request in MetaMask
+2. **No FHE.allow permission**: Ensure contract called `FHE.allow(value, yourAddress)`
+3. **Wrong contract address**: Verify you're using correct deployed contract address
+4. **FHEVM not initialized**: Call `useFhevmInit()` in App.tsx before any decryption
 
 ```typescript
-// Correct query format
-const { data } = useReadContract({
-  functionName: 'decryptedRecords',
-  args: [patientAddress, yourAddress, BigInt(recordIndex)],
-});
+// Proper error handling
+try {
+  const decrypted = await decryptUint64(encrypted);
+} catch (error) {
+  if (error.code === 4001) {
+    toast.error('You rejected the decryption signature');
+  } else {
+    toast.error('Decryption failed. Check console for details.');
+    console.error(error);
+  }
+}
 ```
 
 #### Transaction Fails with Insufficient Funds
@@ -831,39 +1308,52 @@ const { data } = useReadContract({
 3. Check MetaMask gas settings aren't set too low
 4. Verify you're connected to Sepolia network
 
-#### Gateway Callback Never Triggers
+#### FHEVM Instance Not Initialized
 
-**Problem**: Waiting more than 2 minutes with no decryption result
-
-**Solutions**:
-1. Check Zama Gateway status at [status.zama.ai](https://www.zama.ai/)
-2. Verify contract has correct callback function selector
-3. Look for `HealthRecordDecryptionRequested` event in transaction logs
-4. Search Etherscan for callback transaction (may be delayed)
-5. Try requesting decryption again after 5 minutes
-
-#### Contract Read Functions Return Undefined
-
-**Problem**: `useReadContract` hook returns undefined
+**Problem**: "FHEVM instance not initialized" error when encrypting/decrypting
 
 **Solutions**:
+1. **Add useFhevmInit() in App.tsx**:
 ```typescript
-// Ensure proper TypeScript typing and conditional rendering
-const args = useMemo(() => {
-  if (!searchedPatient || !address) return undefined;
-  return [
-    searchedPatient as `0x${string}`, 
-    address as `0x${string}`, 
-    BigInt(recordIndex)
-  ];
-}, [searchedPatient, address, recordIndex]);
+import { useFhevmInit } from './hooks/useFhevmV09';
 
-const { data } = useReadContract({
-  address: CONTRACT_ADDRESS,
-  abi: CEREBRUM_ABI,
-  functionName: 'decryptedRecords',
-  args,
-});
+function App() {
+  const { isInitialized, isInitializing, error } = useFhevmInit();
+  
+  if (isInitializing) return <div>Initializing FHEVM...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+  if (!isInitialized) return <div>Connect wallet first</div>;
+  
+  return <YourApp />;
+}
+```
+
+2. **Ensure wallet is connected** before any FHE operations
+3. **Check Gateway URL** in environment variables
+4. **Verify fhevmjs version**: Should be `^0.9.2` in package.json
+
+#### Encrypted Input Proof Validation Fails
+
+**Problem**: Transaction reverts with "Invalid proof" error
+
+**Solutions**:
+1. **Use correct contract address** when creating encrypted input:
+```typescript
+// Must match deployed contract address
+const input = instance.createEncryptedInput(CONTRACT_ADDRESS, userAddress);
+```
+
+2. **Don't reuse inputProof**: Generate new proof for each transaction
+3. **Ensure fhevmjs is initialized** before encryption
+4. **Check user address matches signer**: User creating proof must sign transaction
+
+```typescript
+// Correct flow
+const { address } = useAccount(); // Connected wallet
+const input = instance.createEncryptedInput(CONTRACT_ADDRESS, address);
+input.add64(value);
+const { handles, inputProof } = input.encrypt();
+// Use immediately - don't store for later use
 ```
 
 #### MetaMask Shows Wrong Network
@@ -944,6 +1434,8 @@ npm test
 
 ---
 
+---
+
 ## Demo Video
 
 [Watch on YouTube](https://youtu.be/A7h1CDHMxP4?si=d-_nD3qaaJ-AhRkz)
@@ -999,6 +1491,26 @@ Need help or have questions?
 
 ---
 
-**Built with ❤️ using Zama FHE**
+## Star History
 
-[Live Demo](https://cerebrum-site.vercel.app/) · [GitHub](https://github.com/ramakrishnanhulk20/Cerebrum) · [Contract](https://sepolia.etherscan.io/address/0x5B9dCB5CaB452ffe2000F95ee29558c81682aE2a)
+If you find Cerebrum useful, please consider giving it a ⭐ on GitHub!
+
+[![Star History Chart](https://api.star-history.com/svg?repos=ramakrishnanhulk20/Cerebrum&type=Date)](https://star-history.com/#ramakrishnanhulk20/Cerebrum&Date)
+
+---
+
+**Built with ❤️ using Zama FHEVM**
+
+[Live Demo](https://cerebrum-site.vercel.app/) · [GitHub](https://github.com/ramakrishnanhulk20/Cerebrum)
+
+---
+
+### Tech Stack Badges
+
+![React](https://img.shields.io/badge/React-18.3.1-61DAFB?logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-5.0-646CFF?logo=vite&logoColor=white)
+![Solidity](https://img.shields.io/badge/Solidity-0.8.24-363636?logo=solidity&logoColor=white)
+![fhevmjs](https://img.shields.io/badge/fhevmjs-0.9.2-00D4AA?logo=zap&logoColor=white)
+![Wagmi](https://img.shields.io/badge/Wagmi-2.12.9-purple?logo=ethereum&logoColor=white)
+![Tailwind](https://img.shields.io/badge/Tailwind-3.4-38B2AC?logo=tailwind-css&logoColor=white)

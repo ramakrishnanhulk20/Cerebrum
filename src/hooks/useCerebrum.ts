@@ -1,5 +1,5 @@
 import { useReadContract } from 'wagmi';
-import { CEREBRUM_CONTRACT_ADDRESS, CEREBRUM_ABI } from '../config/contracts';
+import { CEREBRUM_CONTRACT_ADDRESS, CEREBRUM_ABI } from '../config/contracts-v09';
 
 export const useCerebrum = () => {
   const { data: totalPatients } = useReadContract({
