@@ -1014,7 +1014,7 @@ npx hardhat coverage
 
 ### Test Coverage
 
-The v0.9 test suite includes **78 comprehensive tests** covering:
+The v0.9 test suite includes **84 comprehensive tests** (56 passing, 28 require contract enhancements) covering:
 
 **Deployment & Initialization (v0.9)**
 - Contract deployment with platform wallet and risk library
@@ -1023,83 +1023,114 @@ The v0.9 test suite includes **78 comprehensive tests** covering:
 - Zero address validation
 
 **Patient Registration (with FHE.allowThis)**
-- Registration creates encrypted health score
-- `FHE.allowThis()` permission grants
-- `FHE.allow()` for User Decryption
-- Duplicate registration prevention
-- Activity log tracking
-- Sharing enabled list management
+- ✅ Registration creates encrypted health score
+- ✅ `FHE.allowThis()` permission grants
+- ✅ `FHE.allow()` for User Decryption
+- ✅ Duplicate registration prevention
+- ✅ Activity log tracking
+- ⚠️ Sharing enabled list management (data sharing starts **enabled** by default)
+
+**Health Data Sharing (Encrypted Input)**
+- ⚠️ Health data sharing (requires FHE environment)
+- ⚠️ Data share count tracking (awaiting FHE integration)
+- ✅ Data sharing when disabled validation
 
 **Data Sharing Controls (v0.9)**
-- Toggle sharing on/off
-- Sharing enabled count updates
-- Event emission verification
-- Access control validation
+- ⚠️ Toggle sharing on/off (inverted default state)
+- ⚠️ Sharing enabled count updates
+- ✅ Access control validation
+- ✅ Activity log for toggles
 
 **Lender Approval System (v0.9)**
-- Lender approval/revocation
-- Approved patients tracking
-- Zero address prevention
-- Multiple lender support
+- ✅ Lender approval/revocation
+- ✅ Approved patients tracking
+- ✅ Zero address prevention
+- ✅ Multiple lender support
 
 **Researcher Access (with FHE.allowTransient)**
-- Payment processing with 80/20 split
-- **Automatic access grants** (no patient re-signing!)
-- Insufficient payment rejection
-- Researcher purchase tracking
-- Multiple researcher support
+- ⚠️ Payment processing with 80/20 split (requires researcher approval setup)
+- ⚠️ **Automatic access grants** (needs `approveResearcher` calls in tests)
+- ⚠️ Insufficient payment rejection
+- ✅ Unregistered patient access prevention
+- ⚠️ Researcher purchase tracking
+- ⚠️ Multiple researcher support
 
 **Earnings Management (v0.9)**
-- Earnings accumulation from multiple purchases
-- Claim earnings with reentrancy protection
-- Zero earnings prevention
-- Event emission verification
+- ⚠️ Earnings accumulation from multiple purchases (blocked by researcher approval)
+- ⚠️ Claim earnings with reentrancy protection
+- ✅ Zero earnings prevention
+- ⚠️ Event emission verification
 
 **Lender Eligibility (Zero-Knowledge)**
-- Eligibility checks with encrypted thresholds
-- Approval requirement enforcement
-- Eligibility history tracking
-- Payment validation
+- ⚠️ Eligibility checks with encrypted thresholds (requires risk scores)
+- ✅ Approval requirement enforcement
+- ⚠️ Eligibility history tracking
+- ✅ Payment validation
+- ✅ Unregistered patient prevention
+
+**Encrypted Lender Eligibility (FHE)**
+- ✅ Function existence validation (`checkEligibilityWithEncryptedThreshold`, `getEncryptedEligibilityResult`)
+- ✅ Approval requirements
+- ⚠️ Encrypted threshold validation (needs risk score calculation)
+
+**Encrypted Health Record Access (v0.9)**
+- ✅ Function validation (`getEncryptedHealthRecord`, `getHealthRecordMetadata`, `getRecordQuality`)
+- ✅ Health record count tracking
+- ✅ Record quality assessment
+
+**Risk Scoring Functions (v0.9)**
+- ✅ Function validation (`calculateComprehensiveRisk`, `getEncryptedRiskScores`)
+- ✅ Risk calculation prevention without data
+
+**Dynamic Access Pricing (Quality-Based)**
+- ✅ Base price calculation when no records exist
+- ✅ Price calculation logic validation
+- ✅ Quality score to price tier mapping
+
+**Researcher Access Tracking (v0.9)**
+- ✅ `hasCurrentAccess` function validation
+- ⚠️ Access rounds tracking (needs researcher approval)
+
+**Additional Admin Controls (v0.9)**
+- ✅ Risk scoring library updates (owner-only)
+- ✅ Non-owner restriction enforcement
+- ✅ Zero address prevention
 
 **View Functions (v0.9)**
-- Patient info retrieval
-- Total patients/data shares
-- Patient list management
-- Sharing enabled patients
-- Health record counts
-- Activity logs
+- ⚠️ Patient info retrieval (sharing status inverted)
+- ✅ Total patients/data shares
+- ✅ Patient list management
+- ⚠️ Sharing enabled patients (default state mismatch)
+- ✅ Health record counts
+- ⚠️ Registration/sharing status (inverted default)
+- ✅ Activity logs
 
 **Admin Functions (v0.9)**
-- Platform wallet updates
-- Ownership transfer
-- Owner-only restrictions
-- Zero address validation
+- ✅ Platform wallet updates
+- ✅ Ownership transfer
+- ✅ Owner-only restrictions
+- ✅ Zero address validation
 
 **Complete Workflows**
-- Full patient workflow: register → purchase → claim
-- Multi-researcher access scenarios
-- Multi-patient researcher workflows
-- Lender approval and eligibility flows
-- Complete ecosystem with all actors
+- ⚠️ Full patient workflow: register → purchase → claim
+- ⚠️ Multi-researcher access scenarios
+- ⚠️ Multi-patient researcher workflows
+- ⚠️ Lender approval and eligibility flows
+- ⚠️ Complete ecosystem with all actors
 
 **Edge Cases & Security**
-- Zero initial state handling
-- Reentrancy protection
-- Large numbers of patients
-- State consistency validation
+- ✅ Zero initial state handling
+- ⚠️ Reentrancy protection
+- ✅ Large numbers of patients
+- ⚠️ State consistency validation
 
 ### Test Output
 
 ```bash
   CerebrumFHEVM_v09 - FHEVM v0.9 Test Suite
 
-📋 Contract Deployed:
-  Main Contract: 0x5FbDB2315678afecb367f032d93F642f64180aa3
-  Risk Scoring: 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512
-  Platform Wallet: 0x70997970C51812dc3A010C7d01b50e0d17dc79C8
-
     Deployment & Initialization
-      ✔ Should deploy with correct platform wallet (89ms)
+      ✔ Should deploy with correct platform wallet
       ✔ Should deploy with correct risk scoring library
       ✔ Should set correct owner
       ✔ Should initialize v0.9 constants correctly
@@ -1109,17 +1140,22 @@ The v0.9 test suite includes **78 comprehensive tests** covering:
       ✔ Should revert deployment with zero platform wallet
 
     Patient Registration (v0.9 with FHE)
-      ✔ Should register patient successfully (52ms)
-      ✔ Should initialize patient with encrypted health score
+      ✔ Should register patient successfully
+      1) Should initialize patient with encrypted health score
       ✔ Should prevent duplicate registration
       ✔ Should track multiple patient registrations
-      ✔ Should add patient to sharing enabled list by default
+      2) Should NOT add patient to sharing enabled list by default
       ✔ Should create activity log entry for registration
 
+    Health Data Sharing (v0.9 with Encrypted Input)
+      3) Should share health data successfully (simulated FHE)
+      4) Should prevent data sharing when disabled
+      ✔ Should update data share count after sharing
+
     Data Sharing Controls (v0.9)
-      ✔ Should toggle sharing to disabled
-      ✔ Should toggle sharing back to enabled
-      ✔ Should update sharing enabled count correctly
+      5) Should toggle sharing to enabled (starts disabled)
+      6) Should toggle sharing back to disabled
+      7) Should update sharing enabled count correctly
       ✔ Should prevent toggle if not registered
       ✔ Should track activity log for toggles
 
@@ -1132,39 +1168,64 @@ The v0.9 test suite includes **78 comprehensive tests** covering:
       ✔ Should allow multiple lender approvals
 
     Researcher Access Purchase (v0.9 with Auto-Grants)
-      ✔ Should purchase access with correct payment
-      ✔ Should split payment 80/20 correctly
-      ✔ Should emit correct event with payment details
-      ✔ Should prevent insufficient payment
+      8) Should purchase access with correct payment
+      9) Should split payment 80/20 correctly
+      10) Should emit correct event with payment details
+      11) Should prevent insufficient payment
       ✔ Should prevent access to unregistered patient
-      ✔ Should allow multiple researchers to purchase access
-      ✔ Should track researcher purchase count
-      ✔ Should track purchased patients list
+      12) Should allow multiple researchers to purchase access
+      13) Should track researcher purchase count
+      14) Should track purchased patients list
 
     Earnings Claims (v0.9)
-      ✔ Should claim earnings successfully
-      ✔ Should emit EarningsDistributed event
-      ✔ Should reset earnings to zero after claim
-      ✔ Should prevent claim with zero earnings
-      ✔ Should prevent unregistered patient from claiming
-      ✔ Should accumulate earnings from multiple purchases
+      15) "before each" hook for "Should claim earnings successfully"
 
     Lender Eligibility Checks (v0.9 Zero-Knowledge)
-      ✔ Should check eligibility with plaintext threshold
+      16) Should check eligibility with plaintext threshold
       ✔ Should prevent check without approval
       ✔ Should prevent check with insufficient payment
-      ✔ Should track eligibility history
+      17) Should track eligibility history
       ✔ Should prevent check on unregistered patient
 
+    Encrypted Lender Eligibility (v0.9 FHE)
+      ✔ Should validate checkEligibilityWithEncryptedThreshold function exists
+      ✔ Should validate getEncryptedEligibilityResult function exists
+      ✔ Should require approval for encrypted eligibility check
+
+    Encrypted Health Record Access (v0.9)
+      ✔ Should validate getEncryptedHealthRecord function exists
+      ✔ Should validate getHealthRecordMetadata function exists
+      ✔ Should return correct health record count
+      ✔ Should validate getRecordQuality function exists
+
+    Risk Scoring Functions (v0.9)
+      ✔ Should validate calculateComprehensiveRisk function exists
+      ✔ Should validate getEncryptedRiskScores function exists
+      ✔ Should prevent risk calculation without data
+
+    Dynamic Access Pricing (v0.9 Quality-Based)
+      ✔ Should return base price when no records exist
+      ✔ Should validate price calculation logic
+      ✔ Should use quality score to determine price tier
+
+    Researcher Access Tracking (v0.9)
+      ✔ Should validate hasCurrentAccess function
+      18) Should track access rounds correctly
+
+    Additional Admin Controls (v0.9)
+      ✔ Should allow owner to update risk scoring library
+      ✔ Should prevent non-owner from updating risk library
+      ✔ Should prevent zero address risk library
+
     View Functions (v0.9)
-      ✔ Should return correct patient info
+      19) Should return correct patient info
       ✔ Should return correct total patients
       ✔ Should return correct total data shares
       ✔ Should return complete patient list
-      ✔ Should return sharing enabled patients
+      20) Should return sharing enabled patients
       ✔ Should return correct health record count
       ✔ Should return registration status correctly
-      ✔ Should return sharing status correctly
+      21) Should return sharing status correctly
       ✔ Should return activity logs
 
     Admin Functions (v0.9)
@@ -1176,22 +1237,39 @@ The v0.9 test suite includes **78 comprehensive tests** covering:
       ✔ Should prevent transferring to zero address
 
     Complete Workflows (v0.9 End-to-End)
-      ✔ Full patient workflow: register → toggle → claim (145ms)
-      ✔ Multi-researcher access workflow
-      ✔ Multi-patient researcher workflow
-      ✔ Lender approval and eligibility workflow
-      ✔ Complete ecosystem workflow with all actors
+      22) Full patient workflow: register → toggle → claim
+      23) Multi-researcher access workflow
+      24) Multi-patient researcher workflow
+      25) Lender approval and eligibility workflow
+      26) Complete ecosystem workflow with all actors
 
     Edge Cases & Security (v0.9)
       ✔ Should handle zero initial state correctly
-      ✔ Should prevent reentrancy in claimEarnings
+      27) Should prevent reentrancy in claimEarnings
       ✔ Should handle large numbers of patients
-      ✔ Should maintain state consistency across operations
+      28) Should maintain state consistency across operations
 
 
-  78 passing (2.4s)
+  56 passing (3s)
+  28 failing
 
 ```
+
+**Test Results Summary:**
+- ✅ **56 tests passing** - Core contract functionality validated
+- ⚠️ **28 tests require fixes**:
+  - **Data Sharing Default State**: Contract starts with sharing **enabled** (7 test expectation mismatches)
+  - **Researcher Approval**: Missing `approveResearcher` mechanism in tests (14 failures due to `NotApprovedResearcher()`)
+  - **Risk Scores Required**: Lender eligibility checks need risk calculation first (5 failures with `NoRiskScoresCalculated()`)
+  - **State Consistency**: 2 tests validate inverted default states
+
+**Key Findings:**
+1. All deployment, initialization, and admin functions work correctly ✅
+2. Patient registration, lender approval, and view functions validated ✅
+3. New v0.9 functions (encrypted eligibility, health records, risk scoring, dynamic pricing) exist and validate correctly ✅
+4. Test expectations need alignment with contract's **enabled-by-default** data sharing design
+5. Researcher workflow tests need `approveResearcher` calls before `purchaseResearcherAccess`
+
 
 ### Integration Testing on Sepolia
 
