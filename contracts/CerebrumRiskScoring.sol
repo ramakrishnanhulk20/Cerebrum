@@ -5,7 +5,7 @@ import {FHE, euint64} from "@fhevm/solidity/lib/FHE.sol";
 import {EthereumConfig} from "@fhevm/solidity/config/ZamaConfig.sol";
 
 /// @title Cerebrum Risk Scoring Library
-/// @notice Separate contract for encrypted risk calculations to reduce main contract size
+/// @notice for encrypted risk calculations to reduce main contract size
 /// @dev Called by main Cerebrum contract to calculate disease risks
 contract CerebrumRiskScoring is EthereumConfig {
     
