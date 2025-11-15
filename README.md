@@ -90,8 +90,8 @@ Cerebrum leverages **FHEVM** to create a significant improvement in privacy-pres
 - Submit data with an input proof for cryptographic verification
 - Only you decide who gets access—your keys, your control
 
-**Instant Decryption** ⚡
-- View your encrypted health score in **0–2 seconds** via EIP-712 signature
+**Instant Decryption**
+- View your encrypted health score in 0–2 seconds via EIP-712 signature
 - No waiting for callbacks or polling
 - Sign once, decrypt instantly
 
@@ -117,8 +117,8 @@ Cerebrum leverages **FHEVM** to create a significant improvement in privacy-pres
 - **Automatic permission grant** in same transaction (no patient re-signing needed!)
 - Access resets when patient shares new data (fresh monetization opportunity)
 
-**Lightning-Fast Decryption** ⚡
-- Decrypt health records in **0-2 seconds** with EIP-712 signatures
+**Lightning-Fast Decryption**
+- Decrypt health records in 0-2 seconds with EIP-712 signatures
 - No waiting for Gateway callbacks (was 30-60 seconds in v0.8)
 - Batch decrypt multiple values simultaneously
 
@@ -215,7 +215,7 @@ Cerebrum leverages **FHEVM** to create a significant improvement in privacy-pres
 
 ### Data Flow Architecture (User Decryption)
 
-#### Phase 1: Patient Data Upload ⚡
+#### Phase 1: Patient Data Upload
 
 ```typescript
 // Client-side encryption with fhevmjs
@@ -234,7 +234,7 @@ await contract.shareHealthData([...handles], age, exercise, sleep, inputProof);
 4. Smart contract stores as `euint64` with `FHE.allowThis()` permissions
 5. Health score auto-increments using `FHE.add()` operations
 
-#### Phase 2: Researcher Access Purchase 💰
+#### Phase 2: Researcher Access Purchase
 
 ```solidity
 // Automatic access grant via FHE.allowTransient - NO patient re-signing!
@@ -254,7 +254,7 @@ function purchaseResearcherAccess(address patient) external payable {
 4. **No patient interaction needed** for access grant
 5. On-chain event emitted for transparency
 
-#### Phase 3: Instant User Decryption ⚡ (0–2 seconds)
+#### Phase 3: Instant User Decryption
 
 ```typescript
 // User Decryption with EIP-712 signatures
@@ -275,7 +275,7 @@ const { bloodSugar, cholesterol, bmi, ... } = await decryptHealthRecord(encrypte
 - ❌ No Gateway callbacks or polling
 - ✅ One signature, instant results
 
-#### Phase 4: Lender Qualification (Zero-Knowledge) 🔐
+#### Phase 4: Lender Qualification
 
 ```typescript
 // Lender never sees actual score!
@@ -297,7 +297,7 @@ const isEligible = await decryptBool(encrypted); // true or false
 
 ## Technology Stack
 
-### Frontend Stack 🎨
+### Frontend Stack
 - **React 18** - Modern UI with hooks and functional components
 - **TypeScript** - Type-safe development for reliability
 - **Vite** - Lightning-fast build tool with HMR
@@ -308,25 +308,25 @@ const isEligible = await decryptBool(encrypted); // true or false
 - **fhevmjs** - Zama's FHE SDK (Relayer SDK) for encryption/decryption
 - **react-hot-toast** - Beautiful toast notifications
 
-### Smart Contract Stack ⚡
+### Smart Contract Stack
 - **Solidity 0.8.24** - Smart contract language
 - **Zama FHEVM** - Fully Homomorphic Encryption on-chain
 - **Hardhat/Foundry** - Development environment and testing
 - **TFHE.sol** - FHE operations (add, select, ge, allowThis, allowTransient)
 
-### Encryption & Privacy 🔐
+### Encryption & Privacy
 - **fhevmjs** - Client-side encryption and User Decryption
 - **createEncryptedInput()** - Input encryption with proof generation
 - **EIP-712 Signatures** - Typed data signing for decryption authorization
 - **FHE Operations**: `asEuint64`, `add`, `ge`, `select`, `allowThis`, `allowTransient`
 
-### Blockchain Infrastructure 🌐
+### Blockchain Infrastructure
 - **Ethereum Sepolia Testnet** - Development and testing network
 - **Zama Gateway** - User Decryption service (0-2 second response)
 - **MetaMask** - Browser wallet for transaction signing
 - **Etherscan** - Contract verification and monitoring
 
-### Key FHEVM Patterns 🚀
+### Key FHEVM Patterns
 ```solidity
 // Client-side encryption
 createEncryptedInput(contractAddress, userAddress)
@@ -370,47 +370,29 @@ git clone https://github.com/ramakrishnanhulk20/Cerebrum.git
 cd Cerebrum
 ```
 
-2. **Install frontend dependencies**
-
-```bash
-cd frontend
-npm install
-```
-
-3. **Install smart contract dependencies**
-
-```bash
-cd ../contracts
-npm install
-```
-
-4. **Install dependencies**
+2. **Install dependencies**
 
 ```bash
 npm install
 ```
 
-5. **Set up environment variables**
+3. **Set up environment variables**
 
 Create `.env` file in root directory:
 
 ```env
-# Contract configuration (update after deployment)
 VITE_CONTRACT_ADDRESS=0x0000000000000000000000000000000000000000
 VITE_CHAIN_ID=11155111
-
-# Zama Gateway configuration
 VITE_GATEWAY_URL=https://gateway.zama.ai
 
-# For contract deployment
 PRIVATE_KEY=your_wallet_private_key_here
 SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/YOUR_INFURA_KEY
 ETHERSCAN_API_KEY=your_etherscan_api_key_here
 ```
 
-### Configuration & Deployment
+### Deployment
 
-#### 1. Deploy Smart Contract
+#### Deploy Smart Contract
 
 ```bash
 # Using Foundry
@@ -424,34 +406,11 @@ forge create contracts/CerebrumFHEVM_v09.sol:CerebrumFHEVM_v09 \
 npx hardhat run scripts/deploy.js --network sepolia
 ```
 
-#### 2. Update Contract Address
+#### Update Contract Address
 
-Update `src/config/contracts-v09.ts`:
+Update `src/config/contracts-v09.ts` with your deployed contract address.
 
-```typescript
-export const CEREBRUM_CONTRACT_ADDRESS = '0xYourDeployedContractAddress' as const;
-export const CEREBRUM_ABI = [...]; // Full ABI included
-```
-
-#### 3. Initialize FHEVM in App
-
-Update `src/App.tsx`:
-
-```typescript
-import { useFhevmInit } from './hooks/useFhevmV09';
-
-function App() {
-  const { isInitialized, isInitializing, error } = useFhevmInit();
-  
-  if (isInitializing) return <div>Initializing FHEVM...</div>;
-  if (error) return <div>Failed to initialize: {error.message}</div>;
-  if (!isInitialized) return <div>Please connect your wallet</div>;
-  
-  return <RouterProvider router={router} />;
-}
-```
-
-#### 4. Start Development Server
+#### Start Development Server
 
 ```bash
 npm run dev
@@ -459,11 +418,11 @@ npm run dev
 
 Visit `http://localhost:5173` to view the application.
 
-#### 5. Build for Production
+#### Build for Production
 
 ```bash
 npm run build
-npm run preview  # Test production build locally
+npm run preview
 ```
 
 ---
@@ -487,7 +446,7 @@ The `Patient Dashboard` page is where users manage encrypted health data, build 
 
 Under the hood, the app calls `registerPatient()` on `CerebrumFHEVM_v09`.
 
-#### 2. Share Health Data ⚡
+#### 2. Share Health Data
 
 Once registered, the top of the dashboard shows a hero section with a mini workflow: **Share Health Data → Build Credit Score → Earn Rewards**. To add a new encrypted health record:
 
@@ -918,7 +877,7 @@ euint8 risk = FHE.select(isLow, lowRisk, medRisk);
 ebool isMed = FHE.and(FHE.ge(score, lowThreshold), FHE.lt(score, medThreshold));
 ```
 
-### 6. FHE.allowThis() 🆕
+### 6. FHE.allowThis()
 **Purpose**: Grant contract permanent access to manage encrypted values
 
 **Usage in Cerebrum v0.9**:
@@ -929,7 +888,7 @@ FHE.allowThis(encBloodSugar);
 FHE.allowThis(healthRecord.cholesterol);
 ```
 
-### 7. FHE.allowTransient() 🆕⚡
+### 7. FHE.allowTransient()
 **Purpose**: Grant one-time automatic access to address (revolutionary!)
 
 **Usage in Cerebrum v0.9**:
@@ -947,7 +906,7 @@ function purchaseResearcherAccess(address patient) external payable {
 }
 ```
 
-### 8. FHE.allow() 🆕
+### 8. FHE.allow()
 **Purpose**: Grant specific address permission for User Decryption
 
 **Usage in Cerebrum v0.9**:
@@ -959,7 +918,7 @@ FHE.allow(patient.healthScore, patientAddress);
 FHE.allow(eligibilityResults[patient], lenderAddress);
 ```
 
-### 9. createEncryptedInput() (Client-Side) 🆕
+### 9. createEncryptedInput() (Client-Side)
 **Purpose**: Encrypt data on client before blockchain submission
 
 **Usage in Cerebrum v0.9**:
@@ -975,7 +934,7 @@ const { handles, inputProof } = input.encrypt();
 await contract.shareHealthData([...handles], age, exercise, sleep, inputProof);
 ```
 
-### 10. User Decryption (Client-Side) 🆕⚡
+### 10. User Decryption (Client-Side)
 **Purpose**: Instant decryption with EIP-712 signatures (0-2 seconds)
 
 **Usage in Cerebrum v0.9**:
@@ -1304,27 +1263,40 @@ See [Testing Guide](./TESTING_GUIDE_V09.md) for complete details on v0.9 testing
 
 ```
 Cerebrum/
-├── src/                           # Frontend source
+├── src/
 │   ├── components/
 │   │   ├── common/
-│   │   │   └── Navbar.tsx
-│   │   └── CopyButton.tsx
+│   │   │   ├── Navbar.tsx
+│   │   │   ├── CopyButton.tsx
+│   │   │   ├── CustomToast.tsx
+│   │   │   ├── EmptyState.tsx
+│   │   │   ├── ErrorBoundary.tsx
+│   │   │   ├── OnboardingTour.tsx
+│   │   │   ├── ProgressIndicators.tsx
+│   │   │   ├── Skeleton.tsx
+│   │   │   └── ThemeToggle.tsx
+│   │   ├── AnalyticsDashboard.tsx
+│   │   ├── CopyButton.tsx
+│   │   └── GatewayDecryptProgress.tsx
 │   ├── pages/
 │   │   ├── LandingPage.tsx
-│   │   ├── PatientDashboard.tsx   # Patient portal
-│   │   ├── ResearcherPortal.tsx   # Researcher portal
-│   │   ├── LenderPortal.tsx       # Lender portal
-│   │   └── DocsPage.tsx           # Documentation page
+│   │   ├── PatientDashboard.tsx
+│   │   ├── ResearcherPortal.tsx
+│   │   ├── LenderPortal.tsx
+│   │   └── DocsPage.tsx
 │   ├── config/
-│   │   ├── contracts.ts           # v0.8 contract (legacy)
-│   │   ├── contracts-v09.ts       # v0.9 contract (current) ⚡
-│   │   ├── wagmi.ts               # Wagmi v2 configuration
-│   │   └── theme.ts               # Theme configuration
+│   │   ├── contracts-v09.ts
+│   │   ├── theme.ts
+│   │   └── wagmi.ts
 │   ├── hooks/
-│   │   ├── useCerebrum.ts         # v0.8 hooks (legacy)
-│   │   └── useFhevmV09.ts         # v0.9 hooks (current) ⚡
+│   │   ├── useCerebrum.ts
+│   │   ├── useFheDecrypt.ts
+│   │   ├── useFhevmV09.ts
+│   │   ├── useInitFhevm.ts
+│   │   └── useUserDecryption.ts
 │   ├── utils/
-│   │   └── fhevm-v09.ts           # v0.9 encryption/decryption ⚡
+│   │   ├── fhevm-v09.ts
+│   │   └── signatureStorage.ts
 │   ├── contexts/
 │   │   └── ThemeContext.tsx
 │   ├── types/
@@ -1332,35 +1304,42 @@ Cerebrum/
 │   ├── assets/
 │   ├── App.tsx
 │   ├── main.tsx
-│   └── index.css
+│   ├── routes.tsx
+│   ├── index.css
+│   └── env.d.ts
 ├── contracts/
-│   ├── CerebrumFHEVM.sol          # v0.8 contract (legacy)
-│   └── CerebrumFHEVM_v09.sol      # v0.9 contract (current) ⚡
+│   ├── CerebrumFHEVM_v09.sol
+│   └── CerebrumRiskScoring.sol
+├── deploy/
+│   ├── 01_deploy_cerebrum.ts
+│   └── 02_deploy_risk_scoring.ts
 ├── test/
-│   └── CerebrumFHEVM.test.js      # Contract tests
+│   └── CerebrumFHEVM_v09.test.cjs
+├── types/
+│   ├── common.ts
+│   ├── hardhat.d.ts
+│   ├── index.ts
+│   ├── contracts/
+│   └── factories/
+├── artifacts/
+├── cache/
 ├── public/
-│   └── index.html
-├── docs/                          # v0.9 Migration Documentation
-│   ├── FHEVM_V09_MIGRATION.md     # Complete migration guide ⚡
-│   ├── FRONTEND_V09_COMPLETE.md   # Frontend integration ⚡
-│   ├── QUICK_REFERENCE.md         # v0.9 quick reference ⚡
-│   ├── ARCHITECTURE_DIAGRAM.md    # System architecture ⚡
-│   ├── DEPLOYMENT_CHECKLIST.md    # Deployment guide ⚡
-│   └── V09_MIGRATION_COMPLETE.md  # Migration summary ⚡
-├── package.json                   # Dependencies (fhevmjs@^0.9.2)
+│   ├── index.html
+│   └── site.webmanifest
+├── scripts/
+│   ├── check-abi.cjs
+│   ├── update-abi.cjs
+│   └── verify-contract.cjs
+├── package.json
+├── hardhat.config.cjs
 ├── vite.config.ts
 ├── tsconfig.json
 ├── tailwind.config.js
+├── eslint.config.js
+├── vercel.json
 ├── LICENSE
 └── README.md
 ```
-
-**Key Files for v0.9:**
-- ⚡ `contracts/CerebrumFHEVM_v09.sol` - Smart contract with User Decryption
-- ⚡ `src/utils/fhevm-v09.ts` - Encryption/decryption utilities
-- ⚡ `src/hooks/useFhevmV09.ts` - React hooks for all user types
-- ⚡ `src/config/contracts-v09.ts` - Simplified ABI (no callbacks)
-- ⚡ `docs/` - Complete v0.9 migration documentation
 
 ---
 
