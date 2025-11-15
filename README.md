@@ -953,7 +953,7 @@ const decrypted = await fhevmInstance.decrypt(contractAddress, encrypted);
 
 Cerebrum includes a comprehensive test suite for FHEVM v0.9 covering all smart contract functionality and FHE operations.
 
-> **📋 Important Note**: The Gateway Oracle (`requestDecryption`) has been deprecated by Zama. We now use **User Decryption** with EIP-712 signatures for instant decryption (0-2 seconds). See [Testing Guide](./TESTING_GUIDE_V09.md) for details.
+> **📋 Note**: The Gateway Oracle (`requestDecryption`) has been deprecated by Zama in V0.9. We now use **User Decryption** with EIP-712 signatures for instant decryption (0-2 seconds).
 
 ### Running Tests
 
