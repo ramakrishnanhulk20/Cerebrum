@@ -8,7 +8,8 @@ require("hardhat-gas-reporter");
 require("solidity-coverage");
 require("dotenv/config");
 
-const MNEMONIC = process.env.MNEMONIC || "test test test test test test test test test test test junk";
+// Valid BIP39 mnemonic for testing
+const MNEMONIC = "announce room limb pattern dry unit scale effort smooth jazz weasel alcohol";
 const PRIVATE_KEY = process.env.PRIVATE_KEY || "";
 const INFURA_API_KEY = process.env.INFURA_API_KEY || "";
 const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY || "";

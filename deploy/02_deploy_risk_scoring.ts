@@ -1,45 +1,33 @@
 import hre from "hardhat";
 
-async function main() {
+const func = async function (hre: any) {
   console.log("\n🔬 Deploying CerebrumRiskScoring Library...\n");
   
-  // Deploy CerebrumRiskScoring contract
+  const { deployments, getNamedAccounts } = hre;
+  const { deploy } = deployments;
+  const { deployer } = await getNamedAccounts();
+  
   console.log("📦 Deploying CerebrumRiskScoring...");
-  const RiskScoring = await hre.ethers.getContractFactory("CerebrumRiskScoring");
-  const riskScoring = await RiskScoring.deploy();
+  console.log(`📍 Deployer address: ${deployer}`);
   
-  console.log("⏳ Waiting for deployment confirmation...");
-  await riskScoring.waitForDeployment();
-  
-  const contractAddress = await riskScoring.getAddress();
-  console.log(`✅ CerebrumRiskScoring deployed to: ${contractAddress}\n`);
-  
-  // Deployment Summary
-  console.log("=== 📊 Deployment Summary ===");
-  console.log(`Contract Address: ${contractAddress}`);
-  console.log(`Network:          ${hre.network.name}`);
-  console.log(`Chain ID:         ${hre.network.config.chainId}`);
-  console.log("");
-  
-  // Next steps
-  console.log("=== 🎯 Next Steps ===");
-  console.log("1. Update .env with:");
-  console.log(`   RISK_SCORING_LIB=${contractAddress}`);
-  console.log("");
-  console.log("2. Redeploy main contract with this address:");
-  console.log(`   npm run deploy:sepolia`);
-  console.log("");
-  console.log("3. Or update existing contract (if owner function exists)");
-  console.log("");
-  
-  return contractAddress;
-}
-
-export default main;
-
-main()
-  .then(() => process.exit(0))
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
+  const riskScoring = await deploy('CerebrumRiskScoring', {
+    from: deployer,
+    args: [],
+    log: true,
+    waitConfirmations: 1,
   });
+  
+  console.log(`✅ CerebrumRiskScoring deployed to: ${riskScoring.address}\n`);
+  
+  console.log("=== 📊 Risk Library Deployment Summary ===");
+  console.log(`Contract Address: ${riskScoring.address}`);
+  console.log(`Network:          ${hre.network.name}`);
+  console.log("");
+  
+  return true;
+};
+
+func.tags = ['risk'];
+func.id = 'deploy_risk_scoring';
+
+export default func;

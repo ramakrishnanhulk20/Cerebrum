@@ -4,7 +4,7 @@ const crypto = require('crypto');
 console.log("🔍 Checking ABI Configuration...\n");
 
 // Load frontend config
-const contractsFile = fs.readFileSync('./src/config/contracts.ts', 'utf8');
+const contractsFile = fs.readFileSync('./src/config/contracts-v09.ts', 'utf8');
 const addressMatch = contractsFile.match(/export const CEREBRUM_CONTRACT_ADDRESS = '(0x[a-fA-F0-9]{40})'/);
 const abiMatch = contractsFile.match(/export const CEREBRUM_ABI = (\[[\s\S]*?\]) as const;/);
 

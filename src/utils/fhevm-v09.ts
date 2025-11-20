@@ -354,17 +354,83 @@ export async function decryptUint64(
 
     // Perform user decryption
     console.log('🔓 Performing user decryption via Gateway...');
-
-    const result = await fhe.userDecrypt(
-      handleContractPairs,
-      keypair.privateKey,
-      keypair.publicKey,
-      signature.replace("0x", ""),
+    console.log('📋 Request payload:', {
+      handles: handleContractPairs.map(h => h.handle),
       contractAddresses,
       userAddress,
+      publicKey: keypair.publicKey.substring(0, 20) + '...',
       startTimeStamp,
       durationDays
-    );
+    });
+    
+    // Verify EIP-712 signature locally
+    console.log('🔍 Verifying EIP-712 signature...');
+    try {
+      const { verifyTypedData } = await import('ethers');
+      const recovered = verifyTypedData(
+        eip712.domain,
+        { UserDecryptRequestVerification: eip712.types.UserDecryptRequestVerification },
+        eip712.message,
+        signature
+      );
+      console.log('✅ Signature verified:', {
+        recovered: recovered.toLowerCase(),
+        expected: userAddress.toLowerCase(),
+        match: recovered.toLowerCase() === userAddress.toLowerCase()
+      });
+      if (recovered.toLowerCase() !== userAddress.toLowerCase()) {
+        console.error('❌ SIGNATURE MISMATCH! This will cause 500 error.');
+      }
+    } catch (sigErr) {
+      console.warn('⚠️ Could not verify signature locally:', sigErr);
+    }
+    
+    console.log('⏳ Waiting 3 seconds for ACL propagation...');
+    // CRITICAL: Wait for coprocessors to propagate ACL updates to Gateway
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    console.log('✅ ACL propagation delay complete');
+
+    let result;
+    try {
+      result = await fhe.userDecrypt(
+        handleContractPairs,
+        keypair.privateKey,
+        keypair.publicKey,
+        signature.replace("0x", ""),
+        contractAddresses,
+        userAddress,
+        startTimeStamp,
+        durationDays
+      );
+    } catch (decryptErr: any) {
+      console.error('❌ userDecrypt failed');
+      console.error('🔍 Error object:', {
+        name: decryptErr?.name,
+        message: decryptErr?.message,
+        code: decryptErr?.code,
+        status: decryptErr?.status || decryptErr?.statusCode
+      });
+      
+      // Try to extract response body
+      if (decryptErr?.response) {
+        try {
+          const responseText = typeof decryptErr.response.text === 'function'
+            ? await decryptErr.response.text()
+            : JSON.stringify(decryptErr.response);
+          console.error('📄 Relayer response body:', responseText);
+        } catch (e) {
+          console.error('⚠️ Could not read response body');
+        }
+      }
+      
+      console.error('💡 Debugging steps:');
+      console.error('1. Check Network tab for POST /v1/user-decrypt response body');
+      console.error('2. Verify handle exists on-chain and FHE.allow() was called');
+      console.error('3. Check if signature verification passed above');
+      console.error('4. Try increasing wait time to 30s for testnet');
+      
+      throw decryptErr;
+    }
 
     const decrypted = Number(result[ciphertext]);
     console.log('✅ Decrypted value:', decrypted);
@@ -379,6 +445,19 @@ export async function decryptUint64(
       message: error?.message,
       code: error?.code
     });
+    
+    // Check for CORS error (localhost blocked by Zama testnet)
+    if (error?.message?.includes('CORS') || 
+        error?.message?.includes('Access-Control-Allow-Origin') ||
+        error?.message?.includes('ERR_FAILED') ||
+        error?.status === 520 ||
+        error?.statusCode === 520) {
+      console.error('🚨 CORS ERROR: Zama testnet relayer blocks localhost');
+      throw new Error(
+        'User Decryption blocked by CORS policy. ' +
+        'Test on production: https://cerebrum-site.vercel.app'
+      );
+    }
     
     // Check for relayer/network error
     if (error?.message?.includes('Failed to fetch') || error?.message?.includes('NetworkError')) {
@@ -437,16 +516,53 @@ export async function decryptBool(
     ];
 
     console.log('🔓 Performing user decryption via Gateway...');
-    const result = await fhe.userDecrypt(
-      handleContractPairs,
-      sigData.privateKey,
-      sigData.publicKey,
-      sigData.signature,
-      sigData.contractAddresses,
-      sigData.userAddress,
-      sigData.startTimestamp.toString(),
-      sigData.durationDays.toString()
-    );
+    console.log('📋 Request payload:', {
+      handle: ciphertext,
+      contractAddress,
+      userAddress,
+      publicKey: sigData.publicKey.substring(0, 20) + '...',
+      startTimestamp: sigData.startTimestamp
+    });
+    
+    console.log('⏳ Waiting 3 seconds for ACL propagation...');
+    // CRITICAL: Wait for coprocessors to propagate ACL updates to Gateway
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    console.log('✅ ACL propagation delay complete');
+    
+    let result;
+    try {
+      result = await fhe.userDecrypt(
+        handleContractPairs,
+        sigData.privateKey,
+        sigData.publicKey,
+        sigData.signature,
+        sigData.contractAddresses,
+        sigData.userAddress,
+        sigData.startTimestamp.toString(),
+        sigData.durationDays.toString()
+      );
+    } catch (decryptErr: any) {
+      console.error('❌ userDecrypt (bool) failed');
+      console.error('🔍 Error details:', {
+        message: decryptErr?.message,
+        status: decryptErr?.status || decryptErr?.statusCode
+      });
+      
+      // Try to capture response body
+      if (decryptErr?.response) {
+        try {
+          const responseText = typeof decryptErr.response.text === 'function'
+            ? await decryptErr.response.text()
+            : JSON.stringify(decryptErr.response);
+          console.error('📄 Relayer response body:', responseText);
+        } catch (e) {
+          console.error('⚠️ Could not read response body');
+        }
+      }
+      
+      console.error('💡 Check Network tab for full response details');
+      throw decryptErr;
+    }
 
     const decrypted = Boolean(result[ciphertext]);
     console.log('✅ Decrypted bool:', decrypted);
@@ -460,6 +576,19 @@ export async function decryptBool(
       message: error?.message,
       code: error?.code
     });
+
+    // Check for CORS error (localhost blocked by Zama testnet)
+    if (error?.message?.includes('CORS') || 
+        error?.message?.includes('Access-Control-Allow-Origin') ||
+        error?.message?.includes('ERR_FAILED') ||
+        error?.status === 520 ||
+        error?.statusCode === 520) {
+      console.error('🚨 CORS ERROR: Zama testnet relayer blocks localhost');
+      throw new Error(
+        'User Decryption blocked by CORS policy. ' +
+        'Test on production: https://cerebrum-site.vercel.app'
+      );
+    }
 
     if (error?.message?.includes('Failed to fetch') || error?.message?.includes('NetworkError')) {
       console.error('🌐 Network error: Gateway service unavailable');
@@ -485,11 +614,27 @@ export async function batchDecryptUint64(
   console.log('📍 Contract address:', contractAddress);
   console.log('🔑 Ciphertext handles:', ciphertexts);
 
+  // Filter out undefined/null handles but keep track of positions
+  const handlePositions: number[] = [];
+  const validHandles = ciphertexts.filter((h, i) => {
+    if (!h || h === '0x0000000000000000000000000000000000000000000000000000000000000000') {
+      return false;
+    }
+    handlePositions.push(i);
+    return true;
+  });
+
+  if (validHandles.length === 0) {
+    throw new Error('Cannot decrypt: No valid encrypted handles found.');
+  }
+
+  console.log(`📊 Decrypting ${validHandles.length} of ${ciphertexts.length} fields (${ciphertexts.length - validHandles.length} fields are empty)`);
+
   try {
     const fhe = await getFhevmInstance(provider);
     console.log('✅ FHEVM instance retrieved');
 
-    console.log('🔐 Batch user decryption for handles:', ciphertexts);
+    console.log('🔐 Batch user decryption for handles:', validHandles);
     
     // Load or create signature (CACHED for 365 days!)
     const { LocalStorageWrapper, loadOrSignDecryptionSignature } = await import('./signatureStorage');
@@ -506,32 +651,75 @@ export async function batchDecryptUint64(
     );
     console.log('✅ Signature ready (cached:', sigData.startTimestamp !== Math.floor(Date.now() / 1000), ')');
 
-    const handleContractPairs = ciphertexts.map(handle => ({
+    const handleContractPairs = validHandles.map(handle => ({
       handle,
       contractAddress: contractAddress,
     }));
     console.log('📋 Handle-contract pairs prepared:', handleContractPairs.length, 'pairs');
 
     console.log('🔓 Performing batch user decryption via Gateway...');
-    const result = await fhe.userDecrypt(
-      handleContractPairs,
-      sigData.privateKey,
-      sigData.publicKey,
-      sigData.signature,
-      sigData.contractAddresses,
-      sigData.userAddress,
+    console.log('📋 Request payload:', {
+      handleCount: validHandles.length,
+      handles: validHandles,
+      contractAddress,
+      userAddress,
+      publicKey: sigData.publicKey.substring(0, 20) + '...'
+    });
+    
+    console.log('⏳ Waiting 3 seconds for ACL propagation...');
+    // CRITICAL: Wait for coprocessors to propagate ACL updates to Gateway
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    console.log('✅ ACL propagation delay complete');
+    
+    let result;
+    try {
+      result = await fhe.userDecrypt(
+        handleContractPairs,
+        sigData.privateKey,
+        sigData.publicKey,
+        sigData.signature,
+        sigData.contractAddresses,
+        sigData.userAddress,
       sigData.startTimestamp.toString(),
       sigData.durationDays.toString()
     );
+    } catch (decryptErr: any) {
+      console.error('❌ Batch userDecrypt failed');
+      console.error('🔍 Error details:', {
+        message: decryptErr?.message,
+        status: decryptErr?.status || decryptErr?.statusCode,
+        handleCount: validHandles.length
+      });
+      
+      // Try to capture response body
+      if (decryptErr?.response) {
+        try {
+          const responseText = typeof decryptErr.response.text === 'function'
+            ? await decryptErr.response.text()
+            : JSON.stringify(decryptErr.response);
+          console.error('📄 Relayer response body:', responseText);
+        } catch (e) {
+          console.error('⚠️ Could not read response body');
+        }
+      }
+      
+      console.error('💡 Debugging steps:');
+      console.error('1. Check Network tab for POST /v1/user-decrypt response body');
+      console.error('2. Verify all', validHandles.length, 'handles have FHE.allow() permissions');
+      console.error('3. Try increasing wait time to 30s for testnet');
+      throw decryptErr;
+    }
 
-    // Convert result to array of BigInts
-    const decryptedValues = ciphertexts.map((handle, index) => {
+    // Convert result to array of BigInts, filling in original positions
+    const decryptedValues: bigint[] = new Array(ciphertexts.length).fill(0n);
+    validHandles.forEach((handle, validIndex) => {
+      const originalIndex = handlePositions[validIndex];
       const value = BigInt(Number(result[handle]));
-      console.log(`  ✅ Decrypted value ${index + 1}/${ciphertexts.length}:`, Number(value));
-      return value;
+      decryptedValues[originalIndex] = value;
+      console.log(`  ✅ Decrypted value ${originalIndex + 1}/${ciphertexts.length}:`, Number(value));
     });
     
-    console.log(`✅ Batch decrypted ${ciphertexts.length} values successfully!`);
+    console.log(`✅ Batch decrypted ${validHandles.length} of ${ciphertexts.length} values successfully!`);
     console.log('🎯 All values:', decryptedValues.map(v => Number(v)));
     console.log('⏱️ Total time: ~1-2 seconds for batch');
     
@@ -542,13 +730,37 @@ export async function batchDecryptUint64(
       name: error?.name,
       message: error?.message,
       code: error?.code,
-      attemptedCount: ciphertexts.length
+      attemptedCount: validHandles.length
     });
+
+    // Check for CORS error (localhost blocked by Zama testnet)
+    if (error?.message?.includes('CORS') || 
+        error?.message?.includes('Access-Control-Allow-Origin') ||
+        error?.message?.includes('ERR_FAILED') ||
+        error?.status === 520 ||
+        error?.statusCode === 520) {
+      console.error('🚨 CORS ERROR DETECTED');
+      console.error('📍 The Zama testnet relayer blocks requests from localhost origins');
+      console.error('💡 Solutions:');
+      console.error('   1. Deploy to production and test there (RECOMMENDED)');
+      console.error('   2. Test on existing deployment: https://cerebrum-site.vercel.app');
+      console.error('   3. Contact Zama to request localhost whitelist for development');
+      throw new Error(
+        'User Decryption blocked by CORS policy. The Zama testnet relayer does not allow localhost requests. ' +
+        'Please test on production deployment: https://cerebrum-site.vercel.app'
+      );
+    }
 
     if (error?.message?.includes('Failed to fetch') || error?.message?.includes('NetworkError')) {
       console.error('🌐 Network error: Gateway service unavailable');
       throw new Error('Decryption service is temporarily unavailable. Please try again later.');
     }
+    
+    if (error?.message?.includes('500') || error?.message?.includes('Internal Server Error')) {
+      console.error('🔒 Relayer error - possible ACL permission issue');
+      throw new Error('Unable to decrypt: Permission may not have been granted yet. Try calling getEncryptedHealthRecord() first or wait a few seconds for the transaction to confirm.');
+    }
+    
     throw error;
   }
 }
@@ -618,10 +830,11 @@ export function formatHealthScore(decryptedValue: bigint): number {
  * Risk scores are 0-100 percentages
  */
 export function formatRiskScore(decryptedValue: bigint): number {
-  // Risk scores are stored as integers (e.g., 7050 = 70.50%)
-  // Divide by 100 to get percentage with 2 decimal places
-  const score = Number(decryptedValue) / 100;
-  return Math.max(0, Math.min(100, score));
+  // Risk scores are stored as integers representing (percentage × 10)
+  // e.g., 404 = 40.4%, 500 = 50.0%, 615 = 61.5%
+  // Frontend divides by 10 for display, so we return the raw value
+  const score = Number(decryptedValue);
+  return Math.max(0, Math.min(1000, score)); // Max 100.0% = 1000
 }
 
 /**

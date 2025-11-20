@@ -27,7 +27,7 @@ export interface CerebrumRiskScoringInterface extends Interface {
       | "calculateDiabetesRisk"
       | "calculateHeartDiseaseRisk"
       | "calculateStrokeRisk"
-      | "protocolId"
+      | "confidentialProtocolId"
   ): FunctionFragment;
 
   encodeFunctionData(
@@ -54,7 +54,7 @@ export interface CerebrumRiskScoringInterface extends Interface {
     values: [BytesLike, BytesLike, BigNumberish, BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "protocolId",
+    functionFragment: "confidentialProtocolId",
     values?: undefined
   ): string;
 
@@ -74,7 +74,10 @@ export interface CerebrumRiskScoringInterface extends Interface {
     functionFragment: "calculateStrokeRisk",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "protocolId", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "confidentialProtocolId",
+    data: BytesLike
+  ): Result;
 }
 
 export interface CerebrumRiskScoring extends BaseContract {
@@ -166,7 +169,7 @@ export interface CerebrumRiskScoring extends BaseContract {
     "nonpayable"
   >;
 
-  protocolId: TypedContractMethod<[], [bigint], "view">;
+  confidentialProtocolId: TypedContractMethod<[], [bigint], "view">;
 
   getFunction<T extends ContractMethod = ContractMethod>(
     key: string | FunctionFragment
@@ -223,7 +226,7 @@ export interface CerebrumRiskScoring extends BaseContract {
     "nonpayable"
   >;
   getFunction(
-    nameOrSignature: "protocolId"
+    nameOrSignature: "confidentialProtocolId"
   ): TypedContractMethod<[], [bigint], "view">;
 
   filters: {};

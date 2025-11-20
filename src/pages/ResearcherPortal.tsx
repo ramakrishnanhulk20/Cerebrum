@@ -24,7 +24,7 @@ import {
   Shield
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
+import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt, usePublicClient } from 'wagmi';
 import { CEREBRUM_CONTRACT_ADDRESS, CEREBRUM_ABI } from '../config/contracts-v09';
 import { formatEther, parseEther, isAddress } from 'viem';
 import { AnalyticsDashboard } from '../components/AnalyticsDashboard';
@@ -109,6 +109,7 @@ const TransactionModal = ({
 
 const ResearcherPortal = () => {
   const { address, isConnected } = useAccount();
+  const publicClient = usePublicClient();
   const [selectedPatient, setSelectedPatient] = useState<string | null>(null);
   const [recordIndex, setRecordIndex] = useState('0');
   const [searchQuery, setSearchQuery] = useState('');
@@ -186,15 +187,16 @@ const ResearcherPortal = () => {
     }
   });
 
-  // Query researcher's access round for this patient
-  const { data: researcherAccessRound } = useReadContract({
+  // Query if researcher has access to the currently selected record
+  const { data: hasRecordAccess } = useReadContract({
     address: CEREBRUM_CONTRACT_ADDRESS as `0x${string}`,
     abi: CEREBRUM_ABI,
-    functionName: 'researcherAccessRound',
-    args: selectedPatient && address ? [selectedPatient as `0x${string}`, address] : undefined,
+    functionName: 'hasRecordAccess',
+    args: selectedPatient && address ? [selectedPatient as `0x${string}`, address as `0x${string}`, BigInt(recordIndex)] : undefined,
     query: {
-      refetchInterval: 5000, // Refetch every 5 seconds to check access status
-    }
+      enabled: !!selectedPatient && !!address,
+      refetchInterval: 5000,
+    },
   });
 
   const { data: recordCount } = useReadContract({
@@ -266,12 +268,13 @@ const ResearcherPortal = () => {
     if (purchaseSuccess) {
       console.log('✅ Purchase successful!');
       toast.dismiss('purchase-tx');
-      toast.success('✅ Access purchased successfully!');
-      // Access will be recalculated automatically when researcherAccessRound refetches
+      const recordNum = recordCount ? Number(recordCount) : 0;
+      toast.success(`✅ Access purchased! You now have access to all ${recordNum} current records.`);
+      // Access will be recalculated automatically when hasRecordAccess refetches
       refetchPatient();
       refetchPurchased();
     }
-  }, [purchaseSuccess]);
+  }, [purchaseSuccess, recordCount, refetchPatient, refetchPurchased]);
 
   // Handle permission grant success and decrypt
   useEffect(() => {
@@ -400,46 +403,25 @@ const ResearcherPortal = () => {
   const dataShareCount = patientInfo?.[4] ? Number(patientInfo[4]) : 0;
   const recordCountNum = recordCount ? Number(recordCount) : 0;
 
-  // ✅ CORRECT ACCESS CHECK: Compare access round to current dataShareCount
-  // The contract's hasResearcherAccess() function has a bug - it only checks > 0
-  // So we manually check if researcherAccessRound == dataShareCount for proper validation
-  const hasAccess = researcherAccessRound && dataShareCount > 0 && 
-                    Number(researcherAccessRound) === dataShareCount;
+  // ✅ Per-Record Access: Check if researcher has purchased this specific record
+  // New model: Researcher keeps access to old records, only new ones require purchase
+  const hasAccess = hasRecordAccess === true;
 
   // Debug access status changes
   useEffect(() => {
     console.log('🔐 Access Status Update:', {
       selectedPatient,
-      researcherAccessRound: researcherAccessRound ? Number(researcherAccessRound) : 0,
+      recordIndex,
+      hasRecordAccess,
       dataShareCount,
       hasAccess,
-      accessValid: researcherAccessRound && dataShareCount > 0 && Number(researcherAccessRound) === dataShareCount,
       isRegistered,
       sharingEnabled
     });
     
-    // Clear cached handles if access has expired (patient shared new data)
-    if (selectedPatient && researcherAccessRound && dataShareCount > 0) {
-      const currentRound = Number(researcherAccessRound);
-      if (currentRound !== dataShareCount) {
-        console.log('⚠️ Access expired! Clearing cached handles...');
-        const healthKey = getHealthHandlesCacheKey(
-          selectedPatient,
-          recordIndex,
-          address,
-          dataShareCount
-        );
-        const riskKey = getRiskHandlesCacheKey(
-          selectedPatient,
-          recordIndex,
-          address,
-          dataShareCount
-        );
-        localStorage.removeItem(healthKey);
-        localStorage.removeItem(riskKey);
-      }
-    }
-  }, [hasAccess, researcherAccessRound, dataShareCount, selectedPatient, address, recordIndex]);
+    // Cache invalidation is automatic - if you don't have access to a record, you can't decrypt it
+    // No need to clear cache based on rounds anymore since access is per-record
+  }, [hasAccess, hasRecordAccess, dataShareCount, selectedPatient, address, recordIndex]);
 
   // Extract risk scores from decrypted state (v0.9 client-side decrypt)
   const riskDiabetes = decryptedRiskData?.diabetesRisk ?? null;
@@ -548,25 +530,30 @@ const ResearcherPortal = () => {
 
   // v0.9: Client-side decryption of health record
   const handleDecryptHealthRecord = async () => {
-    if (!selectedPatient || !hasAccess) {
+    if (!selectedPatient || !address) {
+      toast.error('Missing required data for decryption');
+      return;
+    }
+
+    if (!hasAccess) {
       toast.error('Please purchase access first');
       return;
     }
 
     setIsDecryptingHealth(true);
     
-    // Check if we already have cached handles from previous permission grant
+    // Check for cached handles first
     const cacheKey = getHealthHandlesCacheKey(
       selectedPatient,
       recordIndex,
       address,
       dataShareCount
     );
+    
     const cachedHandles = localStorage.getItem(cacheKey);
     
     if (cachedHandles) {
-      console.log('🎯 [ResearcherPortal] Found cached handles! Skipping transaction...');
-      toast.loading('🔓 Decrypting with existing permissions...', { id: 'health-permission' });
+      console.log('✅ [ResearcherPortal] Found cached health handles, attempting decrypt...');
       
       try {
         const handles = JSON.parse(cachedHandles);
@@ -575,141 +562,109 @@ const ResearcherPortal = () => {
         const decrypted = await decryptHealthRecord(handles);
         console.log('✅ [ResearcherPortal] Decrypted health data:', decrypted);
         setDecryptedHealthData(decrypted);
-        toast.success('✅ Health record decrypted successfully!', { id: 'health-permission' });
+        toast.success('✅ Health record decrypted successfully!');
         setIsDecryptingHealth(false);
         return;
       } catch (error: any) {
-        console.warn('⚠️ [ResearcherPortal] Cached handles failed, requesting new permission...', error);
-        // Fall through to transaction if cached decrypt fails
+        console.warn('⚠️ [ResearcherPortal] Cached handles failed, fetching fresh handles...', error);
+        // Fall through to fetch fresh handles if cached decrypt fails
       }
     }
     
-    toast.loading('🔐 Requesting permission to decrypt health data...', { id: 'health-permission' });
+    toast.loading('🔐 Fetching encrypted handles...', { id: 'health-permission' });
     
     try {
-      console.log('🔬 [ResearcherPortal] Starting health record decryption...');
-      console.log('📝 Step 1: Calling getEncryptedHealthRecord to grant FHE.allow() permissions...');
+      console.log('🔬 [ResearcherPortal] Fetching health record handles (view call)...');
+      console.log('🔍 Access validation:', {
+        hasRecordAccess,
+        dataShareCount,
+        hasAccess,
+        recordIndex,
+        patient: selectedPatient,
+        researcher: address,
+      });
       
-      // Step 1: Call getEncryptedHealthRecord as transaction to grant permanent FHE.allow() permissions
-      grantPermissionForHealth({
+      // Double-check access before attempting to decrypt
+      if (!hasAccess) {
+        toast.error('⚠️ You need to purchase access to this record first!', { id: 'health-permission' });
+        return;
+      }
+      
+      // Verify on-chain access before calling (extra safety check)
+      const accessCheck = await publicClient.readContract({
+        address: CEREBRUM_CONTRACT_ADDRESS as `0x${string}`,
+        abi: CEREBRUM_ABI,
+        functionName: 'hasRecordAccess',
+        args: [selectedPatient as `0x${string}`, address as `0x${string}`, BigInt(recordIndex)],
+      });
+      
+      console.log('🔐 On-chain access check:', accessCheck);
+      
+      if (!accessCheck) {
+        toast.error('⚠️ Access verification failed! Please purchase access first.', { id: 'health-permission' });
+        return;
+      }
+      
+      // Call getEncryptedHealthRecord with account context for msg.sender
+      // Important: must specify account parameter so contract can verify access
+      const result = await publicClient.readContract({
         address: CEREBRUM_CONTRACT_ADDRESS as `0x${string}`,
         abi: CEREBRUM_ABI,
         functionName: 'getEncryptedHealthRecord',
         args: [selectedPatient as `0x${string}`, BigInt(recordIndex)],
-      } as any);
+        account: address as `0x${string}`, // This sets msg.sender for the view call
+      });
 
-      // Step 2: After permission granted, decrypt (handled in useEffect below)
+      // Extract handles from result
+      const [bloodSugar, cholesterol, bmi, bpSystolic, bpDiastolic, heartRate, weight, height] = result as any[];
+      
+      // Convert to hex handles, checking for zero/empty values
+      const toHandle = (value: any) => {
+        if (!value || BigInt(value) === 0n) return undefined;
+        return '0x' + BigInt(value).toString(16).padStart(64, '0');
+      };
+      
+      const handles = {
+        bloodSugar: toHandle(bloodSugar),
+        cholesterol: toHandle(cholesterol),
+        bmi: toHandle(bmi),
+        bloodPressureSystolic: toHandle(bpSystolic),
+        bloodPressureDiastolic: toHandle(bpDiastolic),
+        heartRate: toHandle(heartRate),
+        weight: toHandle(weight),
+        height: toHandle(height),
+      };
+      
+      console.log('🔐 Fetched handles:', handles);
+      
+      // Cache the handles
+      localStorage.setItem(cacheKey, JSON.stringify(handles));
+      
+      toast.success('✅ Handles fetched! Decrypting...', { id: 'health-permission' });
+      
+      // Decrypt immediately (permissions already granted!)
+      const decrypted = await decryptHealthRecord(handles);
+      console.log('✅ [ResearcherPortal] Decrypted health data:', decrypted);
+      setDecryptedHealthData(decrypted);
+      toast.success('✅ Health record decrypted successfully!');
+      
     } catch (error: any) {
-      console.error('❌ [ResearcherPortal] Failed to start health decryption:', error);
-      toast.error('Failed to start decryption', { id: 'health-permission' });
+      console.error('❌ [ResearcherPortal] Failed to decrypt health record:', error);
+      
+      // Better error messages
+      if (error?.message?.includes('AccessExpired')) {
+        toast.error('⚠️ Access expired! The patient shared new data. Please purchase access again.', { id: 'health-permission' });
+      } else if (error?.message?.includes('InvalidRecordIndex')) {
+        toast.error('⚠️ Invalid record index. Please check the record number.', { id: 'health-permission' });
+      } else {
+        toast.error('Failed to decrypt health record', { id: 'health-permission' });
+      }
+    } finally {
       setIsDecryptingHealth(false);
     }
   };
 
-  // Handle health permission granted -> decrypt
-  useEffect(() => {
-    if (!isHealthPermissionGranted || !healthPermissionReceipt || !selectedPatient) {
-      console.log('🔍 [Health Decrypt] Waiting for conditions:', {
-        isHealthPermissionGranted,
-        hasReceipt: !!healthPermissionReceipt,
-        selectedPatient
-      });
-      return;
-    }
-
-    const performHealthDecrypt = async () => {
-      try {
-        toast.success('✅ Permission granted! Parsing event...', { id: 'health-permission' });
-        console.log('✅ [ResearcherPortal] Permission granted! Parsing event from transaction logs...');
-        
-        // Parse HealthDataPermissionGranted event from receipt
-        console.log('📋 [ResearcherPortal] Receipt logs:', healthPermissionReceipt.logs);
-        
-        // Find the HealthDataPermissionGranted event (4 topics: signature + 3 indexed params)
-        const healthEvent = healthPermissionReceipt.logs.find((log: any) => {
-          return log.address?.toLowerCase() === CEREBRUM_CONTRACT_ADDRESS.toLowerCase() && 
-                 log.topics?.length === 4;
-        });
-        
-        if (!healthEvent) {
-          console.error('❌ [ResearcherPortal] HealthDataPermissionGranted event not found');
-          console.log('📊 Available logs:', healthPermissionReceipt.logs.map((log: any) => ({
-            address: log.address,
-            topics: log.topics?.length,
-            data: log.data
-          })));
-          toast.error('Event not found in transaction receipt', { id: 'health-permission' });
-          setIsDecryptingHealth(false);
-          return;
-        }
-        
-        console.log('✅ Found HealthDataPermissionGranted event:', healthEvent);
-        
-        // Parse the data field (8 bytes32 handles + 1 uint256 timestamp)
-        // Each bytes32 is 64 hex chars (32 bytes)
-        const { data } = healthEvent;
-        const hexData = data.slice(2); // Remove 0x prefix
-        
-        const bloodSugarHandle = '0x' + hexData.slice(0, 64);
-        const cholesterolHandle = '0x' + hexData.slice(64, 128);
-        const bmiHandle = '0x' + hexData.slice(128, 192);
-        const bpSystolicHandle = '0x' + hexData.slice(192, 256);
-        const bpDiastolicHandle = '0x' + hexData.slice(256, 320);
-        const heartRateHandle = '0x' + hexData.slice(320, 384);
-        const weightHandle = '0x' + hexData.slice(384, 448);
-        const heightHandle = '0x' + hexData.slice(448, 512);
-        // timestamp is at positions 512-576 (unused for decryption)
-        
-        console.log('🔐 Parsed handles from event:');
-        console.log('  Blood Sugar:', bloodSugarHandle);
-        console.log('  Cholesterol:', cholesterolHandle);
-        console.log('  BMI:', bmiHandle);
-        console.log('  BP Systolic:', bpSystolicHandle);
-        console.log('  BP Diastolic:', bpDiastolicHandle);
-        console.log('  Heart Rate:', heartRateHandle);
-        console.log('  Weight:', weightHandle);
-        console.log('  Height:', heightHandle);
-        
-        // Cache handles for future decrypts (permissions are permanent!)
-        const handlesObj = {
-          bloodSugar: bloodSugarHandle,
-          cholesterol: cholesterolHandle,
-          bmi: bmiHandle,
-          bloodPressureSystolic: bpSystolicHandle,
-          bloodPressureDiastolic: bpDiastolicHandle,
-          heartRate: heartRateHandle,
-          weight: weightHandle,
-          height: heightHandle,
-        };
-        
-        const cacheKey = getHealthHandlesCacheKey(
-          selectedPatient,
-          recordIndex,
-          address,
-          dataShareCount
-        );
-        localStorage.setItem(cacheKey, JSON.stringify(handlesObj));
-        console.log('💾 [ResearcherPortal] Cached handles to localStorage for future use');
-        
-        // Decrypt using userDecrypt()
-        console.log('🔐 [ResearcherPortal] Starting batch decrypt for 8 values...');
-        
-        const decrypted = await decryptHealthRecord(handlesObj);
-
-        console.log('✅ [ResearcherPortal] Decrypted health data:', decrypted);
-        setDecryptedHealthData(decrypted);
-        toast.success('✅ Health record decrypted successfully!', { id: 'health-permission' });
-      } catch (error: any) {
-        console.error('❌ [ResearcherPortal] Failed to decrypt health record:', error);
-        console.error('❌ [ResearcherPortal] Error stack:', error.stack);
-        toast.error(`Failed to decrypt: ${error.message || 'Unknown error'}`, { id: 'health-permission' });
-      } finally {
-        setIsDecryptingHealth(false);
-      }
-    };
-
-    performHealthDecrypt();
-  }, [isHealthPermissionGranted, healthPermissionReceipt, selectedPatient, decryptHealthRecord]);
+  // Risk scores decryption (v0.9 User Decryption)
 
   // v0.9: Client-side decryption of risk scores
   const handleDecryptRiskScores = async () => {
@@ -1160,13 +1115,9 @@ const ResearcherPortal = () => {
                     <span className="text-white">{dataShareCount}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Your Access Round:</span>
-                    <span className="text-white">{researcherAccessRound ? Number(researcherAccessRound) : 0}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-400">Access Valid:</span>
+                    <span className="text-gray-400">Current Record Access:</span>
                     <span className={hasAccess ? 'text-green-400 font-bold' : 'text-red-400 font-bold'}>
-                      {hasAccess ? '✓ YES' : '✗ NO'}
+                      {hasAccess ? '✓ Purchased' : '✗ Not Purchased'}
                     </span>
                   </div>
                 </div>
@@ -1183,7 +1134,12 @@ const ResearcherPortal = () => {
 
                 {/* Record Selector */}
                 <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-400 mb-2">Select Health Record</label>
+                  <label className="block text-sm font-medium text-gray-400 mb-2">
+                    Select Health Record 
+                    <span className="ml-2 text-xs">
+                      {hasAccess ? '✅ Accessible' : '🔒 Purchase Required'}
+                    </span>
+                  </label>
                   <select
                     value={recordIndex}
                     onChange={(e) => {
@@ -1200,6 +1156,11 @@ const ResearcherPortal = () => {
                       </option>
                     ))}
                   </select>
+                  {!hasAccess && (
+                    <p className="mt-2 text-sm text-amber-400">
+                      ⚠️ This record requires purchase. Click "Purchase Access" below to unlock all current records.
+                    </p>
+                  )}
                 </div>
 
                 {/* Two Main Options */}

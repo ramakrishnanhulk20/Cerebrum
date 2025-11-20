@@ -85,48 +85,48 @@ const DocsPage = () => {
             </h2>
             <div className="bg-white/5 border border-emerald-500/20 rounded-2xl p-8 space-y-6">
               <p className="text-lg text-gray-300 leading-relaxed">
-                Cerebrum is a <span className="text-emerald-400 font-semibold">privacy-first healthcare data marketplace</span> built on Ethereum using Zama's FHEVM and Fully Homomorphic Encryption (FHE). It enables patients to monetize their health data while maintaining complete privacy through on-chain encrypted computation and instant User Decryption via EIP-712 signatures.
+                Cerebrum is a <span className="text-emerald-400 font-semibold">privacy-first healthcare data marketplace</span> built on Ethereum using Zama's FHEVM v0.9.1 and Fully Homomorphic Encryption (FHE). It enables patients to monetize their health data while maintaining complete privacy through on-chain encrypted computation and instant User Decryption via EIP-712 signatures.
               </p>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-8">
                 <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6">
                   <Lock className="w-8 h-8 text-emerald-400 mb-3" />
                   <h4 className="font-semibold mb-2">Fully Encrypted</h4>
-                  <p className="text-sm text-gray-400">All health data remains encrypted on-chain using FHEVM encrypted types</p>
+                  <p className="text-sm text-gray-400">All health data remains encrypted on-chain using FHEVM encrypted types (euint64, ebool)</p>
                 </div>
                 <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6">
                   <Zap className="w-8 h-8 text-emerald-400 mb-3" />
                   <h4 className="font-semibold mb-2">Instant Decryption</h4>
-                  <p className="text-sm text-gray-400">0-2 second User Decryption with EIP-712 signatures</p>
+                  <p className="text-sm text-gray-400">0-2 second User Decryption with EIP-712 signatures (no callbacks or polling)</p>
                 </div>
                 <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6">
                   <Shield className="w-8 h-8 text-emerald-400 mb-3" />
-                  <h4 className="font-semibold mb-2">Full Control</h4>
-                  <p className="text-sm text-gray-400">You decide who can access your encrypted data</p>
+                  <h4 className="font-semibold mb-2">Per-Record Access</h4>
+                  <p className="text-sm text-gray-400">Researchers maintain access to old records, only pay for new ones</p>
                 </div>
               </div>
 
               <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-xl p-6">
                 <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
                   <Zap className="w-5 h-5 text-emerald-400" />
-                  Key Features
+                  Key Features (v0.9.1)
                 </h4>
                 <ul className="space-y-2 text-gray-300">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
-                    <span><strong>Health Credit Score:</strong> Build encrypted score from 500-850 based on health metrics</span>
+                    <span><strong>Medically Accurate Risk Scores:</strong> Normalized algorithms calculate realistic diabetes, heart disease, and stroke risks (40-60% for critical values)</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
-                    <span><strong>Instant User Decryption:</strong> 0-2 second decryption with EIP-712 signatures (95% faster than v0.8)</span>
+                    <span><strong>Instant User Decryption:</strong> 0-2 second decryption with EIP-712 signatures (95% faster than v0.8 callbacks)</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
-                    <span><strong>Automatic Access Grants:</strong> Researchers get instant access via FHE.allowTransient (no patient re-signing)</span>
+                    <span><strong>Automatic Access Grants:</strong> FHE.allowTransient provides instant researcher access (no patient re-signing needed)</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
-                    <span><strong>Lower Gas Costs:</strong> 46% cheaper than v0.8 (no callback transactions)</span>
+                    <span><strong>Per-Record Access Model:</strong> Researchers keep access to old records, purchase only unlocks new data (sustainable monetization)</span>
                   </li>
                 </ul>
               </div>
@@ -159,9 +159,10 @@ const DocsPage = () => {
                     <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-xl p-4">
                       <p className="text-sm text-gray-400 mb-2"><strong>What happens:</strong></p>
                       <ul className="text-sm text-gray-300 space-y-1 ml-4">
-                        <li>• Initial health score set to 500 (encrypted)</li>
-                        <li>• Data sharing disabled by default</li>
-                        <li>• Account created on Ethereum Sepolia</li>
+                        <li>• Initial health score set to 500 (encrypted with euint64)</li>
+                        <li>• Data sharing enabled by default (toggle in dashboard)</li>
+                        <li>• Account created on Ethereum Sepolia Testnet</li>
+                        <li>• Activity log initialized for transparency</li>
                       </ul>
                     </div>
                   </div>
@@ -287,41 +288,45 @@ const DocsPage = () => {
                   </div>
 
                   <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-xl p-6">
-                    <h4 className="text-lg font-semibold mb-3">💰 Pricing Model</h4>
+                    <h4 className="text-lg font-semibold mb-3">💰 Per-Record Access Model</h4>
                     <ul className="space-y-2 text-gray-300">
                       <li className="flex items-start gap-2">
                         <CheckCircle className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
-                        <span><strong>0.01 ETH per patient access</strong> - Automatic access grant (no patient re-signing)</span>
+                        <span><strong>0.01 ETH per purchase</strong> - Unlocks all current records + maintains access to old ones</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <CheckCircle className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
-                        <span><strong>Instant decryption</strong> - 0-2 seconds with EIP-712 signatures (95% faster than v0.8)</span>
+                        <span><strong>Instant decryption</strong> - 0-2 seconds with EIP-712 signatures via User Decryption</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <CheckCircle className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
-                        <span><strong>Patient earns 80%</strong> - 0.008 ETH goes to patient, 0.002 ETH platform fee</span>
+                        <span><strong>Patient earns 80%</strong> - 0.008 ETH to patient, 0.002 ETH platform fee (sustainable model)</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
+                        <span><strong>New data = new purchase</strong> - When patient shares new records, researchers must purchase again</span>
                       </li>
                     </ul>
                   </div>
 
                   <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-xl p-6">
-                    <h4 className="text-lg font-semibold mb-3">🔬 What You Can Do</h4>
+                    <h4 className="text-lg font-semibold mb-3">🔬 What You Can Access</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div className="flex items-start gap-2">
                         <Database className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
-                        <span className="text-sm text-gray-300">View all health records after decryption</span>
+                        <span className="text-sm text-gray-300">All health metrics (blood sugar, BP, cholesterol, BMI, etc.)</span>
                       </div>
                       <div className="flex items-start gap-2">
                         <TrendingUp className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
-                        <span className="text-sm text-gray-300">Analyze trends and patterns over time</span>
+                        <span className="text-sm text-gray-300">Analyze longitudinal trends across multiple records</span>
                       </div>
                       <div className="flex items-start gap-2">
                         <FileText className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
-                        <span className="text-sm text-gray-300">Calculate disease risk predictions</span>
+                        <span className="text-sm text-gray-300">Calculate medically accurate risk scores (normalized algorithms)</span>
                       </div>
                       <div className="flex items-start gap-2">
                         <Shield className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
-                        <span className="text-sm text-gray-300">Export data for analysis (coming soon)</span>
+                        <span className="text-sm text-gray-300">Maintain access to old records automatically</span>
                       </div>
                     </div>
                   </div>

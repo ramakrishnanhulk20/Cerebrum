@@ -23,7 +23,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             borderRadius: 'large',
             fontStack: 'system',
           })}>
-            <BrowserRouter>
+            <BrowserRouter future={{ v7_startTransition: true }}>
               <App />
             </BrowserRouter>
           </RainbowKitProvider>

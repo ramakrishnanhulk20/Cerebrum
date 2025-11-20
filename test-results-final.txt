@@ -4,538 +4,538 @@
     Deployment & Initialization
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xe4365DBbDb06ac94dEC0B54bBdF32291bA9Ca85D
-  Risk Scoring: 0xe3b35d5F5711e9d12Cd841f20026E5948f6E39ca
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x8E962604536c30a7ae627A455caf956137B0FCeF
+  Risk Scoring: 0x82e507BcA29b3Ed868e29973d46304b86bCadb4A
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should deploy with correct platform wallet
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x84A143Db7eF059cb8F83429B1FcF796C858ADa40
-  Risk Scoring: 0x600a3575aA6096788E7cD7B1997f3B5A7147bAf4
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x2bcADd69113e4cA1BDc946Ee6dD43f0aCda2b404
+  Risk Scoring: 0xD38896EE8e95078A53d1e2122F111F518EFbD443
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should deploy with correct risk scoring library
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x8176e3bB7bb5897A9850f405166aB1Daa06D393D
-  Risk Scoring: 0x36beb30597f129E9E855Ca70f5a2De12aE028496
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x7Af96d8232fDe0E9eB38c616005b751D07A61ce4
+  Risk Scoring: 0xfEa04CDBe9F681753eFFE8eD9cC91e8645232AB4
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should set correct owner
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x66016F5c27f1d0CDc4Cd2fDAF9cBBE7a284f0Df3
-  Risk Scoring: 0x5d375823C9Fe502cbEDcB8FD5CfF381391b85147
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x0441564Ac3C034C579Df4e495F53bc5913562256
+  Risk Scoring: 0x01C64f49A6a68599Ee675AA5ceB9E63DE1a5a4Ef
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should initialize v0.9 constants correctly
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xE9EB4462AB64f7a7093528fB6859CB7aC9b90Bc0
-  Risk Scoring: 0x1CC8ae49034233F2aA1447F87d1ee6eFdfffBBF1
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x255aA1b3a1180B47d916507dbfF92b55914ea70e
+  Risk Scoring: 0xad02EB70DcE716f11209f0215E739bA38f50bebD
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should initialize tier constants
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x17Fdd3F023b6a47656d2b1ea8B55ED040f014EaD
-  Risk Scoring: 0x044168F640aE69dC6E12580f069533CC689feEa5
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x69c94dB94c5A244F0288B005FffB0A7bE31841c5
+  Risk Scoring: 0x70dd93ee53039c31424E92Ac32eF25613e3B74dd
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should have zero initial patients
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x5D4F89c4ACFDd79Aa419d90659E44A69FdBF2C97
-  Risk Scoring: 0x71892E58a5Da2f7aD7bF1CbA8aeDfd704ff954a8
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x480b7f31629517C18af50fFBA224851B4F7Da266
+  Risk Scoring: 0x07C7b40748631091412584bF208255F266D02349
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should have zero initial data shares
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x602D178A3EC8603A7D2beC32e19Cba82b154AA3B
-  Risk Scoring: 0xAD1140A75fba350Dd3f35a64D14d9AeE9E16731e
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0xcee77898664c943bc0519ba2433434513e1aF31f
+  Risk Scoring: 0xe19D9545bA0288951EEee47BDa18a75B84EDC944
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should revert deployment with zero platform wallet
     Patient Registration (v0.9 with FHE)
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x643d8f889774a65AE384fe1F95c1401BC589B62D
-  Risk Scoring: 0x0A9824Ec87cCb1904E29c8a853E7BcFf14c6BF1d
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x7707919B93dd1567513148C69aa5d05680E8f457
+  Risk Scoring: 0xd443d964e3d9568082191Ec1B54Db65976F2f491
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should register patient successfully
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xfE944cDb87955FE34cC321067f3a03c87EC02849
-  Risk Scoring: 0x7b4b81CCF8106eD8E760729cef94e457dc0B080F
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x25eC5DcEc477f2fd933FC5192Ed28c2aa39DD234
+  Risk Scoring: 0x95243Ba62e1753C208B6defA8E62C752631E8031
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should initialize patient with encrypted health score
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xeE4F79f40ABAB3013D0e3C6368D856e63F447869
-  Risk Scoring: 0x2F247aaA6dFD4b8C59f4C53755b323462bB1927b
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0xdC2217d92DEe40B560923d9e74064B7AcC0cC38E
+  Risk Scoring: 0xA7e73D1B00903E0B1a9912cfFe42F77cF370C22B
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should prevent duplicate registration
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x17f0adb5EcAFc771Bc10EA472aD8478fF30E3D1E
-  Risk Scoring: 0x21Ac2F09D97C901be878d272DECf9481e674A6C3
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x9e0aFB3d91865Efb2B034BEbc3e5bbcaB638A71f
+  Risk Scoring: 0x329B56C8857Aa08E1B94B17aCC433e28C093930d
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should track multiple patient registrations
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xB36dB430941c6BBce277C0C3B2fCFc545FAb601d
-  Risk Scoring: 0x20D20512F0467f2aEb6DF60b7C7D2108BDeF0E86
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0xCAEAbA584cF873C0f583064f19cd9b9592ad7D9f
+  Risk Scoring: 0x083A593eFE41123FD44A093f452C54a89c0089d8
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should add patient to sharing enabled list by default
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xDd37AE0f1Ab714E102b0Ba18a849248C2682008F
-  Risk Scoring: 0xc2Eaf3A624ceB5798800bB8Fe1ed1c1324147eDA
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x434DafAA06b3197E37Be71D3dE98Ace0c2F7Cb06
+  Risk Scoring: 0x1071F6547092121Fd502CE6F49d0A1Da28ec5BA2
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should create activity log entry for registration
     Health Data Sharing (v0.9 with Encrypted Input)
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xAB2649e92Aa903Ce054007cF3D4f56D0968192c7
-  Risk Scoring: 0xd467721B08226d87b723F0Ac196c9Dcb82634C9B
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0xFF211e0c1d6F57e7a6F0bB93F2C9A8Fe9102aaA3
+  Risk Scoring: 0x75c86FffD0F2d9d9b1a2f8b6Af8417865b73903e
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should share health data successfully (simulated FHE)
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xC9096371dd4f46148fcC580F469C588CA4DadC06
-  Risk Scoring: 0xd8B2eB32027C1c4C5Bcbdcb9b833dD3D5583bDF8
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x603AB8e7C8D5F4728bFb67FB488b245ceaC5Fb1B
+  Risk Scoring: 0x045e656194027030e644d655F1Bc4d33d6956B16
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should prevent data sharing when disabled
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x859a5bBe8A1eA2EA72F5455EA5E545a4f6A2D354
-  Risk Scoring: 0x3337190f6cB5143219cFBCD3B0bEC5C45B038C44
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x5DA20c99fd328d9045e0B6926777bd553D802d4B
+  Risk Scoring: 0x4aFC790855146DEcdf6BD532aD3126DD15A46231
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should update data share count after sharing
     Data Sharing Controls (v0.9)
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xa732B9591C3faF167B3d51ccDcE12e3AC2685a91
-  Risk Scoring: 0x5D265B1d8A6d3D7DeE566A404e4958a9F236bEd7
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x6b6024dC8d740E49C22D8795D3e2c74E82fbD921
+  Risk Scoring: 0xce0D9957A752C0475f2C99d4502ad86bca00df96
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should toggle sharing to disabled (starts enabled)
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x78f66a9519d3ffE46AEfD7c5A049f0Fa7366899B
-  Risk Scoring: 0x44826fF1D26166ae17877BdFECf77C8457313bA8
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x1A17b50a444E267b4B26A71fA4829F34DaC426d8
+  Risk Scoring: 0x33B6cF34e3652CE6C48FaEad2d61bB8bad6E3dd5
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should toggle sharing back to enabled
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xBDFfAeAA7F6a7c96fD8b45d9Cd422c46dDB4AD9A
-  Risk Scoring: 0xa58334D51890cbaB8A34264f097440B9CbA17dD8
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x6c9aD2d4e25D28cc4cfda07437522dE4dfB14085
+  Risk Scoring: 0xcD738358CaF8BF44b16fB19e9ab0686c21621873
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should update sharing enabled count correctly
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x3F4d9F1be2B473916E2917fa83174CCF9F1E9F62
-  Risk Scoring: 0x19E9C903B201031f91aD89502F2ACd5e154a5D65
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0xD2Fda1b003cB881711B195EA046f941FCF4D9572
+  Risk Scoring: 0xfa390b82819C60Da0Ea191cEF4a3906B16468042
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should prevent toggle if not registered
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x91b7104b8508d4f677ea22577B01e98393d3Db95
-  Risk Scoring: 0xfAeb02c60Bc952a80D5b4FF47Ee8742A3211AcE5
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0xf25ec2bb12b4aD8D812256982c01245127691C1c
+  Risk Scoring: 0xC8e150B24B132979900dDf50579980534F03E8Ef
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should track activity log for toggles
     Lender Approval System (v0.9)
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x9b6eb8cC2B02A1f3c796f3475Ee7078BF1d8F9Ec
-  Risk Scoring: 0xdc3d48964Bd43E57d0Ea1425B1CD85fA28E94090
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0xdCD133D2121BaDeE5a5857f4966eCbD6A229BcE0
+  Risk Scoring: 0xFEa004d2C73f1aE46DD431FCC76e7caC6AA1e0bF
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should approve lender successfully
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xbd7F889eE8723F76962d0Cfbf207b9f533D71970
-  Risk Scoring: 0x00edDdc5985A579130994235BA39114C58F2ae1C
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x236585737B0D149EC6555a1493cc06d316E98d52
+  Risk Scoring: 0x028772E30ef665C3657C6Ea6164bdd17b58c8cCa
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should track approved patients for lender
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x9425844a8F9938aEF65f82b6437286391D5aCa45
-  Risk Scoring: 0xBa60CaADBfa161961F59fC02bdb459189F358Ae2
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x57F8A1da339B5A5B7B2fbA5D707D41B7Cc342a04
+  Risk Scoring: 0xAf76f96A3701Ca9d0DcFE86DfC13747CfBBb663C
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should revoke lender approval
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x924546897C1F27a3024108962E575639d0E27Ed0
-  Risk Scoring: 0x0bbb680C96cd7C8585b78ab8bFf6F19579C60d58
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x9538f00D181CdCb97519370f6020C04ae3db24a9
+  Risk Scoring: 0x083a901Fbad117358eEe41A9a3d458eFF9d0Bb1b
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should prevent zero address approval
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x8EB77A68571665E4E222f66d0c9F6BAe6548d2c2
-  Risk Scoring: 0x1ad431342719002986651e404Ed5A8BA23103648
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x5894AbD10fAFC05f20FD6022daC12371b083E362
+  Risk Scoring: 0x7fEdd3F9946F2Ed2e99870264C6F972427023dAF
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should prevent unregistered patient from approving
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x41344DF42bD8B63A532D74420AD9C526FfA0B1A1
-  Risk Scoring: 0x872DC865457bE82B23EF17A8f5A2D04a81D1CF75
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x8FcE6eBf915AE968Bc405A44E5aCD209dcBAC1fF
+  Risk Scoring: 0x477DdEE426B90cb1FADAdc2457b3d3fDaDEcA0B0
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should allow multiple lender approvals
     Researcher Access Purchase (v0.9 with Auto-Grants)
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x3bEe35702b3f055B8E2C326B70Ea84a5D3f2125d
-  Risk Scoring: 0x6dBD582233c9F883f98127790fA60cFAB098796c
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x682B9e67B95E73F426Cf8c635d1DF1552dEB8868
+  Risk Scoring: 0xd6Ae131a1553e627DfD6c17d00C76CF4ba8A530b
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should require health records before purchase
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x21885E8E6B3e1F27B4c959D3FFC429Ef479D14A0
-  Risk Scoring: 0xd1fF255fe6EDd0b0D9079Fc603aE7B34e4aE4B63
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x4B9Af43C10c6a6F1D9AcB3726Abf95Ce5924C160
+  Risk Scoring: 0x7d1Fb8d3Ce7e3be939f1c99764dcB77f3035D3Bb
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should validate payment split logic exists
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xE433113648F9C3Ad9B25b4600493FE90A079E852
-  Risk Scoring: 0xD6A1548b97eDFfe18a6f94ab5da8aA2D90B4e52c
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0xdB880e7A3fFB3D02a3aD6cce549814fa32c91248
+  Risk Scoring: 0xd1Cb695a1f1DdF52286104eF3843814a59359039
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should validate researcher access event exists
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xEDf3D9b7f5a3f61d31Ac35ADF28dE04C58490919
-  Risk Scoring: 0x3709680fa0c32bFf88cBd0F8126daD81cf992820
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x1E328B788854bc9e8634379f6DE03347777F8F19
+  Risk Scoring: 0x38f3E2661f4E6eCD572CE214Ea0Bd543C18576f4
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should prevent insufficient payment validation exists
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x9F650ecbC1e70cC4d2d16727BCF56488055ab2F8
-  Risk Scoring: 0xDe46730758fE6B4BCDfB7d11b0BF0A324870e1ea
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x955135Fd7ad475647F97a097237B57286A7abA02
+  Risk Scoring: 0xFB0bbB4758456a3fb3232d7429e22D978868Ee8b
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should prevent access to unregistered patient
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x0517a947D67dD37B24055f9024a78Ca3F8b29Cb9
-  Risk Scoring: 0x88E93510E54B54B8E8CE2523017fC50A8f820Ae8
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x5488402fdFE2840140d65F01Dcd1dabCa3aAA2A4
+  Risk Scoring: 0xc366DCC59BB0a5D1399B11586777431a2c84F06d
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should validate multi-researcher access pattern
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xB0a9e07Fd6952688cFa6859b9989352E06CaACC7
-  Risk Scoring: 0xB440Baf72184F321C00A0F5c08e0BbA7B2EAD42A
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x09Cd5084854faa4e0d75532dEf5Bc8b7b465aA63
+  Risk Scoring: 0x74D29F130b659fD35ed6FeE2BC7AFF080e143137
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should validate purchase count tracking
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x12418B86ba3Fa7893CC08CE948DFf05f8698e3cb
-  Risk Scoring: 0x0C324f0b7803b68DD4aC91fA04a9Da12a4a2a5e9
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x3b3F6d20E5CBEB37A0fd620c19474C1fc76FDf06
+  Risk Scoring: 0x455a85fFe8b4D80ab0556eAb0153F9a2045F5414
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should validate purchased patients list tracking
     Earnings Claims (v0.9)
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xd938c84eEe7CD758aaa2FD9E77200A55Fde9f2b7
-  Risk Scoring: 0x26958fbD9C5EcFA1De53908aa8af3fc2590b22CF
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0xa505760432918fd8fc7348c98e516Be4Fada8e21
+  Risk Scoring: 0x2f328706dFb387F5c5e5a77f2778A5b52386CABB
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should prevent claim with zero earnings
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x3B74a2Aae0aeb0FE571C194Ba7A9E544f7aaa272
-  Risk Scoring: 0xD781b3962F4f3f91127c0BFe0a9AC3526250bb48
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0xD2de6b8Fce2D530817f3A6C06fF54e8de2165d77
+  Risk Scoring: 0xcd56f8a1D65f61F8CaA1893BC5EE8b05889566BE
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should prevent unregistered patient from claiming
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xF696AbefE70d9ea2ede6D456aca06cE209961c8b
-  Risk Scoring: 0x324e68a9874C8f54E0eAEdabD401018034A318cF
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x954C647042ae7AF439E4A25afeEB69D4404f94Af
+  Risk Scoring: 0xc369eFBab4E6d5f932e696356945eC22A249a8d9
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should validate earnings claim function exists
     Lender Eligibility Checks (v0.9 Zero-Knowledge)
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x4FA4Fc548E10e91eF885602B17c876709D552C39
-  Risk Scoring: 0x7E7fD5e733a5AF5AAd6AC6bbc82c26af62195251
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x87AcAD271C062d0f917f756786A0c90384FC65F6
+  Risk Scoring: 0x278e442Bc25F1D4ca1109E40d878819b338E33C4
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should check eligibility with plaintext threshold
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xA4522CE73E643C058A1816715AA11007fB07b1cF
-  Risk Scoring: 0x766f42272e34f9d637415154469Ee2068bF3f3a6
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x5Db4bbA1A2671b1533D0731612Ad3afe9ea9e7A5
+  Risk Scoring: 0xf6C77B804812d7391B52dE1ed5B194f08B85Aa94
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should prevent check without approval
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x7785a2Ed4C317830087478EcF0136C48BE78aC57
-  Risk Scoring: 0x169BEC15653Cd1eB0276D8F639eF8448CB168f53
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x76773bFFEf74AB39fE4085D70C452Fb0653cea5C
+  Risk Scoring: 0xF72aA5a518bA529B4122E3b5e8EFF52e0233C7a3
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should prevent check with insufficient payment
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x3f0c2cF8020AF355AA56A68bD8Fa3EB2FB5590E7
-  Risk Scoring: 0xd575278da3dc05A4311d6109A52592097490056E
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0xF6ba36E030d8536aD80Bb201B1649290599a0A1C
+  Risk Scoring: 0xc823FC80a846b5b4530ECB2132a3E511a677AC5F
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should track eligibility history
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xe74A20DF6C21a6886C95aC25ebd14b0b392DcD8C
-  Risk Scoring: 0xD17b703724B99Ca36F0C5837f2D9d3900E8d9c6A
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x4AA2D674da77B56562775ab9C476De8CE1C3Cf25
+  Risk Scoring: 0xae2aCE7cc0913bbE8616ED07495e5E713F457223
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should prevent check on unregistered patient
     Encrypted Lender Eligibility (v0.9 FHE)
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x0267FC842F2297CA0453047DF0733BAE9f23FDE2
-  Risk Scoring: 0xe2C660dCA552E4a945827B5B491c47b0B21070d6
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x9133cfccc6692d1cFa60CdEECCc5CF5dEfe1375e
+  Risk Scoring: 0xb533085713014b57643df654746f2eEed390216C
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should validate checkEligibilityWithEncryptedThreshold function exists
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xcf012a5F0d50C04DF05c8972DDDc15984d5f317A
-  Risk Scoring: 0x72aAd81C05a714984ED8537E88593Dd660b0658f
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x96b73a995CA38bcfd04d9750cd2877e18249Dc8A
+  Risk Scoring: 0xb5a654987dC4E0375D05EF1A81C8665d5580660A
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should validate getEncryptedEligibilityResult function exists
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xB462e1103342115F82D1a4111E8FcCCeD7F620F4
-  Risk Scoring: 0xB820fB1be00301E9C4B33Dc0f168Ce771E187C9f
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x72AaFE9073c391640ff7698B7a8E0b34cD985572
+  Risk Scoring: 0x2aA0eEDB413B726d8f7f5a21BB8E5468B2E80132
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should require approval for encrypted eligibility check
     Encrypted Health Record Access (v0.9)
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xf0c4ee8c8D7DA5181dAF37e2c5b1e9c6382d63eb
-  Risk Scoring: 0x655C9FD9625f8f330b8E11F44100B18bEF60Ad7d
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x471ba56231c8D57CC296d604E70AA7febCdff8A9
+  Risk Scoring: 0x6217D5cF2DaD55e090082970D25323e0f7e27966
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should validate getEncryptedHealthRecord function exists
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x387DFC37e450565a8603F1513eba6473108905Ef
-  Risk Scoring: 0xc2c7d3727B1431D9Ea947c0Ec79469D751538450
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x51725Ba989354CC571f837074Cb288b720186713
+  Risk Scoring: 0x2572C25c0D6111F65E4582252124f274c598BE1d
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should validate getHealthRecordMetadata function exists
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x24A19587b52AF039d17c307bc1268D856C6EEa77
-  Risk Scoring: 0xB249D8bab01e541170BAC35B0472791A923Ad1BD
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0xbBE2A4DaFe06534326AC199837f4703e768d39dA
+  Risk Scoring: 0xdF9d8C1E0eed5D8963765fc5fA696b6B2D5629C3
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should return correct health record count
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xa1145dd985A3e10A75b3EDF7978Df911CbC91DA3
-  Risk Scoring: 0x64061d247c89703920d52758A42492de812e783d
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x901E0DE7174Ed434143a561CB309b338d12e2712
+  Risk Scoring: 0xD2Ff42E25a82721b2d2B6A67996bff963748D7db
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should validate getRecordQuality function exists
     Risk Scoring Functions (v0.9)
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x9654B6D4013238e23FF264983Be9d65ebE39dba6
-  Risk Scoring: 0x1a42d38226727F9b185D436fADaa2c57aE67A6E2
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0xDEE580965C513249b807b2751369D8E5e81f9D97
+  Risk Scoring: 0x449fD7192b278D9355DFaE3333F4d8fD43671dBa
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should validate calculateComprehensiveRisk function exists
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xd911202379B2729295D16e19b33915779C4b348C
-  Risk Scoring: 0xFCbADD4c8cDAdB6589d41EC2a8cE2D756C62dc9c
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x04483c66dDD91848f77Fc769d8DCE3264070E2aA
+  Risk Scoring: 0xF866e9576e98B517980741AfeddeA9b60b4e2AC9
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should validate getEncryptedRiskScores function exists
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x324B1f12Cc9c6fe416D25aFE28FD6d7E0C5910c2
-  Risk Scoring: 0xa5353Eb626742d71A379F1Cf13af50dea8f86431
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x5C8eBBAD88852A2d389C4848712bD635294E350c
+  Risk Scoring: 0xC382AEd26F9E28340Fcadc89E16a92aCc3E02622
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should prevent risk calculation without data
     Dynamic Access Pricing (v0.9 Quality-Based)
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x25269Bf7e02d045FcaD7Da9FCA41b1ac8c47066F
-  Risk Scoring: 0xb2810076d7dBB85Ad8B083aBdFb1Ac48bB2096bF
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x312a3b1F8d0802a871eE3AD8E1F8BdF27bc013c3
+  Risk Scoring: 0x2ab2c2d14817fbF6e1cD5Bbc0BDd6E6D5c5fbBF0
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should return base price when no records exist
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x91e6032614Ffad6D67D65532ED81606E09D0aC82
-  Risk Scoring: 0xde8eF0356C28753AEF03c16397b3a1209b106e71
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0xC01D0671df14846eAC769C21F17e5c791029d5B6
+  Risk Scoring: 0x33b32198fcFcaD422D24Cf9D00E16B0BaDA9d55d
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should validate price calculation logic
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x40a902a90a08b5b075f6C7f16f371Fb9eEB506e6
-  Risk Scoring: 0x8316E4a95789Deb25F7846bE76D88467c217D73B
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0xCE8a612fDC0056571D487bB6813ECcB046b370C6
+  Risk Scoring: 0xa80F05CdaF89E5f976A0724241Aa166Af50261b0
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should use quality score to determine price tier
-    Researcher Access Tracking (v0.9)
+    Researcher Access Tracking (v0.9 - Per-Record Access)
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x770D8548793AAFf62dAC570fe04D1e7aC3ae34CE
-  Risk Scoring: 0x5b35eBb510FB84e1f06C7aeEF31ec5efdFDd7A42
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
-      Ô£ö Should validate hasCurrentAccess function
+  Main Contract: 0xD9235371EB9E6905c5386150825800CF3faa0CB7
+  Risk Scoring: 0xBF325476F5A85B304f057968aB5B1Fa78B16461b
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
+      Ô£ö Should validate hasRecordAccess function (per-record tracking)
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xB6724056aAE627b77003e19fc925b83d614c3729
-  Risk Scoring: 0x960765fE5AbaD06eB19ed38172443dcf43808487
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
-      Ô£ö Should track access rounds correctly
+  Main Contract: 0xde3256Bbe48BFd7AD9BBe3814d84c1a3eba809ef
+  Risk Scoring: 0xA0e02778E0510041e3b4bC003335B0A9b1e57fb0
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
+      Ô£ö Should track per-record access correctly
     Additional Admin Controls (v0.9)
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x1993E813cfAe856E26DE8EeAfd192D454f21af6e
-  Risk Scoring: 0x440660A0aaD166aD0e7c541320E10E22727F95Ae
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0xeA6f675d44E25b620E0FC181Ab125daFC4425a8A
+  Risk Scoring: 0x9be42000f585994231541b2105FD3Ebd9E7be37A
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should allow owner to update risk scoring library
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xec9e4d0d7d96E72DaC4C9d46d4597Cf8E81b4a22
-  Risk Scoring: 0xE38bA11503966463FD035a72aB2039D3fDCB973c
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x823Ee36dd8575007dBf24214Baa92Ab84e52c65C
+  Risk Scoring: 0xcA380EE476ce9C692E2B7639d3Ee7454A5b0DAe9
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should prevent non-owner from updating risk library
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x10cF8B08ED027EBcE94926B789b81172324DA101
-  Risk Scoring: 0xB702CED356e5D21a87D125F0cFdbf2Fc46bd72Ac
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0xf4E197De864862dF6DFAeCFA9A35C584fdA74b32
+  Risk Scoring: 0xd91e9F7B146d331992071B424956a76303630E8D
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should prevent zero address risk library
     View Functions (v0.9)
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x5d72544920772e83c1469e915b9e7646c574d011
-  Risk Scoring: 0xd59904cb33dcC4d74145e6fFe78C43b91CB79fff
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x8355f516F85EdE696114cd73df6A8c65e30C40a3
+  Risk Scoring: 0x088634dB6C473a801912d2Def75A070FDDeD0578
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should return correct patient info
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xFA6e3cd6eFEd87E7089E235a946aF52aedA0FaeF
-  Risk Scoring: 0x69ec7B0fa6CB38e9720215245c924372c4B3e267
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x8D8658bB1e765623AECD2e623b17ED500EFd0802
+  Risk Scoring: 0xDD85196132201B4c184982B6002115a578f4eaD7
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should return correct total patients
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xa16bD3C022722b3b2a6276d69D7D0F4Cd0947B72
-  Risk Scoring: 0xC6331C26FB8cCA663E3e530a76022A5F4cb4aBb4
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x80b673f3eee3246B3aA1e8199E79129149a4959D
+  Risk Scoring: 0x2fD588647Bf9662B1C782cA5B825B0eC25950CaE
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should return correct total data shares
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x71fE0270700E6a036CF60d5B101AB0FdB8Ee8e78
-  Risk Scoring: 0xD70C7154c657D50c9655f7b6f0E17C36B07cBF6e
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x78aDb2A44408B9D4f7E103A8E5CcD905eB2E9876
+  Risk Scoring: 0x3F3FaE0250e50b901F6911907Eb83566521867bF
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should return complete patient list
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x1d23E04AabA1E595e97914ce5Ab0C9ab7e427B8C
-  Risk Scoring: 0xa04f7A5080668AD6146f9094DcBAB19741FF9B16
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x3f9CD8b84587d305D8e12Ab070036D37B790f682
+  Risk Scoring: 0x1d8f36a62ADf22AF158330f6C095f428aa2d8d10
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should return sharing enabled patients
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xDe0663915821E1b8574f4CfE43a985b13a52e8fC
-  Risk Scoring: 0x549c8a76e831710fDC4da5c5415055dFc79d573A
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x93feCaf722587b4025b9E63F0b490789EB8C7fD8
+  Risk Scoring: 0x4467AF8162297D03282527163726D0289CEA5629
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should return correct health record count
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xa5dA56445F8098AB96e021B2409C02a09E288558
-  Risk Scoring: 0xAaAB01616319056Afa6aa27ff56fAeBF9857Edf9
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x0681c70217f8Bb2F55e620e469b7F7489eF14c74
+  Risk Scoring: 0x2Ab0282C23cbF59258c1F682CBFc692E8450dFdC
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should return registration status correctly
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x224A26e526b1b58ac47a88467bB3DAa5250052ef
-  Risk Scoring: 0x2aDcE3F920D5987fbBF5455d048761cea54f9301
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x84e0b78553453Ce50Facd850a5193ECe2247E9D3
+  Risk Scoring: 0x88bD9A450A9Ba544d5aF33820f6237eD72223f7d
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should return sharing status correctly
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xbf94F2340F08F83e0FdC636A339A962241ec343f
-  Risk Scoring: 0x48D1daB753b1BAF1A34cB81145380a5F417a07F9
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x34e0C24610348429EbeCD1740b5967f7cdf67323
+  Risk Scoring: 0x6b365e04006f7718021f9B385c610aADE8Be25D6
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should return activity logs
     Admin Functions (v0.9)
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xC2509e2594188ba8D0211fA14dea8c9f015EED83
-  Risk Scoring: 0x1fcdCf5b26d5Fa9B33cEbbD81a8b6428838dF316
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0xf2f3B5F0e08f1369185D55bfA90F6B068fe9056b
+  Risk Scoring: 0x49cd9bd4D980388D453F34f68EbE292051eb5465
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should allow owner to update platform wallet
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xa09989B62533E06bfaaa6D0B08E4a4548243ba27
-  Risk Scoring: 0x093142E210e0795bE0ab39F025c3d893ceCe947D
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x61f70a58456e66400dd029Ed41b6B3912DFA0D17
+  Risk Scoring: 0xd5d602834139F0f166Dd819b1a47Af744b70b701
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should prevent non-owner from updating platform wallet
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x61c91B22F4F38189715af882D3dC8771bE33e4cd
-  Risk Scoring: 0x676101Af72D38E39e887cc873149310303605b93
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0xe37a99F99D2E96124ADE83bA9AF8f3dEcBf8D91b
+  Risk Scoring: 0xE5A41d5393d81BAeb6A25A79eb280ceE42314909
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should prevent zero address platform wallet
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x75bfD88873b1CB4a97CcA814602B6d37F844AC76
-  Risk Scoring: 0xDBC4277ab38418c92CbEf9b145cdfF9AC8f0797c
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x41bb9E3Ca2c37502285145dFf612dd843ccE1ec8
+  Risk Scoring: 0x0fCA0ed20E6Ced0AEb4Cb6e6dd4Fc0611356d6b0
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should allow owner to transfer ownership
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x4C17B12e53845BA529c002E643dBD2b07B02cDBc
-  Risk Scoring: 0xa8bac61596C89fF687f5EDFeB87cC4134853262a
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0xd56E4A98850587547258bA209EbB0BEC88651f30
+  Risk Scoring: 0x1a518EBc73eb00F94b052C9B0711B7639745F311
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should prevent non-owner from transferring ownership
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xe0e650dD9df2636eCF83601880332BE5404bd589
-  Risk Scoring: 0x4E845Cb06830165d273994015fCb8D12a7791EE6
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x920A394Bce84add90656071115e576880c65E258
+  Risk Scoring: 0x0f3977C2965451fa5a92E7Adacd9097eeB43806F
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should prevent transferring to zero address
     Complete Workflows (v0.9 End-to-End)
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xB3aa3168CCF86798b45B33dC3130119f53e6014d
-  Risk Scoring: 0x7C22e17FfF1a3D2c7F7d979C731CC71Ef067B33b
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x5d938D9D8042e5704e729c2E55A937e4f90e487c
+  Risk Scoring: 0x0DAa171cc16Ce52D4f657f614731179B68eC2CD6
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Full patient workflow: register ÔåÆ toggle validations
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x840A3Df43141081325449346dE7A0E55D42B471E
-  Risk Scoring: 0x46cf260002EF71893355F4402C811149002F7F16
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x435B529A6cf0A21d4cC8e38b96dD00dF1a50Fd25
+  Risk Scoring: 0xE045bB69a46Ba3e0D14053f0c234D9718E8B8cA6
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Multi-patient registration workflow
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x56370AD2580f13d3B391Cd8204DaE4bbd907ef1b
-  Risk Scoring: 0xbAc6F6595c6241420cD6Debae26a2245a54AB298
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x07e8b4BDd1bcF702312B986204c3B2Ce78d7c82c
+  Risk Scoring: 0xC350677a27acFdcE4dd08303d961b084510693Df
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Multi-lender approval workflow
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x151E553180cD477CD2C11562bc673c5d8e1ab846
-  Risk Scoring: 0x17F5f9C39623c4acB4978ec2cA336568eBC7d06D
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0xeA7cb1be69CE28eB28dF8889ED49466d8bA8Af51
+  Risk Scoring: 0xBddF0B138A7C64e1E8f893bF09f5986304BFbBb2
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Lender approval and eligibility workflow
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x6F75fE2973CB3cE89bF5acC9AaC7AefAF3BDe4E2
-  Risk Scoring: 0xa8A0a8D61Ab9b1b95ec56908ce836F1E68835716
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0xa3e5B00E3D2Fed599e1AA4A7bE5BbF295CF77A48
+  Risk Scoring: 0xB8c335f5B3efC9925C79FE601b3143C2C241545D
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Complete ecosystem workflow with all actors
     Edge Cases & Security (v0.9)
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x25E25C0674ca60790DFe72d5aa59194Dc43e2Fe6
-  Risk Scoring: 0x0A615f419734cD4B10439E37F7aE20976D0d6dFc
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0xD869763CB74B2A6cE6588FC9155F8d631A676a8e
+  Risk Scoring: 0x1e7D83F18c250e18f80e895bfb87c6360eE80db9
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should handle zero initial state correctly
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0x586717B15ABB6aC0C66a988D3723728782fD233F
-  Risk Scoring: 0x024F4B8587152669a0AfFd44Ad9274BECDc7107f
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0x5E4CAF985342F122893b18b64a137F240512DC0A
+  Risk Scoring: 0xF76bC67501d4454e7266CE57086d026cE5252362
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should prevent reentrancy in claimEarnings
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xA98532d5AC7E6B1626b9366b2542fbE5519aF031
-  Risk Scoring: 0x60A28c59696E862c67295aEd08645B6633355D91
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
-      Ô£ö Should handle large numbers of patients (40ms)
+  Main Contract: 0x350B386e849a9ad5c0F6D30bC6BDb68Ae61b3c99
+  Risk Scoring: 0x790587f553789100C650c43f05E539beC56a6Efa
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
+      Ô£ö Should handle large numbers of patients
 
 ­ƒôï Contract Deployed:
-  Main Contract: 0xFe8ebDBE797B1B0c888ab46b36A1F9C8AA4fb8Ed
-  Risk Scoring: 0xBbd7E679282f5b7a136fAa8477C47a5040dAF398
-  Platform Wallet: 0xc9cf46Df14E4504cc630A8A107BFEd0BEFA6C79F
+  Main Contract: 0xA863AA3efD3eFf12B82Ab31d26f527b1127559e6
+  Risk Scoring: 0x7d565818E6EFcC82352B0F8C73de2b384cC8A7e1
+  Platform Wallet: 0xC85C795D69e67De78B02ccAA51F03f4c56B2446e
       Ô£ö Should maintain state consistency across operations
 
 
-  86 passing (3s)
+  86 passing (2s)
 

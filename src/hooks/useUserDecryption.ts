@@ -92,16 +92,51 @@ export function useUserDecryption() {
       ];
 
       // Decrypt all values at once via Zama relayer
-      const results = await instance.userDecrypt(
-        handlePairs,
-        sigData.privateKey,
-        sigData.publicKey,
-        sigData.signature,
-        sigData.contractAddresses,
-        sigData.userAddress,
-        sigData.startTimestamp,
-        sigData.durationDays
-      );
+      console.log('📋 Decryption request:', {
+        handleCount: handlePairs.length,
+        contractAddress,
+        userAddress: address
+      });
+      
+      console.log('⏳ Waiting 3 seconds for ACL propagation...');
+      // CRITICAL: Wait for coprocessors to propagate ACL updates to Gateway
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      console.log('✅ ACL propagation delay complete');
+      
+      let results;
+      try {
+        results = await instance.userDecrypt(
+          handlePairs,
+          sigData.privateKey,
+          sigData.publicKey,
+          sigData.signature,
+          sigData.contractAddresses,
+          sigData.userAddress,
+          sigData.startTimestamp,
+          sigData.durationDays
+        );
+      } catch (decryptErr: any) {
+        console.error('❌ Health record decryption failed');
+        console.error('🔍 Error details:', decryptErr);
+        
+        // Try to capture response body
+        if (decryptErr?.response) {
+          try {
+            const responseText = typeof decryptErr.response.text === 'function'
+              ? await decryptErr.response.text()
+              : JSON.stringify(decryptErr.response);
+            console.error('📄 Relayer response body:', responseText);
+          } catch (e) {
+            console.error('⚠️ Could not read response body');
+          }
+        }
+        
+        console.error('💡 Next steps:');
+        console.error('1. Check browser Network tab for POST /v1/user-decrypt');
+        console.error('2. Verify FHE.allow() was called for these handles');
+        console.error('3. Wait longer (try 30s) if on testnet');
+        throw decryptErr;
+      }
 
       setIsDecrypting(false);
 
@@ -156,16 +191,46 @@ export function useUserDecryption() {
 
       console.log('✅ Using signature (cached:', sigData.startTimestamp !== Math.floor(Date.now() / 1000), ')');
 
-      const results = await instance.userDecrypt(
-        [{ handle, contractAddress }],
-        sigData.privateKey,
-        sigData.publicKey,
-        sigData.signature,
-        sigData.contractAddresses,
-        sigData.userAddress,
-        sigData.startTimestamp,
-        sigData.durationDays
-      );
+      console.log('📋 Eligibility decryption request:', {
+        handle,
+        contractAddress,
+        userAddress: address
+      });
+      
+      console.log('⏳ Waiting 3 seconds for ACL propagation...');
+      // CRITICAL: Wait for coprocessors to propagate ACL updates to Gateway
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      console.log('✅ ACL propagation delay complete');
+      
+      let results;
+      try {
+        results = await instance.userDecrypt(
+          [{ handle, contractAddress }],
+          sigData.privateKey,
+          sigData.publicKey,
+          sigData.signature,
+          sigData.contractAddresses,
+          sigData.userAddress,
+          sigData.startTimestamp,
+          sigData.durationDays
+        );
+      } catch (decryptErr: any) {
+        console.error('❌ Eligibility decryption failed');
+        console.error('🔍 Error details:', decryptErr);
+        
+        if (decryptErr?.response) {
+          try {
+            const responseText = typeof decryptErr.response.text === 'function'
+              ? await decryptErr.response.text()
+              : JSON.stringify(decryptErr.response);
+            console.error('📄 Relayer response body:', responseText);
+          } catch (e) {
+            console.error('⚠️ Could not read response body');
+          }
+        }
+        
+        throw decryptErr;
+      }
 
       setIsDecrypting(false);
       return Boolean(results[handle]);

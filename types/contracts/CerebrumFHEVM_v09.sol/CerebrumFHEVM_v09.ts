@@ -75,6 +75,7 @@ export interface CerebrumFHEVM_v09Interface extends Interface {
       | "checkEligibility"
       | "checkEligibilityWithEncryptedThreshold"
       | "claimEarnings"
+      | "confidentialProtocolId"
       | "eligibilityHistory"
       | "getApprovedPatients"
       | "getEligibilityHistory"
@@ -84,6 +85,7 @@ export interface CerebrumFHEVM_v09Interface extends Interface {
       | "getEncryptedRiskScores"
       | "getHealthRecordCount"
       | "getHealthRecordMetadata"
+      | "getHighestAccessibleRecord"
       | "getPatientActivity"
       | "getPatientInfo"
       | "getPatientList"
@@ -94,8 +96,8 @@ export interface CerebrumFHEVM_v09Interface extends Interface {
       | "getSharingEnabledPatients"
       | "getTotalDataShares"
       | "getTotalPatients"
-      | "hasCurrentAccess"
       | "hasLenderApproval"
+      | "hasRecordAccess"
       | "hasResearcherAccess"
       | "isPatientRegistered"
       | "isSharingEnabled"
@@ -103,10 +105,9 @@ export interface CerebrumFHEVM_v09Interface extends Interface {
       | "owner"
       | "patients"
       | "platformWallet"
-      | "protocolId"
       | "purchaseResearcherAccess"
       | "registerPatient"
-      | "researcherAccessRound"
+      | "researcherRecordAccess"
       | "researcherRiskScores"
       | "revokeLender"
       | "riskScoringLibrary"
@@ -198,6 +199,10 @@ export interface CerebrumFHEVM_v09Interface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "confidentialProtocolId",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "eligibilityHistory",
     values: [AddressLike, AddressLike, BigNumberish]
   ): string;
@@ -232,6 +237,10 @@ export interface CerebrumFHEVM_v09Interface extends Interface {
   encodeFunctionData(
     functionFragment: "getHealthRecordMetadata",
     values: [AddressLike, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getHighestAccessibleRecord",
+    values: [AddressLike, AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "getPatientActivity",
@@ -274,12 +283,12 @@ export interface CerebrumFHEVM_v09Interface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "hasCurrentAccess",
+    functionFragment: "hasLenderApproval",
     values: [AddressLike, AddressLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "hasLenderApproval",
-    values: [AddressLike, AddressLike]
+    functionFragment: "hasRecordAccess",
+    values: [AddressLike, AddressLike, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "hasResearcherAccess",
@@ -307,10 +316,6 @@ export interface CerebrumFHEVM_v09Interface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "protocolId",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "purchaseResearcherAccess",
     values: [AddressLike, BigNumberish]
   ): string;
@@ -319,8 +324,8 @@ export interface CerebrumFHEVM_v09Interface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "researcherAccessRound",
-    values: [AddressLike, AddressLike]
+    functionFragment: "researcherRecordAccess",
+    values: [AddressLike, AddressLike, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "researcherRiskScores",
@@ -438,6 +443,10 @@ export interface CerebrumFHEVM_v09Interface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "confidentialProtocolId",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "eligibilityHistory",
     data: BytesLike
   ): Result;
@@ -471,6 +480,10 @@ export interface CerebrumFHEVM_v09Interface extends Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getHealthRecordMetadata",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getHighestAccessibleRecord",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -514,11 +527,11 @@ export interface CerebrumFHEVM_v09Interface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "hasCurrentAccess",
+    functionFragment: "hasLenderApproval",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "hasLenderApproval",
+    functionFragment: "hasRecordAccess",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -543,7 +556,6 @@ export interface CerebrumFHEVM_v09Interface extends Interface {
     functionFragment: "platformWallet",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "protocolId", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "purchaseResearcherAccess",
     data: BytesLike
@@ -553,7 +565,7 @@ export interface CerebrumFHEVM_v09Interface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "researcherAccessRound",
+    functionFragment: "researcherRecordAccess",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -1036,6 +1048,8 @@ export interface CerebrumFHEVM_v09 extends BaseContract {
 
   claimEarnings: TypedContractMethod<[], [void], "nonpayable">;
 
+  confidentialProtocolId: TypedContractMethod<[], [bigint], "view">;
+
   eligibilityHistory: TypedContractMethod<
     [arg0: AddressLike, arg1: AddressLike, arg2: BigNumberish],
     [
@@ -1064,7 +1078,7 @@ export interface CerebrumFHEVM_v09 extends BaseContract {
   getEncryptedEligibilityResult: TypedContractMethod<
     [patient: AddressLike],
     [string],
-    "nonpayable"
+    "view"
   >;
 
   getEncryptedHealthRecord: TypedContractMethod<
@@ -1081,7 +1095,7 @@ export interface CerebrumFHEVM_v09 extends BaseContract {
         height: string;
       }
     ],
-    "nonpayable"
+    "view"
   >;
 
   getEncryptedHealthScore: TypedContractMethod<
@@ -1119,6 +1133,12 @@ export interface CerebrumFHEVM_v09 extends BaseContract {
         qualityScore: bigint;
       }
     ],
+    "view"
+  >;
+
+  getHighestAccessibleRecord: TypedContractMethod<
+    [patient: AddressLike, researcher: AddressLike],
+    [bigint],
     "view"
   >;
 
@@ -1171,14 +1191,14 @@ export interface CerebrumFHEVM_v09 extends BaseContract {
 
   getTotalPatients: TypedContractMethod<[], [bigint], "view">;
 
-  hasCurrentAccess: TypedContractMethod<
-    [patient: AddressLike, researcher: AddressLike],
+  hasLenderApproval: TypedContractMethod<
+    [patient: AddressLike, lender: AddressLike],
     [boolean],
     "view"
   >;
 
-  hasLenderApproval: TypedContractMethod<
-    [patient: AddressLike, lender: AddressLike],
+  hasRecordAccess: TypedContractMethod<
+    [patient: AddressLike, researcher: AddressLike, recordIndex: BigNumberish],
     [boolean],
     "view"
   >;
@@ -1227,8 +1247,6 @@ export interface CerebrumFHEVM_v09 extends BaseContract {
 
   platformWallet: TypedContractMethod<[], [string], "view">;
 
-  protocolId: TypedContractMethod<[], [bigint], "view">;
-
   purchaseResearcherAccess: TypedContractMethod<
     [patient: AddressLike, recordIndex: BigNumberish],
     [void],
@@ -1237,9 +1255,9 @@ export interface CerebrumFHEVM_v09 extends BaseContract {
 
   registerPatient: TypedContractMethod<[], [void], "nonpayable">;
 
-  researcherAccessRound: TypedContractMethod<
-    [arg0: AddressLike, arg1: AddressLike],
-    [bigint],
+  researcherRecordAccess: TypedContractMethod<
+    [arg0: AddressLike, arg1: AddressLike, arg2: BigNumberish],
+    [boolean],
     "view"
   >;
 
@@ -1382,6 +1400,9 @@ export interface CerebrumFHEVM_v09 extends BaseContract {
     nameOrSignature: "claimEarnings"
   ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
+    nameOrSignature: "confidentialProtocolId"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
     nameOrSignature: "eligibilityHistory"
   ): TypedContractMethod<
     [arg0: AddressLike, arg1: AddressLike, arg2: BigNumberish],
@@ -1407,7 +1428,7 @@ export interface CerebrumFHEVM_v09 extends BaseContract {
   >;
   getFunction(
     nameOrSignature: "getEncryptedEligibilityResult"
-  ): TypedContractMethod<[patient: AddressLike], [string], "nonpayable">;
+  ): TypedContractMethod<[patient: AddressLike], [string], "view">;
   getFunction(
     nameOrSignature: "getEncryptedHealthRecord"
   ): TypedContractMethod<
@@ -1424,7 +1445,7 @@ export interface CerebrumFHEVM_v09 extends BaseContract {
         height: string;
       }
     ],
-    "nonpayable"
+    "view"
   >;
   getFunction(
     nameOrSignature: "getEncryptedHealthScore"
@@ -1458,6 +1479,13 @@ export interface CerebrumFHEVM_v09 extends BaseContract {
         qualityScore: bigint;
       }
     ],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "getHighestAccessibleRecord"
+  ): TypedContractMethod<
+    [patient: AddressLike, researcher: AddressLike],
+    [bigint],
     "view"
   >;
   getFunction(
@@ -1512,16 +1540,16 @@ export interface CerebrumFHEVM_v09 extends BaseContract {
     nameOrSignature: "getTotalPatients"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
-    nameOrSignature: "hasCurrentAccess"
+    nameOrSignature: "hasLenderApproval"
   ): TypedContractMethod<
-    [patient: AddressLike, researcher: AddressLike],
+    [patient: AddressLike, lender: AddressLike],
     [boolean],
     "view"
   >;
   getFunction(
-    nameOrSignature: "hasLenderApproval"
+    nameOrSignature: "hasRecordAccess"
   ): TypedContractMethod<
-    [patient: AddressLike, lender: AddressLike],
+    [patient: AddressLike, researcher: AddressLike, recordIndex: BigNumberish],
     [boolean],
     "view"
   >;
@@ -1569,9 +1597,6 @@ export interface CerebrumFHEVM_v09 extends BaseContract {
     nameOrSignature: "platformWallet"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "protocolId"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
     nameOrSignature: "purchaseResearcherAccess"
   ): TypedContractMethod<
     [patient: AddressLike, recordIndex: BigNumberish],
@@ -1582,10 +1607,10 @@ export interface CerebrumFHEVM_v09 extends BaseContract {
     nameOrSignature: "registerPatient"
   ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: "researcherAccessRound"
+    nameOrSignature: "researcherRecordAccess"
   ): TypedContractMethod<
-    [arg0: AddressLike, arg1: AddressLike],
-    [bigint],
+    [arg0: AddressLike, arg1: AddressLike, arg2: BigNumberish],
+    [boolean],
     "view"
   >;
   getFunction(

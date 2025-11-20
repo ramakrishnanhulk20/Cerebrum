@@ -1,77 +1,69 @@
 import { ethers } from "ethers";
 import hre from "hardhat";
 
-async function main() {
+const func = async function (hre: any) {
   console.log("🚀 Deploying Cerebrum FHEVM v0.9 contracts...\n");
   
-  // Get deployer info
-  const [deployer] = await hre.ethers.getSigners();
-  const deployerAddress = await deployer.getAddress();
-  console.log(`📍 Deployer address: ${deployerAddress}`);
-  console.log(`💰 Deployer balance: ${ethers.formatEther(await hre.ethers.provider.getBalance(deployerAddress))} ETH\n`);
+  const { deployments, getNamedAccounts } = hre;
+  const { deploy, get } = deployments;
+  const { deployer } = await getNamedAccounts();
+  
+  // Get deployer balance
+  const balance = await hre.ethers.provider.getBalance(deployer);
+  console.log(`📍 Deployer address: ${deployer}`);
+  console.log(`💰 Deployer balance: ${ethers.formatEther(balance)} ETH\n`);
+  
+  // Get the deployed risk scoring library address
+  let riskScoringAddress = ethers.ZeroAddress;
+  try {
+    const riskScoring = await get('CerebrumRiskScoring');
+    riskScoringAddress = riskScoring.address;
+    console.log(`✅ Found CerebrumRiskScoring at: ${riskScoringAddress}`);
+  } catch (error) {
+    console.log(`⚠️ CerebrumRiskScoring not deployed yet, using zero address`);
+  }
   
   // Constructor arguments
-  const PLATFORM_WALLET = process.env.PLATFORM_WALLET || deployerAddress;
-  const RISK_SCORING_LIBRARY = process.env.RISK_SCORING_LIBRARY || ethers.ZeroAddress; // Optional
+  const PLATFORM_WALLET = process.env.PLATFORM_WALLET || deployer;
   
-  console.log("📋 Constructor arguments:");
+  console.log("\n📋 Constructor arguments:");
   console.log(`   Platform Wallet: ${PLATFORM_WALLET}`);
-  console.log(`   Risk Scoring Library: ${RISK_SCORING_LIBRARY}`);
+  console.log(`   Risk Scoring Library: ${riskScoringAddress}`);
   console.log("");
   
   // Deploy CerebrumFHEVM_v09 contract
   console.log("⏳ Deploying CerebrumFHEVM_v09 contract...");
-  const CerebrumFHEVM = await hre.ethers.getContractFactory("CerebrumFHEVM_v09");
-  const cerebrum = await CerebrumFHEVM.deploy(PLATFORM_WALLET, RISK_SCORING_LIBRARY);
-  await cerebrum.waitForDeployment();
-  const cerebrumAddress = await cerebrum.getAddress();
+  const cerebrum = await deploy('CerebrumFHEVM_v09', {
+    from: deployer,
+    args: [PLATFORM_WALLET, riskScoringAddress],
+    log: true,
+    waitConfirmations: 1,
+  });
   
-  console.log(`✅ CerebrumFHEVM_v09 deployed to: ${cerebrumAddress}\n`);
-  
-  // Get deployment transaction
-  const deployTx = cerebrum.deploymentTransaction();
-  if (deployTx) {
-    console.log(`📝 Deployment transaction hash: ${deployTx.hash}`);
-    console.log(`⛽ Gas used: ${deployTx.gasLimit.toString()}`);
-    console.log(`🔗 Block: ${deployTx.blockNumber}\n`);
-  }
-  
-  // Verify contract info
-  console.log("🔍 Verifying contract state...");
-  const owner = await cerebrum.owner();
-  const platformWallet = await cerebrum.platformWallet();
-  const totalPatients = await cerebrum.totalPatients();
-  
-  console.log(`   Owner: ${owner}`);
-  console.log(`   Platform Wallet: ${platformWallet}`);
-  console.log(`   Total Patients: ${totalPatients}`);
-  console.log("");
+  console.log(`✅ CerebrumFHEVM_v09 deployed to: ${cerebrum.address}\n`);
   
   console.log("=== 🎉 Deployment Summary ===");
-  console.log(`CerebrumFHEVM_v09: ${cerebrumAddress}`);
+  console.log(`CerebrumFHEVM_v09: ${cerebrum.address}`);
+  console.log(`RiskScoring Library: ${riskScoringAddress}`);
   console.log(`Network: ${hre.network.name}`);
   console.log(`Chain ID: ${(await hre.ethers.provider.getNetwork()).chainId}`);
   console.log("");
   
-  // Save deployment info
   console.log("📄 Next steps:");
   console.log(`1. Update src/config/contracts-v09.ts:`);
-  console.log(`   export const CEREBRUM_CONTRACT_ADDRESS = '${cerebrumAddress}';`);
+  console.log(`   export const CEREBRUM_CONTRACT_ADDRESS = '${cerebrum.address}';`);
   console.log("");
-  console.log(`2. Verify on Etherscan (if on Sepolia):`);
-  console.log(`   npx hardhat verify --network sepolia ${cerebrumAddress} "${PLATFORM_WALLET}" "${RISK_SCORING_LIBRARY}"`);
+  console.log(`2. Verify on Etherscan:`);
+  console.log(`   npx hardhat verify --network sepolia ${cerebrum.address} "${PLATFORM_WALLET}" "${riskScoringAddress}"`);
   console.log("");
   console.log(`3. View on Sepolia Etherscan:`);
-  console.log(`   https://sepolia.etherscan.io/address/${cerebrumAddress}`);
-}
+  console.log(`   https://sepolia.etherscan.io/address/${cerebrum.address}`);
+  
+  return true;
+};
 
-// Export the main function for hardhat-deploy
-export default main;
+func.tags = ['cerebrum'];
+func.dependencies = ['risk']; // Deploy risk library first
+func.id = 'deploy_cerebrum';
 
-// Allow running directly with `npx hardhat run`
-main()
-  .then(() => process.exit(0))
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  });
+export default func;

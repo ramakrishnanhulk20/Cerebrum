@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import confetti from 'canvas-confetti';
-import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
+import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt, usePublicClient } from 'wagmi';
 import { CEREBRUM_CONTRACT_ADDRESS, CEREBRUM_ABI } from '../config/contracts-v09';
 import { isAddress, parseEther } from 'viem';
 import { useLenderFhevm } from '../hooks/useFhevmV09';
@@ -101,6 +101,7 @@ const TransactionModal = ({
 
 const LenderPortal = () => {
   const { address, isConnected } = useAccount();
+  const publicClient = usePublicClient();
   const [minCreditScore, setMinCreditScore] = useState(650);
   const [searchAddress, setSearchAddress] = useState('');
   const [selectedPatient, setSelectedPatient] = useState<string | null>(null);
@@ -306,89 +307,62 @@ const LenderPortal = () => {
 
   // v0.9: Client-side decryption of eligibility result
   const handleDecryptEligibility = async () => {
-    if (!selectedPatient) {
-      toast.error('Please select a patient first');
+    if (!selectedPatient || !address) {
+      toast.error('Please connect your wallet and select a patient');
       return;
     }
 
     setIsDecryptingResult(true);
+    toast.loading('🔐 Fetching encrypted result...', { id: 'decrypt-eligibility' });
+    
     try {
-      console.log('🔬 [LenderPortal] Starting eligibility decryption...');
-      console.log('📝 Step 1: Calling getEncryptedEligibilityResult to grant FHE.allow() permissions...');
+      console.log('🔬 [LenderPortal] Fetching eligibility result (view call)...');
       
-      // Step 1: Call getEncryptedEligibilityResult as transaction to grant permanent FHE.allow() permissions
-      grantEligibilityPermission({
+      // Call getEncryptedEligibilityResult as VIEW (no transaction needed!)
+      // Permissions were already granted in checkEligibility()
+      // Important: must specify account parameter so contract knows msg.sender
+      const result = await publicClient.readContract({
         address: CEREBRUM_CONTRACT_ADDRESS as `0x${string}`,
         abi: CEREBRUM_ABI,
         functionName: 'getEncryptedEligibilityResult',
         args: [selectedPatient as `0x${string}`],
-      } as any);
+        account: address as `0x${string}`, // This sets msg.sender for the view call
+      });
 
-      // Step 2: After permission granted, decrypt (handled in useEffect below)
+      // Convert result to handle hex string
+      const resultHandle = '0x' + BigInt(result as any).toString(16).padStart(64, '0');
+      
+      console.log('🔓 [LenderPortal] Decrypting eligibility result...');
+      console.log('🔑 [LenderPortal] Encrypted result handle:', resultHandle);
+      
+      toast.loading('🔓 Decrypting result...', { id: 'decrypt-eligibility' });
+      
+      const isEligible = await decryptEligibilityResult(resultHandle);
+      
+      setEligibilityResult({
+        address: selectedPatient!,
+        meetsRequirement: isEligible,
+        timestamp: Date.now() / 1000,
+      });
+
+      console.log('✅ [LenderPortal] Eligibility result:', isEligible ? 'ELIGIBLE' : 'NOT ELIGIBLE');
+      
+      if (isEligible) {
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      }
+      
+      toast.success('✅ Eligibility result decrypted!', { id: 'decrypt-eligibility' });
     } catch (error: any) {
-      console.error('❌ [LenderPortal] Failed to start eligibility decryption:', error);
-      toast.error('Failed to start decryption');
+      console.error('❌ [LenderPortal] Failed to decrypt result:', error);
+      toast.error('Failed to decrypt eligibility result', { id: 'decrypt-eligibility' });
+    } finally {
       setIsDecryptingResult(false);
     }
   };
-
-  // Handle permission granted -> decrypt
-  useEffect(() => {
-    if (!isPermissionGranted || !permissionReceipt || !selectedPatient) return;
-
-    const performEligibilityDecrypt = async () => {
-      try {
-        console.log('✅ [LenderPortal] Permission granted! Parsing event for encrypted handle...');
-        
-        // Parse EligibilityPermissionGranted event from permission transaction
-        const eligibilityEvent = permissionReceipt.logs.find((log: any) => {
-          return log.address?.toLowerCase() === CEREBRUM_CONTRACT_ADDRESS.toLowerCase() && 
-                 log.topics[0] === '0x5f43d7159a4a7fac7040467743e8e2f1d43ee245d0de4d42977b657e7d37fc39';
-        });
-        
-        if (!eligibilityEvent) {
-          toast.error('Event not found in transaction receipt');
-          setIsDecryptingResult(false);
-          return;
-        }
-
-        // Parse the data field (bytes32 resultHandle + uint256 timestamp)
-        const { data } = eligibilityEvent;
-        const hexData = data.slice(2); // Remove 0x prefix
-        const resultHandle = '0x' + hexData.slice(0, 64); // First 32 bytes (64 hex chars)
-
-        console.log('🔓 [LenderPortal] Decrypting eligibility result...');
-        console.log('🔑 [LenderPortal] Encrypted result handle:', resultHandle);
-        
-        const isEligible = await decryptEligibilityResult(resultHandle);
-        
-        setEligibilityResult({
-          address: selectedPatient!,
-          meetsRequirement: isEligible,
-          timestamp: Date.now() / 1000,
-        });
-
-        console.log('✅ [LenderPortal] Eligibility result:', isEligible ? 'ELIGIBLE' : 'NOT ELIGIBLE');
-        
-        if (isEligible) {
-          confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 }
-          });
-        }
-        
-        toast.success('✅ Eligibility result decrypted!');
-      } catch (error: any) {
-        console.error('❌ [LenderPortal] Failed to decrypt result:', error);
-        toast.error('Failed to decrypt eligibility result');
-      } finally {
-        setIsDecryptingResult(false);
-      }
-    };
-
-    performEligibilityDecrypt();
-  }, [isPermissionGranted, permissionReceipt, selectedPatient, decryptEligibilityResult]);
 
   // Filter approved patients (this would need on-chain data in real implementation)
   // For now, we'll show patients that have approved this lender

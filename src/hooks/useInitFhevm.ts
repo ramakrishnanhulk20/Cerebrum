@@ -4,18 +4,20 @@
  */
 
 import { useEffect, useState, useRef } from 'react';
-import { useAccount } from 'wagmi';
-import { initializeFhevm as initFhevm } from '../utils/fhevm-v09';
+import { useAccount, useWalletClient } from 'wagmi';
+import { BrowserProvider } from 'ethers';
+import { initializeFhevm } from '../utils/fhevm-v09';
 
 export function useInitFhevm() {
   const { address, isConnected } = useAccount();
+  const { data: walletClient } = useWalletClient();
   const [isInitialized, setIsInitialized] = useState(false);
   const initAttemptedRef = useRef(false);
 
   useEffect(() => {
     const initialize = async () => {
       // Only initialize once when wallet connects
-      if (!isConnected || !address) {
+      if (!isConnected || !address || !walletClient) {
         setIsInitialized(false);
         initAttemptedRef.current = false;
         return;
@@ -30,11 +32,20 @@ export function useInitFhevm() {
 
       try {
         console.log('✅ Wallet connected:', address);
-        console.log('🔄 Initializing FHEVM v0.9...');
+        console.log('🔄 Initializing FHEVM v0.9.1...');
         
-        await initFhevm();
+        // Convert WalletClient to BrowserProvider for ethers compatibility
+        const { account, chain, transport } = walletClient;
+        const network = {
+          chainId: chain.id,
+          name: chain.name,
+          ensAddress: chain.contracts?.ensRegistry?.address,
+        };
+        const provider = new BrowserProvider(transport, network);
         
-        console.log('✅ FHEVM initialized successfully');
+        await initializeFhevm(provider);
+        
+        console.log('✅ FHEVM v0.9.1 initialized successfully');
         setIsInitialized(true);
       } catch (error) {
         console.error('❌ Failed to initialize FHEVM:', error);
@@ -44,7 +55,7 @@ export function useInitFhevm() {
     };
 
     initialize();
-  }, [isConnected, address]);
+  }, [isConnected, address, walletClient]);
 
   return { isInitialized, address, isConnected };
 }

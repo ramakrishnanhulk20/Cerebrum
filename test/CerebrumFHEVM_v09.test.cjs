@@ -557,21 +557,24 @@ describe("CerebrumFHEVM_v09 - FHEVM v0.9 Test Suite", function () {
   });
 
   // ============ ACCESS TRACKING (v0.9) ============
-  describe("Researcher Access Tracking (v0.9)", function () {
+  describe("Researcher Access Tracking (v0.9 - Per-Record Access)", function () {
     beforeEach(async function () {
       await cerebrum.connect(patient1).registerPatient();
       // Sharing enabled by default - no need to toggle
     });
 
-    it("Should validate hasCurrentAccess function", async function () {
-      expect(cerebrum.hasCurrentAccess).to.be.a('function');
+    it("Should validate hasRecordAccess function (per-record tracking)", async function () {
+      expect(cerebrum.hasRecordAccess).to.be.a('function');
     });
 
-    it("Should track access rounds correctly", async function () {
-      // Access tracking requires health records for purchaseResearcherAccess
-      // Tested in integration environment with actual FHE data
+    it("Should track per-record access correctly", async function () {
+      // Per-record access tracking: researcher gets access to specific records
       expect(cerebrum.hasResearcherAccess).to.be.a('function');
-      expect(cerebrum.researcherAccessRound).to.not.be.undefined;
+      expect(cerebrum.hasRecordAccess).to.be.a('function');
+      
+      // Verify access check returns false before purchase
+      const hasAccess = await cerebrum.hasRecordAccess(patient1.address, researcher1.address, 0);
+      expect(hasAccess).to.equal(false);
     });
   });
 
@@ -585,11 +588,15 @@ describe("CerebrumFHEVM_v09 - FHEVM v0.9 Test Suite", function () {
     });
 
     it("Should prevent non-owner from updating risk library", async function () {
+      // FHEVM Hardhat plugin throws HardhatFhevmError for access control violations
       try {
         await cerebrum.connect(patient1).setRiskScoringLibrary(researcher1.address);
         expect.fail("Should have reverted");
       } catch (error) {
-        expect(error.message).to.include("Fhevm assertion failed");
+        // Accept either HardhatFhevmError or NotOwner custom error
+        expect(error.message).to.satisfy(msg => 
+          msg.includes("Fhevm assertion failed") || msg.includes("NotOwner")
+        );
       }
     });
 
@@ -672,12 +679,15 @@ describe("CerebrumFHEVM_v09 - FHEVM v0.9 Test Suite", function () {
     });
 
     it("Should prevent non-owner from updating platform wallet", async function () {
-      // Note: FHEVM Hardhat plugin throws HardhatFhevmError before custom error can be caught
+      // FHEVM Hardhat plugin throws HardhatFhevmError for access control violations
       try {
         await cerebrum.connect(patient1).setPlatformWallet(researcher1.address);
         expect.fail("Should have reverted");
       } catch (error) {
-        expect(error.message).to.include("Fhevm assertion failed");
+        // Accept either HardhatFhevmError or NotOwner custom error
+        expect(error.message).to.satisfy(msg => 
+          msg.includes("Fhevm assertion failed") || msg.includes("NotOwner")
+        );
       }
     });
 
@@ -693,12 +703,15 @@ describe("CerebrumFHEVM_v09 - FHEVM v0.9 Test Suite", function () {
     });
 
     it("Should prevent non-owner from transferring ownership", async function () {
-      // Note: FHEVM Hardhat plugin throws HardhatFhevmError before custom error can be caught
+      // FHEVM Hardhat plugin throws HardhatFhevmError for access control violations
       try {
         await cerebrum.connect(patient1).transferOwnership(researcher1.address);
         expect.fail("Should have reverted");
       } catch (error) {
-        expect(error.message).to.include("Fhevm assertion failed");
+        // Accept either HardhatFhevmError or NotOwner custom error
+        expect(error.message).to.satisfy(msg => 
+          msg.includes("Fhevm assertion failed") || msg.includes("NotOwner")
+        );
       }
     });
 

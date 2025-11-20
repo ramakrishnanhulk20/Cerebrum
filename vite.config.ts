@@ -19,9 +19,9 @@ export default defineConfig({
   server: {
     open: false,
     headers: {
-      // Required for FHEVM RelayerSDK SharedArrayBuffer support
-      // Using 'credentialless' to allow third-party resources (Coinbase, etc.)
-      'Cross-Origin-Opener-Policy': 'same-origin',
+      // Base Account SDK requires 'same-origin-allow-popups' instead of 'same-origin'
+      // This allows the SDK to communicate with wallet popups (MetaMask, Coinbase)
+      'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
       'Cross-Origin-Embedder-Policy': 'credentialless',
     },
   },

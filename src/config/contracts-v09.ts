@@ -1,14 +1,14 @@
-// ✅ FHEVM v0.9 Migration Complete (Nov 2025)
-// v0.9 Contract with FHE.allowThis, FHE.allowTransient, and User Decryption
-// ⚡ PRODUCTION DEPLOYMENT - Contract has permanent permission to use healthScore
-// Deployed to Sepolia: 0xe3eCc468c5757b646BC609c14335dD664B721950
-// Risk Scoring Library: 0x2e6F04061e62E14Ec18436280E7357B632eaacC2
-// FHEVM v0.9 Contract Configuration
+// ✅ FHEVM v0.9.1 Migration Complete (Nov 19, 2025) - Per-Record Access + Normalized Risk Scoring
+// v0.9.1 Contract with per-record access tracking (researchers keep old records)
+// ⚡ PRODUCTION DEPLOYMENT - Option B: Incremental access + Medically Accurate Risk Algorithms
+// Deployed to Sepolia: 0xbb55D9C8BC11176D393Ad4F0630EE7dad9317aEC
+// Risk Scoring Library: 0x3aB1E4e1141EA3564441c81D824d2F5b4c71c16d (Updated: Nov 19 - Fixed normalization)
+// FHEVM v0.9.1 Contract Configuration
 // IMPORTANT: Update this address when deploying a new contract version
-// Latest deployment: Fresh deployment with verification support
+// Latest deployment: v0.9.1 with medically accurate risk scoring (baseline normalization + proper weights)
 
 // Contract Address
-export const CEREBRUM_CONTRACT_ADDRESS = '0xe3eCc468c5757b646BC609c14335dD664B721950';
+export const CEREBRUM_CONTRACT_ADDRESS = '0xbb55D9C8BC11176D393Ad4F0630EE7dad9317aEC';
 
 // FHEVM v0.9 ABI - Compiled from CerebrumFHEVM_v09.sol
 export const CEREBRUM_ABI = [
@@ -86,6 +86,11 @@ export const CEREBRUM_ABI = [
   {
     "inputs": [],
     "name": "PlatformWalletNotSet",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ZamaProtocolUnsupported",
     "type": "error"
   },
   {
@@ -781,6 +786,19 @@ export const CEREBRUM_ABI = [
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "confidentialProtocolId",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -905,7 +923,7 @@ export const CEREBRUM_ABI = [
         "type": "bytes32"
       }
     ],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -964,7 +982,7 @@ export const CEREBRUM_ABI = [
         "type": "bytes32"
       }
     ],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -1078,6 +1096,30 @@ export const CEREBRUM_ABI = [
         "internalType": "uint8",
         "name": "qualityScore",
         "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "patient",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "researcher",
+        "type": "address"
+      }
+    ],
+    "name": "getHighestAccessibleRecord",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -1299,11 +1341,11 @@ export const CEREBRUM_ABI = [
       },
       {
         "internalType": "address",
-        "name": "researcher",
+        "name": "lender",
         "type": "address"
       }
     ],
-    "name": "hasCurrentAccess",
+    "name": "hasLenderApproval",
     "outputs": [
       {
         "internalType": "bool",
@@ -1323,11 +1365,16 @@ export const CEREBRUM_ABI = [
       },
       {
         "internalType": "address",
-        "name": "lender",
+        "name": "researcher",
         "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "recordIndex",
+        "type": "uint256"
       }
     ],
-    "name": "hasLenderApproval",
+    "name": "hasRecordAccess",
     "outputs": [
       {
         "internalType": "bool",
@@ -1500,19 +1547,6 @@ export const CEREBRUM_ABI = [
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "protocolId",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
@@ -1548,14 +1582,19 @@ export const CEREBRUM_ABI = [
         "internalType": "address",
         "name": "",
         "type": "address"
-      }
-    ],
-    "name": "researcherAccessRound",
-    "outputs": [
+      },
       {
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "name": "researcherRecordAccess",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",

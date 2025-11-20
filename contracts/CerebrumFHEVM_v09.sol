@@ -2,7 +2,7 @@
 pragma solidity ^0.8.24;
 
 import {FHE, euint8, euint64, ebool, externalEuint64} from "@fhevm/solidity/lib/FHE.sol";
-import {EthereumConfig} from "@fhevm/solidity/config/ZamaConfig.sol";
+import {ZamaEthereumConfig} from "@fhevm/solidity/config/ZamaConfig.sol";
 
 interface ICerebrumRiskScoring {
     function calculateDiabetesRisk(euint64 bloodSugar, euint64 bmi, uint8 age) external returns (euint64);
@@ -14,7 +14,7 @@ interface ICerebrumRiskScoring {
 /// @title Cerebrum v0.9 - FHEVM v0.9
 /// @notice Privacy-first health data marketplace with automatic access control
 /// @dev No Gateway callbacks - uses User Decryption (EIP-712) and FHE.allow for seamless access
-contract CerebrumFHEVM_v09 is EthereumConfig {
+contract CerebrumFHEVM_v09 is ZamaEthereumConfig {
     // ============ Constants ============
     uint64 public constant INITIAL_SCORE = 500;
     uint64 public constant SCORE_INCREMENT = 10;
@@ -87,7 +87,9 @@ contract CerebrumFHEVM_v09 is EthereumConfig {
 
     mapping(address => Patient) public patients;
     mapping(address => mapping(address => bool)) public lenderApprovals;
-    mapping(address => mapping(address => uint256)) public researcherAccessRound;
+    // Track which specific records each researcher has purchased access to
+    // researcherRecordAccess[patient][researcher][recordIndex] = hasPurchased
+    mapping(address => mapping(address => mapping(uint256 => bool))) public researcherRecordAccess;
     mapping(address => address[]) private lenderApprovedBy;
     mapping(address => mapping(address => EligibilityCheck[])) public eligibilityHistory;
     
@@ -279,6 +281,16 @@ contract CerebrumFHEVM_v09 is EthereumConfig {
         FHE.allowThis(heartRate);
         FHE.allowThis(weight);
         FHE.allowThis(height);
+
+        // Grant patient permission to decrypt their own data
+        FHE.allow(bloodSugar, msg.sender);
+        FHE.allow(cholesterol, msg.sender);
+        FHE.allow(bmi, msg.sender);
+        FHE.allow(bpSystolic, msg.sender);
+        FHE.allow(bpDiastolic, msg.sender);
+        FHE.allow(heartRate, msg.sender);
+        FHE.allow(weight, msg.sender);
+        FHE.allow(height, msg.sender);
 
         HealthData memory newRecord = HealthData({
             bloodSugar: bloodSugar,
@@ -532,29 +544,21 @@ contract CerebrumFHEVM_v09 is EthereumConfig {
 
     /// @notice Get encrypted eligibility result for User Decryption
     /// @dev Returns encrypted ebool that lender can decrypt on frontend
-    function getEncryptedEligibilityResult(address patient) external returns (ebool) {
+    /// @dev Permissions already granted in checkEligibility(), so this is now a view function
+    function getEncryptedEligibilityResult(address patient) external view returns (ebool) {
         ebool result = encryptedEligibilityResults[patient][msg.sender];
         
-        // Re-grant PERMANENT permission for off-chain User Decryption
-        // Changed from FHE.allowTransient() to FHE.allow() to enable userDecrypt()
-        FHE.allow(result, msg.sender);
-        
-        // Emit event with handle for frontend parsing
-        emit EligibilityPermissionGranted(
-            patient,
-            msg.sender,
-            bytes32(ebool.unwrap(result)),
-            block.timestamp
-        );
+        // No FHE.allow() needed - permissions already granted in checkEligibility()!
+        // This is now a view function that just returns the encrypted handle
         
         return result;
     }
 
     // ============ Researcher Functions ============
 
-    /// @notice Purchase researcher access 
-    /// @dev Contract automatically to researcher - NO PATIENT SIGNING NEEDED!
-    /// @dev automatic access control without user interaction
+    /// @notice Purchase researcher access to ALL current records
+    /// @dev Contract automatically grants access to researcher - NO PATIENT SIGNING NEEDED!
+    /// @dev Purchases access to all existing records. New records require new purchase.
     function purchaseResearcherAccess(address patient, uint256 recordIndex) external payable {
         Patient storage pat = patients[patient];
         if (!pat.isRegistered) revert NotRegistered();
@@ -564,21 +568,26 @@ contract CerebrumFHEVM_v09 is EthereumConfig {
         uint256 accessPrice = calculateAccessPrice(patient, recordIndex);
         if (msg.value < accessPrice) revert InsufficientPayment();
 
-        // Grant access (track data version)
-        researcherAccessRound[patient][msg.sender] = pat.dataShareCount;
-
-        HealthData storage record = pat.healthRecords[recordIndex];
+        // Grant access to ALL current records (per-record tracking)
+        // This allows researcher to keep access to these records even when patient adds new data
+        for (uint256 i = 0; i < pat.healthRecords.length; i++) {
+            // Mark this record as purchased
+            researcherRecordAccess[patient][msg.sender][i] = true;
+            
+            // Grant PERMANENT ACL permissions for this record
+            HealthData storage record = pat.healthRecords[i];
+            FHE.allow(record.bloodSugar, msg.sender);
+            FHE.allow(record.cholesterol, msg.sender);
+            FHE.allow(record.bmi, msg.sender);
+            FHE.allow(record.bloodPressureSystolic, msg.sender);
+            FHE.allow(record.bloodPressureDiastolic, msg.sender);
+            FHE.allow(record.heartRate, msg.sender);
+            FHE.allow(record.weight, msg.sender);
+            FHE.allow(record.height, msg.sender);
+        }
         
-        // FHE.allowTransient for automatic, temporary access
-        // Researcher gets ONE-TIME access without patient signing again!
-        FHE.allowTransient(record.bloodSugar, msg.sender);
-        FHE.allowTransient(record.cholesterol, msg.sender);
-        FHE.allowTransient(record.bmi, msg.sender);
-        FHE.allowTransient(record.bloodPressureSystolic, msg.sender);
-        FHE.allowTransient(record.bloodPressureDiastolic, msg.sender);
-        FHE.allowTransient(record.heartRate, msg.sender);
-        FHE.allowTransient(record.weight, msg.sender);
-        FHE.allowTransient(record.height, msg.sender);
+        // Use the purchased recordIndex for event emission
+        HealthData storage purchasedRecord = pat.healthRecords[recordIndex];
 
         // Distribute payment
         uint256 patientPayment = (accessPrice * 80) / 100;
@@ -593,14 +602,32 @@ contract CerebrumFHEVM_v09 is EthereumConfig {
         }
 
         emit ResearcherAccessPurchased(patient, msg.sender, accessPrice, patientPayment, platformFee, block.timestamp);
-        emit ResearcherAccessGranted(patient, msg.sender, pat.dataShareCount, block.timestamp);
+        emit ResearcherAccessGranted(patient, msg.sender, pat.healthRecords.length, block.timestamp);
+        
+        // Emit event with handles for the purchased record (for event parsing)
+        emit HealthDataPermissionGranted(
+            patient,
+            msg.sender,
+            recordIndex,
+            bytes32(euint64.unwrap(purchasedRecord.bloodSugar)),
+            bytes32(euint64.unwrap(purchasedRecord.cholesterol)),
+            bytes32(euint64.unwrap(purchasedRecord.bmi)),
+            bytes32(euint64.unwrap(purchasedRecord.bloodPressureSystolic)),
+            bytes32(euint64.unwrap(purchasedRecord.bloodPressureDiastolic)),
+            bytes32(euint64.unwrap(purchasedRecord.heartRate)),
+            bytes32(euint64.unwrap(purchasedRecord.weight)),
+            bytes32(euint64.unwrap(purchasedRecord.height)),
+            block.timestamp
+        );
     }
 
     /// @notice Get encrypted health record for User Decryption
     /// @dev Researcher uses User Decryption (EIP-712) to decrypt on frontend
     /// @dev No Gateway callbacks - instant decryption in 0-2 seconds!
+    /// @dev Permissions already granted in purchaseResearcherAccess(), so this is now a view function
     function getEncryptedHealthRecord(address patient, uint256 recordIndex) 
         external 
+        view
         returns (
             euint64 bloodSugar,
             euint64 cholesterol,
@@ -616,40 +643,17 @@ contract CerebrumFHEVM_v09 is EthereumConfig {
         
         if (recordIndex >= pat.healthRecords.length) revert InvalidRecordIndex();
         
-        // Check access hasn't expired
-        if (researcherAccessRound[patient][msg.sender] != pat.dataShareCount) {
+        // Check researcher has purchased access to this specific record
+        if (!researcherRecordAccess[patient][msg.sender][recordIndex]) {
             revert AccessExpired();
         }
         
         HealthData storage record = pat.healthRecords[recordIndex];
         
-        // Grant PERMANENT permission for off-chain User Decryption
-        // Changed from FHE.allowTransient() to FHE.allow() to enable userDecrypt()
-        FHE.allow(record.bloodSugar, msg.sender);
-        FHE.allow(record.cholesterol, msg.sender);
-        FHE.allow(record.bmi, msg.sender);
-        FHE.allow(record.bloodPressureSystolic, msg.sender);
-        FHE.allow(record.bloodPressureDiastolic, msg.sender);
-        FHE.allow(record.heartRate, msg.sender);
-        FHE.allow(record.weight, msg.sender);
-        FHE.allow(record.height, msg.sender);
+        // No FHE.allow() needed - permissions already granted in purchaseResearcherAccess()!
+        // This is now a view function that just returns the encrypted handles
         
-        // Emit event with handles for frontend parsing
-        emit HealthDataPermissionGranted(
-            patient,
-            msg.sender,
-            recordIndex,
-            bytes32(euint64.unwrap(record.bloodSugar)),
-            bytes32(euint64.unwrap(record.cholesterol)),
-            bytes32(euint64.unwrap(record.bmi)),
-            bytes32(euint64.unwrap(record.bloodPressureSystolic)),
-            bytes32(euint64.unwrap(record.bloodPressureDiastolic)),
-            bytes32(euint64.unwrap(record.heartRate)),
-            bytes32(euint64.unwrap(record.weight)),
-            bytes32(euint64.unwrap(record.height)),
-            block.timestamp
-        );
-        
+        // Return encrypted handles (no event needed - already emitted in purchase)
         return (
             record.bloodSugar,
             record.cholesterol,
@@ -700,7 +704,8 @@ contract CerebrumFHEVM_v09 is EthereumConfig {
         Patient storage pat = patients[patient];
         if (!pat.isRegistered) revert NotRegistered();
         if (recordIndex >= pat.healthRecords.length) revert InvalidRecordIndex();
-        if (researcherAccessRound[patient][msg.sender] != pat.dataShareCount) revert AccessExpired();
+        // Check researcher has purchased access to this specific record
+        if (!researcherRecordAccess[patient][msg.sender][recordIndex]) revert AccessExpired();
         
         HealthData storage record = pat.healthRecords[recordIndex];
         
@@ -823,8 +828,21 @@ contract CerebrumFHEVM_v09 is EthereumConfig {
         }
     }
 
-    function hasCurrentAccess(address patient, address researcher) external view returns (bool) {
-        return researcherAccessRound[patient][researcher] == patients[patient].dataShareCount;
+    /// @notice Check if researcher has access to a specific record
+    function hasRecordAccess(address patient, address researcher, uint256 recordIndex) external view returns (bool) {
+        if (recordIndex >= patients[patient].healthRecords.length) return false;
+        return researcherRecordAccess[patient][researcher][recordIndex];
+    }
+    
+    /// @notice Get highest record index researcher has access to
+    function getHighestAccessibleRecord(address patient, address researcher) external view returns (uint256) {
+        uint256 count = patients[patient].healthRecords.length;
+        for (uint256 i = count; i > 0; i--) {
+            if (researcherRecordAccess[patient][researcher][i - 1]) {
+                return i - 1;
+            }
+        }
+        revert AccessExpired();
     }
 
     function getApprovedPatients(address lender) external view returns (address[] memory) {
@@ -915,7 +933,14 @@ contract CerebrumFHEVM_v09 is EthereumConfig {
     }
 
     function hasResearcherAccess(address patient, address researcher) external view returns (bool) {
-        return researcherAccessRound[patient][researcher] > 0;
+        // Check if researcher has access to at least one record
+        uint256 recordCount = patients[patient].healthRecords.length;
+        for (uint256 i = 0; i < recordCount; i++) {
+            if (researcherRecordAccess[patient][researcher][i]) {
+                return true;
+            }
+        }
+        return false;
     }
 
     function isPatientRegistered(address _patient) external view returns (bool) {
@@ -936,10 +961,18 @@ contract CerebrumFHEVM_v09 is EthereumConfig {
     function getResearcherPurchasedPatients(address researcher) external view returns (address[] memory) {
         uint256 count = 0;
         
+        // Count patients where researcher has purchased at least one record
         for (uint256 i = 0; i < allPatients.length; i++) {
             address patient = allPatients[i];
-            if (researcherAccessRound[patient][researcher] == patients[patient].dataShareCount && 
-                patients[patient].dataShareCount > 0) {
+            uint256 recordCount = patients[patient].healthRecords.length;
+            bool hasAnyAccess = false;
+            for (uint256 j = 0; j < recordCount; j++) {
+                if (researcherRecordAccess[patient][researcher][j]) {
+                    hasAnyAccess = true;
+                    break;
+                }
+            }
+            if (hasAnyAccess && patients[patient].dataShareCount > 0) {
                 count++;
             }
         }
@@ -948,8 +981,15 @@ contract CerebrumFHEVM_v09 is EthereumConfig {
         uint256 index = 0;
         for (uint256 i = 0; i < allPatients.length; i++) {
             address patient = allPatients[i];
-            if (researcherAccessRound[patient][researcher] == patients[patient].dataShareCount && 
-                patients[patient].dataShareCount > 0) {
+            uint256 recordCount = patients[patient].healthRecords.length;
+            bool hasAnyAccess = false;
+            for (uint256 j = 0; j < recordCount; j++) {
+                if (researcherRecordAccess[patient][researcher][j]) {
+                    hasAnyAccess = true;
+                    break;
+                }
+            }
+            if (hasAnyAccess && patients[patient].dataShareCount > 0) {
                 purchasedPatients[index] = patient;
                 index++;
             }
@@ -962,8 +1002,15 @@ contract CerebrumFHEVM_v09 is EthereumConfig {
         uint256 count = 0;
         for (uint256 i = 0; i < allPatients.length; i++) {
             address patient = allPatients[i];
-            if (researcherAccessRound[patient][researcher] == patients[patient].dataShareCount && 
-                patients[patient].dataShareCount > 0) {
+            uint256 recordCount = patients[patient].healthRecords.length;
+            bool hasAnyAccess = false;
+            for (uint256 j = 0; j < recordCount; j++) {
+                if (researcherRecordAccess[patient][researcher][j]) {
+                    hasAnyAccess = true;
+                    break;
+                }
+            }
+            if (hasAnyAccess && patients[patient].dataShareCount > 0) {
                 count++;
             }
         }

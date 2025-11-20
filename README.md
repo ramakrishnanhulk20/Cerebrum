@@ -8,7 +8,13 @@
 [![fhevmjs](https://img.shields.io/badge/fhevmjs-latest-blue)](https://www.npmjs.com/package/fhevmjs)
 [![YouTube](https://img.shields.io/badge/YouTube-Watch%20Demo-red?logo=youtube&logoColor=white)](https://youtu.be/A7h1CDHMxP4?si=0GCaqexvfX5dTgQY)
 
-A healthcare data marketplace built on Ethereum using Zama's **FHEVM**. Patients maintain complete ownership of their encrypted health records while earning from data monetization. Researchers access encrypted data **instantly** (0–2 seconds), and lenders verify creditworthiness without ever seeing raw medical information—all powered by **Fully Homomorphic Encryption** and **User Decryption with EIP-712 signatures**.
+A healthcare data marketplace built on Ethereum using Zama's **FHEVM v0.9.1**. Patients maintain complete ownership of their encrypted health records while earning from data monetization. Researchers access encrypted data **instantly** (0–2 seconds), and lenders verify creditworthiness without ever seeing raw medical information—all powered by **Fully Homomorphic Encryption** and **User Decryption with EIP-712 signatures**.
+
+**Latest Deployment (Nov 19, 2025):**
+- Main Contract: `0xbb55D9C8BC11176D393Ad4F0630EE7dad9317aEC`
+- Risk Scoring Library: `0x3aB1E4e1141EA3564441c81D824d2F5b4c71c16d` (Normalized algorithm)
+- Network: Ethereum Sepolia Testnet
+- Architecture: Per-record access tracking + Medically accurate risk calculations
 
 [Live Demo](https://cerebrum-site.vercel.app/) · [GitHub](https://github.com/ramakrishnanhulk20/Cerebrum) · [Docs](./docs)
 
@@ -1170,8 +1176,8 @@ The v0.9 test suite includes **84 comprehensive tests** (56 passing, 28 require 
       ✔ Should use quality score to determine price tier
 
     Researcher Access Tracking (2/2 passing)
-      ✔ Should validate hasCurrentAccess function
-      ✔ Should track access rounds correctly
+      ✔ Should validate hasRecordAccess function (per-record tracking)
+      ✔ Should track per-record access correctly
 
     Additional Admin Controls (3/3 passing)
       ✔ Should allow owner to update risk scoring library
@@ -1224,14 +1230,14 @@ The v0.9 test suite includes **84 comprehensive tests** (56 passing, 28 require 
   - **3 tests** - Health Data Sharing with FHE
   - **5 tests** - Data Sharing Controls (enabled by default)
   - **6 tests** - Lender Approval System
-  - **8 tests** - Researcher Access Purchase (validates function existence)
+  - **8 tests** - Researcher Access Purchase with auto-grants
   - **3 tests** - Earnings Claims
   - **5 tests** - Lender Eligibility Checks
   - **3 tests** - Encrypted Lender Eligibility
   - **4 tests** - Encrypted Health Record Access
   - **3 tests** - Risk Scoring Functions
   - **3 tests** - Dynamic Access Pricing
-  - **2 tests** - Researcher Access Tracking
+  - **2 tests** - Per-Record Access Tracking
   - **3 tests** - Additional Admin Controls
   - **9 tests** - View Functions
   - **6 tests** - Admin Functions
@@ -1241,9 +1247,23 @@ The v0.9 test suite includes **84 comprehensive tests** (56 passing, 28 require 
 **Key Testing Strategy:**
 1. ✅ All core contract functions validated (deployment, registration, approvals, admin)
 2. ✅ Data sharing enabled by default design confirmed
-3. ✅ Function existence validated for FHE-dependent operations
+3. ✅ Per-record access tracking validated (Option B implementation)
 4. ✅ Access control and security mechanisms verified
-5. 📝 Integration tests with real FHEVM needed for complete workflow validation (health data sharing, researcher purchases, risk scoring)
+5. ✅ Normalized risk scoring algorithm architecture confirmed
+6. ✅ FHEVM Hardhat plugin compatibility verified
+
+**Architecture Validation:**
+- ✅ Per-record access model (researchers maintain access to old records)
+- ✅ Risk scoring library separation for gas optimization
+- ✅ User Decryption patterns (FHE.allow, FHE.allowTransient, FHE.allowThis)
+- ✅ Payment distribution (80% patient, 20% platform)
+- ✅ Access control modifiers (onlyOwner, registered patients, approved lenders)
+
+**Note:** Integration tests with real FHEVM environment needed for:
+- Complete health data sharing workflows with encrypted input proofs
+- Risk score calculations with actual encrypted values
+- End-to-end researcher purchase and decryption flows
+- Lender eligibility checks with encrypted thresholds
 
 
 ### Integration Testing on Sepolia
