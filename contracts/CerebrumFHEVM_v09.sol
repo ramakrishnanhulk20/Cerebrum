@@ -11,9 +11,8 @@ interface ICerebrumRiskScoring {
     function calculateComprehensiveRisk(euint64 bloodSugar, euint64 cholesterol, euint64 bmi, euint64 bloodPressureSystolic, euint64 heartRate, uint8 age) external returns (euint64, euint64, euint64);
 }
 
-/// @title Cerebrum v0.9 - FHEVM v0.9
-/// @notice Privacy-first health data marketplace with automatic access control
-/// @dev No Gateway callbacks - uses User Decryption (EIP-712) and FHE.allow for seamless access
+// Cerebrum v0.9 - Privacy-first health data marketplace
+// Uses FHEVM v0.9 with User Decryption (EIP-712) and FHE.allow
 contract CerebrumFHEVM_v09 is ZamaEthereumConfig {
     // ============ Constants ============
     uint64 public constant INITIAL_SCORE = 500;
@@ -227,17 +226,7 @@ contract CerebrumFHEVM_v09 is ZamaEthereumConfig {
         emit PatientRegistered(msg.sender, block.timestamp);
     }
 
-    /// @notice Share health data using encrypted inputs
-    /// @dev Uses createEncryptedInput() from frontend to create externalEuint64 values
-    /// @param encBloodSugar Encrypted blood sugar from createEncryptedInput()
-    /// @param encCholesterol Encrypted cholesterol from createEncryptedInput()
-    /// @param encBmi Encrypted BMI from createEncryptedInput()
-    /// @param encBpSystolic Encrypted systolic BP from createEncryptedInput()
-    /// @param encBpDiastolic Encrypted diastolic BP from createEncryptedInput()
-    /// @param encHeartRate Encrypted heart rate from createEncryptedInput()
-    /// @param encWeight Encrypted weight from createEncryptedInput()
-    /// @param encHeight Encrypted height from createEncryptedInput()
-    /// @param inputProof Proof from createEncryptedInput() bundle
+    // Share encrypted health data (all values encrypted on frontend)
     function shareHealthData(
         externalEuint64 encBloodSugar,
         externalEuint64 encCholesterol,
@@ -373,11 +362,7 @@ contract CerebrumFHEVM_v09 is ZamaEthereumConfig {
 
     // ============ User Decryption Functions ============
 
-    /// @notice Get encrypted health score handle for User Decryption
-    /// @dev Returns the ciphertext that can be decrypted client-side with EIP-712 signature
-    /// @dev No need to call enableInstantDecrypt - FHE.allow() is granted in registerPatient()
-    /// @param patient Address of the patient
-    /// @return Encrypted health score (euint64)
+    // Get encrypted health score for client-side decryption
     function getEncryptedHealthScore(address patient) external view returns (euint64) {
         Patient storage pat = patients[patient];
         if (!pat.isRegistered) revert NotRegistered();
@@ -419,8 +404,7 @@ contract CerebrumFHEVM_v09 is ZamaEthereumConfig {
         emit LenderApprovalRevoked(msg.sender, lender, block.timestamp);
     }
 
-    /// @notice Check eligibility with plaintext threshold (lender uses User Decryption for result)
-    /// @dev Returns encrypted ebool (TRUE/FALSE) - lender decrypts on frontend with EIP-712 signature
+    // Check eligibility with threshold (returns encrypted TRUE/FALSE for lender)
     /// @dev No Gateway callbacks - instant result for lender!
     function checkEligibility(address patient, uint64 minCreditScore) external payable {
         if (msg.value != LENDER_CHECK_FEE) revert InsufficientPayment();

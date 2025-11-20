@@ -44,46 +44,46 @@ A healthcare data marketplace built on Ethereum using Zama's **FHEVM v0.9.1**. P
 
 ## Overview
 
-Cerebrum is a privacy-first healthcare data marketplace built on **Ethereum** with **Zama's FHEVM**. Using Fully Homomorphic Encryption and **instant User Decryption** (0–2 seconds via EIP-712 signatures), the platform enables:
+Cerebrum is a privacy-first healthcare data marketplace on Ethereum using Zama's FHEVM. With Fully Homomorphic Encryption and instant User Decryption (0-2 seconds via EIP-712 signatures), it lets:
 
-- **Patients** to own, control, and monetize their encrypted health data
-- **Researchers** to access encrypted medical records with automatic permission grants (no patient re-signing)
-- **Lenders** to verify health creditworthiness through encrypted TRUE/FALSE checks (never seeing actual scores)
+- Patients own, control, and monetize their encrypted health data
+- Researchers access encrypted medical records with automatic permission grants (no patient re-signing needed)
+- Lenders verify health creditworthiness through encrypted TRUE/FALSE checks without seeing actual scores
 
-All health data remains **encrypted on-chain at all times**—computations happen on ciphertext, and decryption is instant when authorized.
+All health data stays encrypted on-chain. Computations happen on ciphertext, and decryption is instant when authorized.
 
 ### The Problem
 
-Healthcare systems worldwide face critical challenges:
+Healthcare systems have issues:
 
-- Medical records stored in plaintext or weakly encrypted formats are vulnerable to breaches affecting millions of patients annually
-- Traditional encryption requires data decryption for processing, creating security vulnerabilities
-- Patients lack control over who accesses their health information and receive no compensation when their data is used
-- Lenders and insurance companies need health verification but current systems expose sensitive medical details
-- Centralized databases create single points of failure and honeypots for attackers
+- Medical records get breached all the time because they're stored in plaintext or weak encryption
+- Regular encryption needs data to be decrypted for processing, which opens security holes
+- Patients don't control who sees their health info and get nothing when their data is used
+- Lenders need health verification but current systems expose too much private medical info
+- Centralized databases are easy targets for attackers
 
 ### Solution: FHEVM with User Decryption
 
-Cerebrum leverages **FHEVM** to create a significant improvement in privacy-preserving healthcare:
+Cerebrum uses FHEVM for better privacy:
 
 **Encryption & Privacy**
-- Health records remain **encrypted on-chain at all times** using FHE
-- Mathematical operations performed directly on encrypted data (no decryption required)
-- **User Decryption** via EIP-712 signatures: 0–2 seconds
+- Health records stay encrypted on-chain using FHE
+- Math operations work directly on encrypted data (no decryption needed)
+- User Decryption via EIP-712 signatures: 0-2 seconds
 
 **Access Control**
-- `FHE.allowThis`: Contract manages encrypted data securely
-- `FHE.allowTransient`: **Automatic one-time access grants** for researchers (no patient re-signing)
-- `FHE.allow`: Granular permissions for User Decryption
+- `FHE.allowThis`: Contract manages encrypted data
+- `FHE.allowTransient`: Automatic one-time access for researchers (no re-signing)
+- `FHE.allow`: Permissions for User Decryption
 
 **Economics**
-- Patients earn **80% of researcher access fees** (0.008 ETH per purchase)
-- Transparent, on-chain revenue distribution
+- Patients get 80% of researcher fees (0.008 ETH per purchase)
+- On-chain revenue split
 
 **Security**
-- Decentralized architecture eliminates single points of failure
-- Cryptographic proofs ensure data integrity
-- Lenders see only encrypted TRUE/FALSE results (never actual scores)
+- Decentralized setup, no single point of failure
+- Cryptographic proofs for data integrity
+- Lenders only see TRUE/FALSE results (never actual scores)
 
 ---
 
@@ -92,51 +92,51 @@ Cerebrum leverages **FHEVM** to create a significant improvement in privacy-pres
 ### 🏥 For Patients
 
 **Complete Data Control**
-- Encrypt health records on your device with **fhevmjs**
-- Submit data with an input proof for cryptographic verification
-- Only you decide who gets access—your keys, your control
+- Encrypt health records on your device with fhevmjs
+- Submit with proof for verification
+- You decide who gets access
 
 **Instant Decryption**
-- View your encrypted health score in 0–2 seconds via EIP-712 signature
-- No waiting for callbacks or polling
+- View your health score in 0-2 seconds with EIP-712 signature
+- No waiting for callbacks
 - Sign once, decrypt instantly
 
 **Data Monetization**
-- Earn **0.008 ETH (80%)** every time a researcher purchases access
-- Track total earnings in real-time dashboard
-- Claim earnings anytime to your wallet
+- Earn 0.008 ETH (80%) when researchers buy access
+- Track earnings in real-time
+- Claim anytime
 
 **Health Credit Score**
-- Automated scoring system (500-850 range) that updates with each data share
-- Scores remain **fully encrypted** on-chain
-- Use for loan applications without revealing raw health metrics
+- Automated scoring (500-850) that updates when you share data
+- Stays fully encrypted on-chain
+- Use for loan applications without revealing raw data
 
 **Activity Tracking**
-- Complete on-chain audit log of all actions
-- Monitor who accessed your data and when
-- Full transparency with zero trust required
+- Full on-chain audit log
+- See who accessed your data and when
+- Complete transparency
 
 ### 🔬 For Researchers
 
 **Instant Access with FHE.allowTransient**
-- Purchase access for **0.01 ETH** per patient
-- **Automatic permission grant** in same transaction (no patient re-signing needed!)
-- Access resets when patient shares new data (fresh monetization opportunity)
+- Purchase access for 0.01 ETH per patient
+- Automatic permission grant in same transaction (no patient re-signing!)
+- Access resets when patient shares new data
 
-**Lightning-Fast Decryption**
-- Decrypt health records in 0-2 seconds with EIP-712 signatures
-- No waiting for Gateway callbacks (was 30-60 seconds in v0.8)
-- Batch decrypt multiple values simultaneously
+**Fast Decryption**
+- Decrypt health records in 0-2 seconds with EIP-712
+- No waiting (was 30-60 seconds in v0.8)
+- Batch decrypt multiple values at once
 
-**Comprehensive Data Access**
-- View all health records: blood sugar, cholesterol, BMI, blood pressure, heart rate, weight, height
-- Access encrypted risk scores: diabetes, heart disease, stroke predictions
-- Timestamps for longitudinal analysis
+**Full Data Access**
+- View all health records: blood sugar, cholesterol, BMI, BP, heart rate, weight, height
+- Access risk scores: diabetes, heart disease, stroke
+- Timestamps for analysis over time
 
-**Fair & Transparent Pricing**
-- **80% to patients** (0.008 ETH)
-- **20% platform fee** (0.002 ETH)
-- **46% cheaper gas** than v0.8 (no callback transactions)
+**Pricing**
+- 80% to patients (0.008 ETH)
+- 20% platform fee (0.002 ETH)
+- 46% cheaper gas than v0.8
 
 ### 💰 For Lenders
 
