@@ -89,7 +89,7 @@ Cerebrum uses FHEVM for better privacy:
 
 ## Key Features
 
-### 🏥 For Patients
+### For Patients
 
 **Complete Data Control**
 - Encrypt health records on your device with fhevmjs
@@ -116,7 +116,7 @@ Cerebrum uses FHEVM for better privacy:
 - See who accessed your data and when
 - Complete transparency
 
-### 🔬 For Researchers
+### For Researchers
 
 **Instant Access with FHE.allowTransient**
 - Purchase access for 0.01 ETH per patient
@@ -138,7 +138,7 @@ Cerebrum uses FHEVM for better privacy:
 - 20% platform fee (0.002 ETH)
 - 46% cheaper gas than v0.8
 
-### 💰 For Lenders
+### For Lenders
 
 **Zero-Knowledge Credit Checks**
 - Verify if patient's health score meets lending criteria **without seeing actual score**
@@ -161,65 +161,113 @@ Cerebrum uses FHEVM for better privacy:
 
 ### System Architecture
 
-```
-┌──────────────────────────────────────────────────────────────────────┐
-│                 Frontend (React + TypeScript + Vite)                 │
-│                          fhevmjs (Relayer SDK)                       │
-│                                                                      │
-│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐              │
-│  │  Patient    │    │ Researcher  │    │   Lender    │              │
-│  │  Dashboard  │    │   Portal    │    │   Portal    │              │
-│  └──────┬──────┘    └──────┬──────┘    └──────┬──────┘              │
-│         │                  │                  │                     │
-│         │  ┌───────────────┴──────────────────┘                     │
-│         │  │                                                        │
-│         │  │  • createEncryptedInput() - Client-side encryption     │
-│         │  │  • User Decryption - EIP-712 signatures (0-2s)         │
-│         │  │  • Wagmi v2 + ethers v6 - Wallet integration           │
-│         │  │                                                        │
-│         └──┴────────────────┬───────────────────────────────────────┘
-│                             │
-│                    ┌────────▼─────────┐
-│                    │  Ethereum Node   │
-│                    │  (Sepolia)       │
-│                    └────────┬─────────┘
-│                             │
-│              ┌──────────────┴──────────────┐
-│              │                             │
-│    ┌─────────▼──────────┐       ┌─────────▼──────────┐
-│    │   CerebrumFHEVM    │       │   Zama Gateway     │
-│    │  Smart Contract    │◄──────┤   (User Decrypt)   │
-│    │                    │       │                    │
-│    │ • FHE.allowThis    │       │ • EIP-712 verify   │
-│    │ • FHE.allowTransient│      │ • Instant decrypt  │
-│    │ • FHE.allow        │       │ • 0–2 second       │
-│    │ • NO CALLBACKS ✅  │       │   response time    │
-│    │                    │       └────────────────────┘
-│    │ ┌────────────────┐ │
-│    │ │Patient Registry││
-│    │ │Encrypted Health││
-│    │ │Access Control  ││
-│    │ │Earnings Pool   ││
-│    │ └────────────────┘ │
-│    └────────────────────┘
-│             │
-│        ┌────┴─────┐
-│        │          │
-│   ┌────▼─────┐  ┌─▼──────────────┐
-│   │Encrypted │  │ Client-Side    │
-│   │ Health   │  │ Decryption     │
-│   │ Records  │  │ (0-2 seconds)  │
-│   │ (euint64)│  │ via EIP-712    │
-│   └──────────┘  └────────────────┘
-└──────────────────────────────────────────────────────────────────────┘
+```mermaid
+%%{init: {'theme':'dark', 'themeVariables': { 'primaryColor':'#00e6a0','primaryTextColor':'#fff','primaryBorderColor':'#00e6a0','lineColor':'#00e6a0','secondaryColor':'#1a1a1a','tertiaryColor':'#2d2d2d'}}}%%
 
-📊 Performance Highlights:
-  • Decryption: 0–2s end-to-end
-  • On-chain computation on encrypted data
-  • No callback complexity or polling
+flowchart TB
+    subgraph Frontend["Frontend Layer<br/>(React + TypeScript + Vite)"]
+        Patient["Patient<br/>Dashboard"]
+        Researcher["Researcher<br/>Portal"]
+        Lender["Lender<br/>Portal"]
+    end
+
+    subgraph SDK["Client-Side SDK"]
+        FhevmJS["fhevmjs (Relayer SDK)<br/>• createEncryptedInput()<br/>• User Decryption (0-2s)<br/>• EIP-712 signatures"]
+        Wagmi["Wagmi v2 + ethers v6<br/>Wallet Integration"]
+    end
+
+    subgraph Blockchain["Ethereum Sepolia"]
+        Node["Ethereum Node"]
+        Contract["CerebrumFHEVM<br/>Smart Contract"]
+        Storage["On-Chain Storage"]
+    end
+
+    subgraph ContractLogic["Smart Contract Internals"]
+        Registry["Patient Registry"]
+        Health["Encrypted Health Records<br/>(euint64)"]
+        Access["Access Control<br/>• FHE.allowThis<br/>• FHE.allowTransient<br/>• FHE.allow"]
+        Earnings["Earnings Pool<br/>80/20 split"]
+    end
+
+    subgraph Gateway["Zama Infrastructure"]
+        ZamaGW["Zama Gateway<br/>(User Decryption)<br/>• EIP-712 verify<br/>• Instant decrypt<br/>• 0-2s response"]
+    end
+
+    Patient --> SDK
+    Researcher --> SDK
+    Lender --> SDK
+    
+    SDK --> Node
+    Node --> Contract
+    Contract --> ContractLogic
+    ContractLogic --> Storage
+    
+    FhevmJS -.EIP-712 decrypt.-> ZamaGW
+    ZamaGW -.decrypted data.-> FhevmJS
+    
+    Contract <-.ACL check.-> ZamaGW
+
+    style Frontend fill:#1a1a1a,stroke:#00e6a0,stroke-width:2px
+    style SDK fill:#2d2d2d,stroke:#00e6a0,stroke-width:2px
+    style Blockchain fill:#1a1a1a,stroke:#00e6a0,stroke-width:2px
+    style ContractLogic fill:#2d2d2d,stroke:#00e6a0,stroke-width:2px
+    style Gateway fill:#0a3d2e,stroke:#00e6a0,stroke-width:3px
+    
+    style Patient fill:#2d2d2d,stroke:#00e6a0
+    style Researcher fill:#2d2d2d,stroke:#00e6a0
+    style Lender fill:#2d2d2d,stroke:#00e6a0
+    style Contract fill:#0a3d2e,stroke:#00e6a0,stroke-width:2px
+    style ZamaGW fill:#0a3d2e,stroke:#00e6a0,stroke-width:2px
 ```
+
+**Performance:**
+- Decryption: 0-2s end-to-end
+- On-chain computation on encrypted data
+- No callback complexity or polling
 
 ### Data Flow Architecture (User Decryption)
+
+```mermaid
+%%{init: {'theme':'dark', 'sequence':{'actorMargin':50,'messageMargin':100}}}%%
+
+sequenceDiagram
+    autonumber
+    
+    participant P as Patient
+    participant F as Frontend
+    participant SDK as fhevmjs
+    participant ETH as Ethereum
+    participant C as Contract
+    participant Z as Zama Gateway
+    participant R as Researcher
+
+    Note over P,Z: Phase 1: Data Upload
+    P->>F: Enter health metrics
+    F->>SDK: createEncryptedInput()
+    SDK-->>F: {handles, inputProof}
+    F->>ETH: shareHealthData(handles, proof)
+    ETH->>C: Store encrypted data
+    C->>C: FHE.allowThis() + FHE.allow()
+    Note over C: Data encrypted on-chain
+
+    Note over R,Z: Phase 2: Researcher Access
+    R->>ETH: purchaseAccess() + 0.01 ETH
+    ETH->>C: Process payment
+    C->>C: FHE.allowTransient(data, researcher)
+    C-->>P: 80% of fee (0.008 ETH)
+    Note over C: Auto-grant access (no re-sign!)
+
+    Note over R,Z: Phase 3: User Decryption
+    R->>C: getEncryptedHealthRecord()
+    C-->>R: Return encrypted handles
+    R->>SDK: Sign EIP-712 message
+    SDK->>Z: userDecrypt(handles, signature)
+    Z->>Z: Verify signature + ACL
+    Z-->>SDK: Decrypted values
+    SDK-->>R: Display data (0-2s total)
+    
+    Note over P,Z: No callbacks • No polling • Instant
+```
 
 #### Phase 1: Patient Data Upload
 
@@ -1349,14 +1397,25 @@ Cerebrum/
 ├── scripts/
 │   ├── check-abi.cjs
 │   ├── update-abi.cjs
+│   ├── update-risk-library.cjs
 │   └── verify-contract.cjs
+├── deployments/
+│   └── sepolia/
+├── fhevmTemp/
+├── favicon/
 ├── package.json
 ├── hardhat.config.cjs
 ├── vite.config.ts
 ├── tsconfig.json
+├── tsconfig.app.json
+├── tsconfig.hardhat.json
+├── tsconfig.node.json
 ├── tailwind.config.js
+├── postcss.config.js
 ├── eslint.config.js
 ├── vercel.json
+├── verify-args.cjs
+├── test-results-final.txt
 ├── LICENSE
 └── README.md
 ```
