@@ -6,7 +6,7 @@
 [![FHEVM](https://img.shields.io/badge/FHEVM-Zama-brightgreen)](https://docs.zama.org/protocol)
 [![Ethereum Sepolia](https://img.shields.io/badge/Ethereum-Sepolia-purple)](https://sepolia.etherscan.io/)
 [![fhevmjs](https://img.shields.io/badge/fhevmjs-latest-blue)](https://www.npmjs.com/package/fhevmjs)
-[![YouTube](https://img.shields.io/badge/YouTube-Watch%20Demo-red?logo=youtube&logoColor=white)](https://youtu.be/A7h1CDHMxP4?si=0GCaqexvfX5dTgQY)
+[![YouTube](https://img.shields.io/badge/YouTube-Watch%20Demo-red?logo=youtube&logoColor=white)](https://youtu.be/pk-2pNLzDhM)
 
 A healthcare data marketplace built on Ethereum using Zama's **FHEVM v0.9.1**. Patients maintain complete ownership of their encrypted health records while earning from data monetization. Researchers access encrypted data **instantly** (0–2 seconds), and lenders verify creditworthiness without ever seeing raw medical information—all powered by **Fully Homomorphic Encryption** and **User Decryption with EIP-712 signatures**.
 
@@ -1590,7 +1590,7 @@ npm test
 
 ## Demo Video
 
-[Watch on YouTube](https://youtu.be/A7h1CDHMxP4?si=d-_nD3qaaJ-AhRkz)
+[Watch on YouTube](https://youtu.be/pk-2pNLzDhM)
 
 ---
 
