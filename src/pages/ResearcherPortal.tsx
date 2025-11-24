@@ -1378,10 +1378,20 @@ const ResearcherPortal = () => {
                         <Shield className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
                         <div>
                           <p className="text-sm text-emerald-300 font-semibold mb-1">✅ Real FHE Calculation</p>
-                          <p className="text-xs text-gray-400">
+                          <p className="text-xs text-gray-400 mb-2">
                             These risk scores were calculated on ENCRYPTED health data using <span className="text-yellow-400 font-semibold">Zama</span>'s fhEVM. 
                             The raw health metrics were never decrypted during computation, preserving patient privacy.
                           </p>
+                          <div className="bg-amber-500/10 border border-amber-500/30 rounded p-3">
+                            <p className="text-xs text-amber-400 flex items-center gap-1 font-semibold mb-1">
+                              <AlertCircle className="w-3 h-3" />
+                              ⚠️ IMPORTANT DISCLAIMER
+                            </p>
+                            <p className="text-xs text-amber-300/90">
+                              These risk scores are <strong>NOT medically accurate</strong>. They are calculated using simplified formulas 
+                              for demonstration purposes only. Do not use these results for medical decisions or advice.
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -1754,10 +1764,19 @@ const AnalyticsSection = ({
             </div>
           </div>
 
-          <div className="mt-3 pt-3 border-t border-green-500/20">
+          <div className="mt-3 pt-3 border-t border-green-500/20 space-y-2">
             <p className="text-xs text-green-300">
               ✨ Calculated on encrypted data using Zama's FHE
             </p>
+            <div className="bg-amber-500/10 border border-amber-500/30 rounded p-2">
+              <p className="text-xs text-amber-400 flex items-center gap-1 font-semibold">
+                <AlertCircle className="w-3 h-3" />
+                ⚠️ DEMO ONLY: Results are NOT medically accurate
+              </p>
+              <p className="text-xs text-amber-300/80 mt-1">
+                Risk scores use simplified formulas for demonstration purposes. Not intended for real medical diagnosis or advice.
+              </p>
+            </div>
           </div>
         </div>
       )}
